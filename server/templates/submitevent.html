@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>submitevent</title>
+  </head>
+  <body>
+  增加个人事件<br>
+        :param userID: int<br>
+        :param eventName: str<br>
+        :param whetherProcess: bool, 表示是否需要endTime; 若无endTime, 即为endTime=1970-01-01 00:00:00<br>
+        :param beginTime: str, in format: %Y-%m-%d %H:%M:%S<br>
+        :param endTime: str可为空, in format: %Y-%m-%d %H:%M:%S<br>
+        :param description: str可为空<br>
+        :param remind: str可为空，通过r=Remind();r_str=r.str()得到(功能未完善，此处暂时不写)<br>
+        :return: 若成功返回eventID，若失败返回err<br><br>
+
+    <form method="POST" action="{{ url_for('submitevent') }}">
+        <label>userID：<input type="number" name="userID" placeholder=""></label><br>
+        <label>事件名称：<input type="text" name="eventName" placeholder="吃饭"></label><br>
+        <label>是否持续：是<input name="whetherProcess" type="radio" value="True" /> 否<input name="whetherProcess" type="radio" value="False" />
+        </label><br>
+        <label>起始时间：<input type="text" name="beginTime" placeholder="2019-04-25 00:00:00"></label><br>
+        <label>结束时间：<input type="text" name="endTime" placeholder=""></label><br>
+        <label>描述：<input type="text" name="description" placeholder="用嘴吃"></label><br>
+
+    <input type="submit" value="GO!">
+    </form>
+    <br>
+
+  {% if res %}
+        <a>{{ res }}</a>
+    {% endif %}
+
+  </body>
+</html>

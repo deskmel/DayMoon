@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>edituser</title>
+  </head>
+  <body>
+  修改用户信息，需要改的项不为空，其他默认为空<br>
+        :param userID: int，必选<br>
+        :param name: str<br>
+        :param password: str<br>
+        :param mail: str<br>
+        :param phoneNumber: str<br>
+        :return: 成功为True，失败为err<br><br>
+
+    <form method="POST" action="{{ url_for('edituser') }}">
+        <label>userID：<input type="number" name="userID" placeholder=""></label><br>
+        <label>新用户名：<input type="text" name="name" placeholder=""></label><br>
+        <label>新密码：<input type="text" name="password" placeholder=""></label><br>
+        <label>新邮箱：<input type="text" name="mail" placeholder=""></label><br>
+        <label>新电话：<input type="text" name="phoneNumber" placeholder=""></label><br>
+    <input type="submit" value="GO!">
+    </form>
+    <br>
+
+  {% if res %}
+        <a>{{ res }}</a>
+    {% endif %}
+
+  </body>
+</html>
