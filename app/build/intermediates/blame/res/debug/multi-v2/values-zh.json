@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "E:\\work\\code\\Andriod\\DayMoon\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\15167\\.gradle\\caches\\transforms-1\\files-1.1\\calendarview-3.4.0.aar\\a1a52421d5c472b9dda376dedf5263fd\\res\\values-zh\\values-zh.xml",
+                    "from": {
+                        "startLines": "2,16,48,62,82,108,113,122,131,132,133,134,135,136,137,138",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,410,1186,1542,2124,2757,2896,3153,3378,3431,3465,3499,3533,3567,3601,3635",
+                        "endLines": "15,47,61,81,107,112,121,130,131,132,133,134,135,136,137,138",
+                        "endColumns": "19,19,19,19,19,19,19,19,52,33,33,33,33,33,33,33",
+                        "endOffsets": "405,1181,1537,2119,2752,2891,3148,3373,3426,3460,3494,3528,3562,3596,3630,3664"
+                    }
+                }
+            ]
+        }
+    ]
+}
