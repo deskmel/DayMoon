@@ -1,4 +1,4 @@
-package com.example.daymoon;
+package com.example.daymoon.EventManagement;
 
 public class Event {
     private String description;

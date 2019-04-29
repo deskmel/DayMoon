@@ -1,4 +1,4 @@
-package com.example.daymoon;
+package com.example.daymoon.UserInterface;
 
 import android.content.Context;
 import android.view.View;
@@ -6,6 +6,10 @@ import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.example.daymoon.EventManagement.Event;
+import com.example.daymoon.R;
+
 import java.util.LinkedList;
 
 public class EventAdapter extends BaseAdapter {
