@@ -1,8 +1,4 @@
-package GroupEventControl;
-
-import EventManagement.ClientEventControl;
-import EventManagement.Event;
-import EventManagement.EventList;
+package GroupEventManagement;
 
 import java.util.GregorianCalendar;
 
@@ -90,6 +86,24 @@ public class ClientGroupEventControl  {
 
 
 
+    // 输入日期，得到当天的groupEventList
+    public GroupEventList findGroupEventListByDate(int beginYear, int beginMonth, int beginDate){
+        GroupEventList resultList = new GroupEventList();
+
+        for (int i = 0; i < groupEventList.length(); i ++){
+            GroupEvent currentGroupEvent = groupEventList.get(i);
+            if (currentGroupEvent.getBeginTime().get(GregorianCalendar.YEAR) == beginYear
+                    && currentGroupEvent.getBeginTime().get(GregorianCalendar.MONTH ) + 1 == beginMonth
+                    && currentGroupEvent.getBeginTime().get(GregorianCalendar.DATE) == beginDate){
+
+                resultList.add(currentGroupEvent);
+            }
+
+        }
+        return resultList;
+    }
+
+
     // 测试
     public static void main(String[] args){
         ClientGroupEventControl crtl = new ClientGroupEventControl(25);
@@ -133,7 +147,15 @@ public class ClientGroupEventControl  {
                 }
                 System.out.println();
                 System.out.println();
+
+
             }
+
+            GroupEventList el = crtl.findGroupEventListByDate(2019, 4, 29);
+            for (int i = 0; i < el.length(); i++){
+                System.out.println(el.get(i).getEventID());
+            }
+
         }catch(Exception ex){
             System.out.println(ex.getMessage());
         }

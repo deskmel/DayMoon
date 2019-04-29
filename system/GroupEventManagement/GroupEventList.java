@@ -1,8 +1,5 @@
-package GroupEventControl;
+package GroupEventManagement;
 
-import EventManagement.Event;
-
-import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.Collections;
 

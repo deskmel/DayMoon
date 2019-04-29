@@ -89,6 +89,25 @@ public class ClientEventControl {
 
 
 
+    // 输入日期，得到当天的eventList
+    public EventList findEventListByDate(int beginYear, int beginMonth, int beginDate){
+        EventList resultList = new EventList();
+
+        for (int i = 0; i < eventList.length(); i ++){
+            Event currentEvent = eventList.get(i);
+            if (currentEvent.getBeginTime().get(GregorianCalendar.YEAR) == beginYear
+            && currentEvent.getBeginTime().get(GregorianCalendar.MONTH ) + 1 == beginMonth
+            && currentEvent.getBeginTime().get(GregorianCalendar.DATE) == beginDate){
+
+                resultList.add(currentEvent);
+            }
+
+        }
+        return resultList;
+    }
+
+
+
     // 测试
     public static void main(String[] args){
         ClientEventControl crtl = new ClientEventControl(25);
@@ -119,6 +138,12 @@ public class ClientEventControl {
                 System.out.println("eventEndTime: " +crtl.eventList.get(i).getEndTime().getTime().toString());
                 System.out.println();
             }
+
+            EventList el = crtl.findEventListByDate(2019, 4, 29);
+            for (int i = 0; i < el.length(); i++){
+                System.out.println(el.get(i).getEventID());
+            }
+
         }catch(Exception ex){
             System.out.println(ex.getMessage());
         }

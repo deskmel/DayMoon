@@ -1,4 +1,4 @@
-package GroupEventControl;
+package GroupEventManagement;
 
 import EventManagement.Event;
 
