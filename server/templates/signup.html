@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>signup</title>
+  </head>
+  <body>
+
+        注册时调用<br>
+        :param name: str,不超过50个字符<br>
+        :param password: str,32位MD5<br>
+        :param mail: str,前端已确认是valid<br>
+        :param phoneNumber: str,前端已确认是valid<br>
+        :return: 若成功，返回userID，若失败，返回提示字符串(name,mail,phone不可重复)<br>
+
+    <br>
+        <form method="POST" action="{{ url_for('signup') }}">
+        <label>姓名：<input type="text" name="name" placeholder="woshswang"></label><br>
+        <label>密码：<input type="text" name="password" placeholder="daego"></label><br>
+        <label>电邮：<input type="text" name="mail" placeholder="s@d.com"></label><br>
+        <label>电话：<input type="text" name="phoneNumber" placeholder="110"></label><br>
+    <input type="submit" value="GO!">
+    </form>
+    <br>
+
+  {% if res %}
+        <a>{{ res }}</a>
+    {% endif %}
+
+  </body>
+</html>

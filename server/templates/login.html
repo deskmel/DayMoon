@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>login</title>
+  </head>
+  <body>
+
+  登录时验证使用，可使用name,mail,phone中任一方法登录<br>
+        :param logstr: str<br>
+        :param password: str<br>
+        :return: 若成功返回int userID, 失败返回bool False<br>
+  <br>
+    <form method="POST" action="{{ url_for('login') }}">
+        <label>姓名/电邮/电话：<input type="text" name="logstr" placeholder="woshswang"></label><br>
+        <label>密码：<input type="text" name="password" placeholder="daego"></label><br>
+    <input type="submit" value="GO!">
+    </form>
+    <br>
+
+  {% if res %}
+        <a>{{ res }}</a>
+    {% endif %}
+
+  </body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>getuser</title>
+  </head>
+  <body>
+查询用户信息<br>
+        :param userID: int<br>
+        :return: 若存在用户，返回dict_json(不含密码)，否则返回None<br><br>
+    <form method="POST" action="{{ url_for('getuser') }}">
+        <label>userID：<input type="number" name="userID" placeholder=""></label><br>
+    <input type="submit" value="GO!">
+    </form>
+    <br>
+
+  {% if res %}
+        <a>{{ res }}</a>
+    {% endif %}
+
+  </body>
+</html>
