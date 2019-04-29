@@ -11,10 +11,9 @@ import com.haibin.calendarview.CalendarView;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
-import com.haibin.calendarview.TrunkBranchAnnals;
 
 
-public class CalendarActivity extends AppCompatActivity implements CalendarView.OnMon {
+public class CalendarActivity extends AppCompatActivity{
     private CalendarView calendarView;
     private TextView selectDate;
 
@@ -25,12 +24,13 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
         calendarView = (CalendarView)findViewById(R.id.calendarView);
         //
         Calendar currentdate = Calendar.getInstance();
+        calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(com.haibin.calendarview.Calendar calendar, boolean isClick) {
 
-        selectDate.setText(String.valueOf(currentdate.get(Calendar.YEAR))+' '+
-                String.valueOf(currentdate.get(Calendar.MONTH))+" "+
-                String.valueOf((currentdate.get(Calendar.DATE))));
+            }
+        });
 
-        calendarView.setOnCalendarSelectListener(new CalendarView.OnCalendarSelectListener());
     }
 
 
