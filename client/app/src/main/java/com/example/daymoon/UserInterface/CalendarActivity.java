@@ -14,6 +14,7 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.daymoon.EventManagement.Event;
+import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.R;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarView;
@@ -23,21 +24,21 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class CalendarActivity extends AppCompatActivity {
-    private java.util.Calendar cal= java.util.Calendar.getInstance();
     private Map<String, Calendar> map = new HashMap<>();
     private CalendarView calendarView;
     private LinearLayout picker;//日期选择器
     private TextView tvMonth;
     private ListView listevent;
     private Context mainContext = null;
-    private EventAdapter adapter = null;
-    private LinkedList<Event> Events;
+    private EventViewAdapter adapter = null;
+    private EventList Events;
     private Button btn_add;//添加事件的按钮
     private AlertDialog alert = null;//提醒框
-    private AlertDialog.Builder builder = null;// 提醒框建造器
+    private UserInterfaceControl UIControl=UserInterfaceControl.getUIControl();
     private int selectYear;
     private int selectMonth;
     private int selectDay;
+
 
 
     //String[] dis={"哈皮","sb戴哥邀请跑步","贯神之狼","李晓肝甲甲","超哥归寝"};
@@ -54,6 +55,7 @@ public class CalendarActivity extends AppCompatActivity {
         btn_add = (Button) findViewById(R.id.addbutton);
         mainContext = CalendarActivity.this;
         final ListView  listview = (ListView) findViewById(R.id.list_one); //绑定listview
+        UIControl = new UserInterfaceControl();
         selectDay=calendarView.getCurDay();
         selectMonth=calendarView.getCurMonth();
         selectYear=calendarView.getCurYear();
@@ -68,8 +70,6 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
         final boolean[] monthType = {true, true, false, false, false, false};
-        final boolean[] dateType = {true, true, true, false, false, false};
-        final boolean[] timeType = {false, false, false, true, true, false};
         //时间选择器选择年月，对应的日历切换到指定日期
         picker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,16 +93,17 @@ public class CalendarActivity extends AppCompatActivity {
         calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Calendar calendar, boolean isClick) {
-                Log.i("??","touched");
+                //Log.i("??","touched");
                 selectYear = calendar.getYear();
                 selectMonth = calendar.getMonth();
                 selectDay = calendar.getDay();
-                Log.i("??",String.format("%d,%d,%d",selectYear,selectMonth,selectDay));
-                Events = new LinkedList<Event>();
+                //Log.i("??",String.format("%d,%d,%d",selectYear,selectMonth,selectDay));
+
+                Events = UIControl.getEventlist(selectYear,selectMonth,selectDay);
                 //此处需要加入方法获取Eventlist
-                Event todays = new Event(String.format("%d,%d,%d",selectYear,selectMonth,selectDay));
-                Events.add(todays);
-                adapter = new EventAdapter(Events,mainContext); //设置adapter
+                //Event todays = new Event(String.format("%d,%d,%d",selectYear,selectMonth,selectDay));
+                //Events.add(todays);
+                adapter = new EventViewAdapter(Events,mainContext); //设置adapter
                 listview.setAdapter(adapter);//将adpter绑定在listview上
             }
         });

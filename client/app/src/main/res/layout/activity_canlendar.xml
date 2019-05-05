@@ -63,7 +63,7 @@
         android:layout_marginTop="5dp"
         app:current_month_text_color="#212121"
         app:day_text_size="10sp"
-        app:month_view="com.example.daymoon.MyMonthView"
+        app:month_view="com.example.daymoon.UserInterface.MyMonthView"
         app:month_view_show_mode="mode_fix"
         app:other_month_text_color="#cccccc"
         app:week_line_background="#e6e6e6" />

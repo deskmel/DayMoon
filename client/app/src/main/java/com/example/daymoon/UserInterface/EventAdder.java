@@ -4,16 +4,17 @@ package com.example.daymoon.UserInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.example.daymoon.Define.Constants;
 import com.example.daymoon.R;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.nightonke.jellytogglebutton.State;
-
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 
@@ -29,10 +30,10 @@ public class EventAdder extends AppCompatActivity {
     private JellyToggleButton jtb_whetherAllday ;
     private MaterialEditText TitleView;
     private MaterialEditText DescriptionView;
-    private event_information_holder event_info;
+    private Event_information_holder event_info;
     private Intent intent;
     private Bundle bundle;
-
+    private UserInterfaceControl UIControl=UserInterfaceControl.getUIControl();
 
 
     @Override
@@ -50,8 +51,8 @@ public class EventAdder extends AppCompatActivity {
         intent=this.getIntent();
         bundle=intent.getExtras();
         //初始化事件的时间
-        event_info = new event_information_holder(bundle.getInt("selectYear"),bundle.getInt("selectMonth"),bundle.getInt("selectDay"));
-
+        event_info = new Event_information_holder(bundle.getInt("selectYear"),bundle.getInt("selectMonth"),bundle.getInt("selectDay"));
+        UIControl=new UserInterfaceControl();
 
 
         final boolean[] dateType = {true, true, true, false, false, false};
@@ -66,7 +67,7 @@ public class EventAdder extends AppCompatActivity {
                         java.util.Calendar c = java.util.Calendar.getInstance();
                         c.setTime(date);
                         int year = c.get(java.util.Calendar.YEAR);
-                        int month = c.get(java.util.Calendar.MONTH);
+                        int month = c.get(java.util.Calendar.MONTH)+1;
                         int datee = c.get(java.util.Calendar.DATE);
                         //滚动到指定日期
                         startDate.setText(String.format("%d-%d-%d",year,month,datee));
@@ -143,11 +144,6 @@ public class EventAdder extends AppCompatActivity {
             }
         });
         //
-
-
-
-
-
         //绑定取消按钮
         findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,35 +157,21 @@ public class EventAdder extends AppCompatActivity {
             public void onClick(View v) {
                 event_info.title=TitleView.getText().toString();
                 event_info.descriptions = DescriptionView.getText().toString();
-
-
-                finish();
+                Log.d("begintime",String.format("%d %d %d %d %d\n",event_info.Year_,event_info.Month_,event_info.Date_,event_info.startHour_,event_info.startMinute_));
+                Log.d("endtime",String.format("%d %d %d %d %d\n",event_info.Year_,event_info.Month_,event_info.Date_,event_info.endHour_,event_info.endMinute_));
+                int State = UIControl.addEvent(event_info);
+                Log.d("??",String.valueOf(State));
+                switch (State)
+                {
+                    case Constants.NORMAL:
+                        finish();
+                        break;
+                    case Constants.ERROR:
+                        //加提醒错误状态
+                        break;
+                }
             }
         });
     }
 
-}
-class event_information_holder{
-    public int Year_;
-    public int Month_;
-    public int Date_;
-    public int startHour_;
-    public int endHour_;
-    public int startMinute_;
-    public int endMinute_;
-    public boolean allday;
-    public boolean process;
-    public String descriptions;
-    public String title;
-
-    public event_information_holder(int y,int m,int d){
-        Year_=y;
-        Month_=m;
-        Date_=d;
-        java.util.Calendar c = java.util.Calendar.getInstance();
-        startHour_=c.HOUR;
-        startMinute_=0;
-        endHour_=startHour_+1;
-        endMinute_ = 0;
-    };
 }

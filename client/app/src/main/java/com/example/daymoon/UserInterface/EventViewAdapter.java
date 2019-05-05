@@ -8,17 +8,18 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.daymoon.EventManagement.Event;
+import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.R;
 
 import java.util.LinkedList;
 
-public class EventAdapter extends BaseAdapter {
+public class EventViewAdapter extends BaseAdapter {
     private LinkedList<Event> Events;
     private Context mContext;
 
-    public EventAdapter() {}
-    public EventAdapter(LinkedList<Event> Events,Context context){
-        this.Events=Events;
+    public EventViewAdapter() {}
+    public EventViewAdapter(EventList Events, Context context){
+        this.Events=Events.getAllEventRecord();
         this.mContext=context;
     }
     @Override
@@ -39,16 +40,22 @@ public class EventAdapter extends BaseAdapter {
         if(convertView == null){
             convertView = LayoutInflater.from(mContext).inflate(R.layout.custom_event_list,parent,false);
             holder = new ViewHolder();
-            holder.txt_content = (TextView) convertView.findViewById(R.id.txt_content);
+            holder.title = (TextView) convertView.findViewById(R.id.event_title);
+            holder.time = (TextView) convertView.findViewById(R.id.event_time);
+            holder.des = (TextView) convertView.findViewById(R.id.event_descriptions);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.txt_content.setText(Events.get(position).getContent());
+        holder.title.setText(Events.get(position).getTitle());
+        holder.time.setText(Events.get(position).getBeginTime_str());
+        holder.des.setText(Events.get(position).getDescription());
         return convertView;
     }
 
     private class ViewHolder{ //event_list 所需数据
-        TextView txt_content;
+        TextView title;
+        TextView time;
+        TextView des;
     }
 }
