@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,7 +21,6 @@ import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarView;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class CalendarActivity extends AppCompatActivity {
@@ -34,7 +34,7 @@ public class CalendarActivity extends AppCompatActivity {
     private EventList Events;
     private Button btn_add;//添加事件的按钮
     private AlertDialog alert = null;//提醒框
-    private UserInterfaceControl UIControl=UserInterfaceControl.getUIControl();
+    private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
     private int selectYear;
     private int selectMonth;
     private int selectDay;
@@ -55,7 +55,7 @@ public class CalendarActivity extends AppCompatActivity {
         btn_add = (Button) findViewById(R.id.addbutton);
         mainContext = CalendarActivity.this;
         final ListView  listview = (ListView) findViewById(R.id.list_one); //绑定listview
-        UIControl = new UserInterfaceControl();
+        UIControl = new TestUserInterfaceControl();
         selectDay=calendarView.getCurDay();
         selectMonth=calendarView.getCurMonth();
         selectYear=calendarView.getCurYear();
@@ -99,12 +99,23 @@ public class CalendarActivity extends AppCompatActivity {
                 selectDay = calendar.getDay();
                 //Log.i("??",String.format("%d,%d,%d",selectYear,selectMonth,selectDay));
 
+
                 Events = UIControl.getEventlist(selectYear,selectMonth,selectDay);
                 //此处需要加入方法获取Eventlist
                 //Event todays = new Event(String.format("%d,%d,%d",selectYear,selectMonth,selectDay));
                 //Events.add(todays);
                 adapter = new EventViewAdapter(Events,mainContext); //设置adapter
                 listview.setAdapter(adapter);//将adpter绑定在listview上
+                System.out.print("sa");
+                listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        System.out.print("asdsa");
+                        Intent intent = new Intent(CalendarActivity.this,EventDetailActivity.class);
+                        intent.putExtra("event",Events.get(position));
+                        startActivity(intent);
+                    }
+                });
             }
         });
 

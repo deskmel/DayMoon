@@ -2,6 +2,7 @@ package com.example.daymoon.EventManagement;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.sql.Time;
@@ -9,7 +10,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class Event implements Comparable<Event> {
+public class Event implements Comparable<Event>, Serializable {
     String description;
     String title;
     int eventID;
@@ -142,6 +143,7 @@ public class Event implements Comparable<Event> {
      *
      * @return @return 返回事件的字符串形式 如2016年8月18日 22时35分
      */
+
     public String getBeginTime_str(){
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm",Locale.CHINA);
@@ -165,6 +167,19 @@ public class Event implements Comparable<Event> {
 
     }
 
+    /**
+     *
+     * @return 返回事件的持续事件
+     * if (allday) result = 全天
+     * else result = BeginTime.
+     */
+    public String getLastingTime_str(){
+        SimpleDateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("H:m",Locale.CHINA);
+        String BeginMinute = dateFormat.format(beginTime);
+        String EndMinute = dateFormat.format(endTime);
+        return String.format("%s-%s",BeginMinute,EndMinute);
+    }
     public int getEventID(){
         return eventID;
     }

@@ -1,82 +1,62 @@
 package com.example.daymoon.UserInterface;
-import android.util.Log;
-
-import com.example.daymoon.Define.Constants;
-import com.example.daymoon.EventManagement.ClientEventControl;
-import com.example.daymoon.EventManagement.Event;
 import com.example.daymoon.EventManagement.EventList;
 
-public class UserInterfaceControl {
-    private int UserId;
-    /**
-     * 单例模式
-     */
-    private static UserInterfaceControl UIControl;
-    private ClientEventControl eventControl;
+/**
+ * UserInterface接口，用于和EventManagement子系统交互
+ *
+ */
 
-    public UserInterfaceControl(){}
-    public UserInterfaceControl(int UserID){
-        UIControl = new UserInterfaceControl();
-        UIControl.UserId=UserID;
-    }
+public interface UserInterfaceControl {
+    /**
+     * 获取某一天的事件列表
+     * @param year Year
+     * @param month Month
+     * @param date Date
+     * @return EventList or null
+     */
+    EventList getEventlist(int year, int month, int date);
+
+    /**
+     * 添加事件
+     * @param event_info
+     * class event_info{
+     *     public int Year_;
+     *     public int Month_;
+     *     public int Date_;
+     *     public int startHour_;
+     *     public int endHour_;
+     *     public int startMinute_;
+     *     public int endMinute_;
+     *     public boolean allday;
+     *     public boolean process;
+     *     public String descriptions;
+     *     public String title;
+     * }
+     * @return
+     *  Constants.NORMAL or Constants.ERROR
+     */
+    int addEvent(Event_information_holder event_info);
 
     /**
      *
-     * @return 获取UIControl 实例
+     * @param eventID 事件ID
+     * @return
+     * Constant.ERROR or Constant.NORMAL
      */
-    public static UserInterfaceControl getUIControl()
-    {
-        if (UIControl==null)
-        {
-            UIControl=new UserInterfaceControl(0
-            );
-        }
-        return UIControl;
-    }
-    /**
-     * @description
-     * @param year 年
-     * @param month 月
-     * @param date 日
-     * @return 事件列表
-     */
-    public EventList getEventlist(int year,int month,int date) {
-
-        //test
-        EventList eventList=new EventList();
-        try {
-            Event today = new Event("today", 0, year, month, date, 0, 0, year, month, date, 1, 1, true);
-            eventList.add(today);
-
-        }
-        catch (Exception ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        return  eventList;
-        //
-        //return  eventControl.findEventListByDate(year,month,date);
-    }
-
+    int deleteEvent(int eventID);
 
     /**
      *
      * @param event_info 事件信息
-     * @return 返回状态 具体定义见 Define.Constants
+     * @return
+     * Constant.ERROR or Constant.NORMAL
      */
-    public int addEvent(Event_information_holder event_info){
-        try{
-            Event today = new Event(event_info.title, 0, event_info.Year_, event_info.Month_, event_info.Date_, event_info.startHour_, event_info.startMinute_, event_info.Year_, event_info.Month_, event_info.Date_, event_info.endHour_, event_info.endMinute_, event_info.process);
-            eventControl.addEvent(today);
-            return Constants.NORMAL;
-        }
-        catch (Exception ex)
-        {
-            Log.d("?","error");
-            return Constants.ERROR;
-        }
+    int editEvent(Event_information_holder event_info);
 
-    }
+
+
+
+
 
 
 }
