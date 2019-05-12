@@ -47,8 +47,9 @@ public class EventAdder extends AppCompatActivity {
         jtb_whetherAllday = findViewById(R.id.whetherAllday);
         TitleView =findViewById(R.id.titleEditView);
         DescriptionView = findViewById(R.id.DesEditView);
-        //为表单绑定日期选择工具        intent=this.getIntent();
-        //        bundle=intent.getExtras();
+        //为表单绑定日期选择工具
+        intent=this.getIntent();
+        bundle=intent.getExtras();
 
         //初始化事件的时间
         event_info = new Event_information_holder(bundle.getInt("selectYear"),bundle.getInt("selectMonth"),bundle.getInt("selectDay"));

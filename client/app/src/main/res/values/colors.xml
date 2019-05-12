@@ -5,4 +5,12 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
     <color name="green">#3dcc6d</color>
+    <color name="black">#000000</color>
+    <color name="red">#ffff0000</color>
+    <color name="iosbackground">#F0EFF5</color>
+    <color name="gray">#EEEEEE</color>
+    <color name="bordergray">#EAEAEC</color>
+    <color name="topbg">#F7F7F7</color>
+    <color name="sgray">#F5F5F5</color>
+
 </resources>

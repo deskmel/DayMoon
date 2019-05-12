@@ -10,6 +10,7 @@ import com.example.daymoon.R;
 
 public class EventDetailActivity extends AppCompatActivity {
     Event event;
+    private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
 
 
 
@@ -17,8 +18,8 @@ public class EventDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
-        event =(Event) getIntent().getSerializableExtra("Event");
-        TextView eventTitle=(TextView) findViewById(R.id.event_title);
+        event =(Event) getIntent().getSerializableExtra("event");
+        TextView eventTitle=(TextView) findViewById(R.id.event_name);
         eventTitle.setText(event.getTitle());
 
         TextView eventTime= (TextView) findViewById(R.id.event_time);
@@ -30,10 +31,22 @@ public class EventDetailActivity extends AppCompatActivity {
         TextView eventDescription = (TextView) findViewById(R.id.event_descriptions);
         eventDescription.setText(event.getDescription());
 
-
+        findViewById(R.id.edit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         findViewById(R.id.getback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
+            }
+        });
+        findViewById(R.id.delete_event).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIControl.deleteEvent(event.getEventID());
                 finish();
             }
         });
