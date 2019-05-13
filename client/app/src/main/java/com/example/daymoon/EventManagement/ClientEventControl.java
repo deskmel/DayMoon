@@ -2,6 +2,7 @@ package com.example.daymoon.EventManagement;
 
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -11,13 +12,17 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.HttpUtil.HttpRequestThread;
-import com.example.daymoon.Define.Constants.*;
+import static com.example.daymoon.Define.Constants.SERVER_IP;
 
 import okhttp3.Request;
+
+import com.example.daymoon.UserInterface.Event_information_holder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -28,52 +33,76 @@ public class ClientEventControl {//施工
 
     private EventList eventList;
 
-    private ClientEventControl(int currentEventID){
-        currentUserID = currentEventID;
+    private static ClientEventControl clientEventControl;
+
+    public static void setCurrentUserID(int currentUserID){
+        getInstance().currentUserID = currentUserID;
+    }
+
+    private static ClientEventControl getInstance(){
+        if (clientEventControl == null){
+            clientEventControl = new ClientEventControl();
+            clientEventControl.eventList = new EventList();
+        }
+        return clientEventControl;
+    }
+
+    public static EventList getEventList(){
+        return getInstance().eventList;
     }
 
     // 通过currentUserID向服务器找到当前user的eventList
-    public void getEventList(){
+    public static void getEventListFromServer(){
         Map<String,String> params = new HashMap<>();
-        params.put("userid",String.valueOf(currentUserID));
-        try{
-            new HttpRequestThread(params, new HttpRequest.DataCallback(){
-                @Override
-                public void requestSuccess(String result) {
-                    Gson gson = new GsonBuilder().create();
-                    Type EventRecordType = new TypeToken<LinkedList<Event>>(){}.getType();
-                    eventList.eventRecord = gson.fromJson(result, EventRecordType);
-                }
-
-                @Override
-                public void requestFailure(Request request, IOException e) {
-                    Log.e("shit", "oops! Something goes wrong");
-                }
-            }).join();
-        }catch (InterruptedException e){
-            Log.e("shit", "InterruptedException");
-            e.printStackTrace();
-        }
+        params.put("userID",String.valueOf(getInstance().currentUserID));
+        new HttpRequestThread(SERVER_IP+"getallmyevents",params, new HttpRequest.DataCallback(){
+            @Override
+            public void requestSuccess(String result) {
+                Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
+                        new CalendarSerializer()).create();
+                System.out.println(result);
+                Type EventRecordType = new TypeToken<EventList>(){}.getType();
+                getInstance().eventList = gson.fromJson(result, EventRecordType);
+            }
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                Log.e("shit", "oops! Something goes wrong");
+            }
+        }).start();
     }
 
 
-
     // 增加一个event
-    public void addEvent(Event event){
-        eventList.add(event);
+    public static void addEvent(Event_information_holder event_info, Runnable callback){
+        Event event;
+        try {
+            event = new Event(event_info.title, event_info.descriptions, 0, event_info.Year_, event_info.Month_, event_info.Date_, event_info.startHour_, event_info.startMinute_, event_info.Year_, event_info.Month_, event_info.Date_, event_info.endHour_, event_info.endMinute_, event_info.process);
+        }catch(Exception e){
+            return;
+        }
+
         Map<String,String> params = new HashMap<>();
 
-        //TO DO params.put();
+        params.put("userID", String.valueOf(getInstance().currentUserID));
+        params.put("eventName", event.getTitle());
+        params.put("whetherProcess", event.whetherProcess?"1":"0");
+        params.put("beginTime", event.getBeginTimeFormat());
+        params.put("endTime", event.getEndTimeFormat());
+        params.put("description", event.getDescription());
 
-        new HttpRequestThread(params, new HttpRequest.DataCallback(){
+        new HttpRequestThread(SERVER_IP+"submitevent", params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
                 Log.i("success","add the event successfully");
+                event.setEventID(Integer.valueOf(result));
+                getInstance().eventList.add(event);
+                callback.run();
             }
 
             @Override
             public void requestFailure(Request request, IOException e) {
                 Log.e("shit","oops! Something goes wrong");
+                callback.run();
             }
         }).start();
     }
@@ -83,10 +112,10 @@ public class ClientEventControl {//施工
     // 删除一个event
     public int deleteEvent(int eventID){
         eventList.sortByEventID();
-        int index = eventList.findBinary(eventID);
+        int index = 0;//TODO 此处因为二分查找被删了 暂时没有
 
         if (index != -1){
-            eventList.delete(index);
+            eventList.remove(index);
             return 0;
         }
         else{
@@ -102,7 +131,7 @@ public class ClientEventControl {//施工
     public int editEvent(String description, int eventID, int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
                          int endYear, int endMonth, int endDate, int endHour, int endMin, boolean wProcess){
         eventList.sortByEventID();
-        int index = eventList.findBinary(eventID);
+        int index = 0;//TODO 此处因为二分查找被删了 暂时没有
 
         if (index != -1){
 
@@ -133,18 +162,15 @@ public class ClientEventControl {//施工
 
 
     // 输入日期，得到当天的eventList
-    public EventList findEventListByDate(int beginYear, int beginMonth, int beginDate){
+    public static EventList findEventListByDate(int year, int month, int day){
         EventList resultList = new EventList();
+        for (Event event:getInstance().eventList){
+            if (event.getBeginTime().get(GregorianCalendar.YEAR) == year
+                    && event.getBeginTime().get(GregorianCalendar.MONTH ) + 1 == month
+                    && event.getBeginTime().get(GregorianCalendar.DATE) == day){
 
-        for (int i = 0; i < eventList.length(); i ++){
-            Event currentEvent = eventList.get(i);
-            if (currentEvent.getBeginTime().get(GregorianCalendar.YEAR) == beginYear
-                    && currentEvent.getBeginTime().get(GregorianCalendar.MONTH ) + 1 == beginMonth
-                    && currentEvent.getBeginTime().get(GregorianCalendar.DATE) == beginDate){
-
-                resultList.add(currentEvent);
+                resultList.add(event);
             }
-
         }
         return resultList;
     }
@@ -153,6 +179,7 @@ public class ClientEventControl {//施工
 
     // 测试
     public static void main(String[] args){
+        /*
         ClientEventControl crtl = new ClientEventControl(25);
         EventList eventList = new EventList();
         crtl.eventList = eventList;
@@ -189,6 +216,6 @@ public class ClientEventControl {//施工
 
         }catch(Exception ex){
             //System.out.println(ex.getMessage());
-        }
+        }*/
     }
 }

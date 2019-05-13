@@ -1,6 +1,8 @@
 package com.example.daymoon.UserInterface;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,16 +16,35 @@ import android.app.AlertDialog;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.EventManagement.Event;
+import static com.example.daymoon.Define.Constants.SERVER_IP;
 import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.R;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarView;
+
+import java.lang.ref.WeakReference;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CalendarActivity extends AppCompatActivity {
+
+    private static class InnerHandler extends Handler{
+        private final WeakReference<CalendarActivity> mActivity;
+        private InnerHandler(CalendarActivity activity){
+            mActivity = new WeakReference<CalendarActivity>(activity);
+        }
+        @Override
+        public void handleMessage(Message msg){
+            CalendarActivity activity = mActivity.get();
+            if (activity != null) {
+
+            }
+        }
+    }
+
     private Map<String, Calendar> map = new HashMap<>();
     private CalendarView calendarView;
     private LinearLayout picker;//日期选择器
@@ -31,23 +52,23 @@ public class CalendarActivity extends AppCompatActivity {
     private ListView listevent;
     private Context mainContext = null;
     private EventViewAdapter adapter = null;
-    private EventList Events;
     private Button btn_add;//添加事件的按钮
     private AlertDialog alert = null;//提醒框
-    private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
+    //private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
     private int selectYear;
     private int selectMonth;
     private int selectDay;
-
+    public InnerHandler mHandler = new InnerHandler(this);
 
 
     //String[] dis={"哈皮","sb戴哥邀请跑步","贯神之狼","李晓肝甲甲","超哥归寝"};
     //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,dis);
     @Override
-
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ClientEventControl.setCurrentUserID(1);//TODO 替换为由登录界面传递过来的ID
+        ClientEventControl.getEventListFromServer();
         setContentView(R.layout.activity_canlendar);//绑定界面
         calendarView = findViewById(R.id.calendarView);//绑定calendar
         picker = findViewById(R.id.picker);//时间选择器
@@ -55,10 +76,10 @@ public class CalendarActivity extends AppCompatActivity {
         btn_add = (Button) findViewById(R.id.addbutton);
         mainContext = CalendarActivity.this;
         final ListView  listview = (ListView) findViewById(R.id.list_one); //绑定listview
-        UIControl = new TestUserInterfaceControl();
-        selectDay=calendarView.getCurDay();
-        selectMonth=calendarView.getCurMonth();
-        selectYear=calendarView.getCurYear();
+        //UIControl = new TestUserInterfaceControl();
+        selectDay = calendarView.getCurDay();
+        selectMonth = calendarView.getCurMonth();
+        selectYear = calendarView.getCurYear();
         initData();
         //初始化当前年月
         tvMonth.setText(calendarView.getCurYear() + "年" + calendarView.getCurMonth() + "月");
@@ -100,19 +121,18 @@ public class CalendarActivity extends AppCompatActivity {
                 //Log.i("??",String.format("%d,%d,%d",selectYear,selectMonth,selectDay));
 
 
-                Events = UIControl.getEventlist(selectYear,selectMonth,selectDay);
                 //此处需要加入方法获取Eventlist
                 //Event todays = new Event(String.format("%d,%d,%d",selectYear,selectMonth,selectDay));
                 //Events.add(todays);
-                adapter = new EventViewAdapter(Events,mainContext); //设置adapter
+                adapter = new EventViewAdapter(ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay), mainContext); //设置adapter
                 listview.setAdapter(adapter);//将adpter绑定在listview上
                 System.out.print("sa");
                 listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        System.out.print("asdsa");
+                        System.out.print(String.valueOf(position));
                         Intent intent = new Intent(CalendarActivity.this,EventDetailActivity.class);
-                        intent.putExtra("event",Events.get(position));
+                        intent.putExtra("event",ClientEventControl.getEventList().get(position));
                         startActivity(intent);
                     }
                 });

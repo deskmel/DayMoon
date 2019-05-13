@@ -57,6 +57,14 @@ def getuser():
         res='查询结果:  '+str(info)
     return render_template('getuser.html',res=res)
 
+@app.route('/getallmyevents',methods=['GET', 'POST'])
+def getallmyevents():
+    res=None
+    if request.method == 'POST':
+        userID=int(request.form.get('userID'))
+        res=db.getAllMyEvents(userID)
+    return res
+
 @app.route('/submitevent',methods=['GET', 'POST'])
 def submitevent():
     res=None
@@ -70,10 +78,9 @@ def submitevent():
         description = request.form.get('description')
         remind=rem.str()
 
-        info=db.submitEventInfo(userID,eventName,whetherProcess,beginTime,endTime,description,remind)
-        res='个人事件的eventID:  '+str(info)
-    return render_template('submitevent.html',res=res)
+        res=db.submitEventInfo(userID,eventName,whetherProcess,beginTime,endTime,description,remind)
+    return str(res)
 
 if __name__ == '__main__':
     app.debug = True
-    app.run()
+    app.run(host = "0.0.0.0", port = 5000)

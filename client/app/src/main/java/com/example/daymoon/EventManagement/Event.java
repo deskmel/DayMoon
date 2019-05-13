@@ -11,23 +11,23 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class Event implements Comparable<Event>, Serializable {
-    private String description, title;
+    private String description, eventName;
     private int eventID;
     private GregorianCalendar beginTime, endTime;
     boolean whetherProcess;
     // Reminder reminder;
 
-    public Event(String str, int eID, int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
+    public Event(String name, String des, int eID, int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
                  int endYear, int endMonth, int endDate, int endHour, int endMin, boolean wProcess) throws Exception{
 
-        if (validEventInfo(str, beginYear, beginMonth, beginDate, beginHour, beginMin, endYear, endMonth, endDate, endHour, endMin)) {
-            description = str;
+        if (validEventInfo(des, beginYear, beginMonth, beginDate, beginHour, beginMin, endYear, endMonth, endDate, endHour, endMin)) {
+            description = des;
             eventID = eID;
             beginTime = new GregorianCalendar(beginYear, beginMonth - 1, beginDate, beginHour, beginMin);
             endTime = new GregorianCalendar(endYear, endMonth - 1, endDate, endHour, endMin);
             whetherProcess = wProcess;
             //需要修改
-            title="Happy things";
+            eventName = name;
         }
         else{
             throw new Exception("Fail to construct event");
@@ -130,7 +130,7 @@ public class Event implements Comparable<Event>, Serializable {
     }
 
     public String getTitle(){
-        return title;
+        return eventName;
     }
 
     public GregorianCalendar getBeginTime(){
@@ -149,6 +149,12 @@ public class Event implements Comparable<Event>, Serializable {
         return dateFormat.format(beginTime.getTime());
     }
 
+    public String getBeginTimeFormat(){
+        SimpleDateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
+        Log.d("?",dateFormat.format(beginTime.getTime()));
+        return dateFormat.format(beginTime.getTime());
+    }
 
     public GregorianCalendar getEndTime(){
         return endTime;
@@ -163,6 +169,13 @@ public class Event implements Comparable<Event>, Serializable {
         dateFormat = new SimpleDateFormat("y年M月d日 H时m分",Locale.CHINA);
         return dateFormat.format(endTime);
 
+    }
+
+    public String getEndTimeFormat(){
+        SimpleDateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
+        Log.d("?",dateFormat.format(endTime.getTime()));
+        return dateFormat.format(endTime.getTime());
     }
 
     /**
@@ -234,11 +247,5 @@ public class Event implements Comparable<Event>, Serializable {
     // 测试
     public static void main(String[] args){
 
-        try {
-            Event ev1 = new Event("xx", 0, 2019, 2, 30, 17, 61, 2019, 4, 32, 0, 0, true);
-            Event ev2 = new Event("xx", 1, 17, 61, 0, 0, true);
-        }catch(Exception ex){
-            System.out.println(ex.getMessage());
-        }
     }
 }

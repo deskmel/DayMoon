@@ -47,7 +47,7 @@ public class TestUserInterfaceControl implements UserInterfaceControl{
         //test
         EventList eventList=new EventList();
         try {
-            Event today = new Event("today", 0, year, month, date, 0, 0, year, month, date, 1, 1, true);
+            Event today = new Event("today", "shit", 0, year, month, date, 0, 0, year, month, date, 1, 1, true);
             eventList.add(today);
 
         }
@@ -68,8 +68,7 @@ public class TestUserInterfaceControl implements UserInterfaceControl{
      */
     public int addEvent(Event_information_holder event_info){
         try{
-            Event today = new Event(event_info.title, 0, event_info.Year_, event_info.Month_, event_info.Date_, event_info.startHour_, event_info.startMinute_, event_info.Year_, event_info.Month_, event_info.Date_, event_info.endHour_, event_info.endMinute_, event_info.process);
-            eventControl.addEvent(today);
+            Event today;
             return Constants.NORMAL;
         }
         catch (Exception ex)

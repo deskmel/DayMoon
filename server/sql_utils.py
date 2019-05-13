@@ -182,17 +182,21 @@ class DayMoonDB(object):
         :param userID: int
         :return: 当userID符合该eventID时才有权限. 若存在事件，返回dict_json，否则返回None
         '''
+
+        Num2Bool=["false","true"]
+
         sql = '''SELECT `userID` FROM `events` WHERE `eventID`=%d''' % eventID
         self.cur.execute(sql)
         realuser = self.cur.fetchone()[0]
         if realuser!=userID: return 'NO ACCESS'
-
         sql = '''SELECT * FROM `events` WHERE `eventID`=%d''' % eventID
         self.cur.execute(sql)
         info = self.cur.fetchone()
+        print(info)
         if not info: return None
         infodict = {'eventID': info[0], 'userID': info[1], 'eventName':info[2], 'description': info[3], 'beginTime': info[4].strftime("%Y-%m-%d %H:%M:%S"),
-                    'endTime': info[5].strftime("%Y-%m-%d %H:%M:%S"), 'whetherProcess':info[6], 'remind': json.loads(info[7])}
+                    'endTime': info[5].strftime("%Y-%m-%d %H:%M:%S"), 'whetherProcess': Num2Bool[info[6]]}#为了测试暂时把remind删了
+
         return json.dumps(infodict,ensure_ascii=False)
 
     def deleteEventInfo(self,eventID,userID):
@@ -573,6 +577,7 @@ class DayMoonDB(object):
         :param userID: int
         :return: json_dict
         '''
+
         sql = '''SELECT `groupIDs` FROM `users` WHERE `userID`=%d''' % userID
         self.cur.execute(sql)
         groups = json.loads(self.cur.fetchone()[0])

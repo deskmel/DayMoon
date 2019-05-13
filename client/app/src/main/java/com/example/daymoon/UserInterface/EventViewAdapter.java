@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.EventManagement.Event;
 import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.R;
@@ -14,17 +15,17 @@ import com.example.daymoon.R;
 import java.util.LinkedList;
 
 public class EventViewAdapter extends BaseAdapter {
-    private LinkedList<Event> Events;
+    private EventList eventList;
     private Context mContext;
 
     public EventViewAdapter() {}
-    public EventViewAdapter(EventList Events, Context context){
-        this.Events=Events.getAllEventRecord();
-        this.mContext=context;
+    public EventViewAdapter(EventList eventList, Context context){
+        this.eventList = eventList;
+        this.mContext = context;
     }
     @Override
     public int getCount(){
-        return Events.size();
+        return eventList.size();
     }
     @Override
     public Object getItem(int position)
@@ -47,9 +48,9 @@ public class EventViewAdapter extends BaseAdapter {
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.title.setText(Events.get(position).getTitle());
-        holder.time.setText(Events.get(position).getBeginTime_str());
-        holder.des.setText(Events.get(position).getDescription());
+        holder.title.setText(eventList.get(position).getTitle());
+        holder.time.setText(eventList.get(position).getBeginTime_str());
+        holder.des.setText(eventList.get(position).getDescription());
         return convertView;
     }
 

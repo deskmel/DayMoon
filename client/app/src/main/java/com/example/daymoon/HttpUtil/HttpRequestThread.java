@@ -1,25 +1,22 @@
 package com.example.daymoon.HttpUtil;
 
-import java.io.IOException;
 import java.util.Map;
-import java.util.HashMap;
 
-import okhttp3.Request;
-
-import static com.example.daymoon.Define.Constants.SERVER_IP;
 
 public class HttpRequestThread extends Thread{
 
     private Map<String, String> params;
     private HttpRequest.DataCallback dataCallback;
+    private String url;
 
-    public HttpRequestThread(Map<String, String> params, HttpRequest.DataCallback dataCallback){
+    public HttpRequestThread(String url, Map<String, String> params, HttpRequest.DataCallback dataCallback){
+        this.url = url;
         this.params = params;
         this.dataCallback = dataCallback;
     }
 
     @Override
     public void run(){
-        HttpRequest.post(SERVER_IP+"signup", params, dataCallback);
+        HttpRequest.post(url, params, dataCallback);
     }
 }

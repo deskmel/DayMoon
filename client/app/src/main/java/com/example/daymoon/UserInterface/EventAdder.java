@@ -12,6 +12,8 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.daymoon.Define.Constants;
+import com.example.daymoon.EventManagement.ClientEventControl;
+import com.example.daymoon.EventManagement.Event;
 import com.example.daymoon.R;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.nightonke.jellytogglebutton.State;
@@ -72,9 +74,9 @@ public class EventAdder extends AppCompatActivity {
                         int datee = c.get(java.util.Calendar.DATE);
                         //滚动到指定日期
                         startDate.setText(String.format("%d-%d-%d",year,month,datee));
-                        event_info.Year_=year;
-                        event_info.Month_=month;
-                        event_info.Date_=datee;
+                        event_info.Year_ = year;
+                        event_info.Month_ = month;
+                        event_info.Date_ = datee;
                     }
                 }).setType(dateType).build();
                 pvTime.show();
@@ -160,17 +162,13 @@ public class EventAdder extends AppCompatActivity {
                 event_info.descriptions = DescriptionView.getText().toString();
                 Log.d("begintime",String.format("%d %d %d %d %d\n",event_info.Year_,event_info.Month_,event_info.Date_,event_info.startHour_,event_info.startMinute_));
                 Log.d("endtime",String.format("%d %d %d %d %d\n",event_info.Year_,event_info.Month_,event_info.Date_,event_info.endHour_,event_info.endMinute_));
-                int State = UIControl.addEvent(event_info);
-                Log.d("??",String.valueOf(State));
-                switch (State)
-                {
-                    case Constants.NORMAL:
+
+                ClientEventControl.addEvent(event_info, new Runnable(){
+                    @Override
+                    public void run() {
                         finish();
-                        break;
-                    case Constants.ERROR:
-                        //加提醒错误状态
-                        break;
-                }
+                    }
+                });
             }
         });
     }

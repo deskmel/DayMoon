@@ -5,56 +5,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class EventList {
-    LinkedList<Event> eventRecord;
-
-    public EventList(){
-        eventRecord = new LinkedList<Event>();
-    }
-
-
-    public void add(Event event){
-        eventRecord.add(event);
-
-    }
-
-
-
-    public void delete(int eventID){
-        eventRecord.remove(eventID);
-    }
-
-
-
-    public int length(){
-        return eventRecord.size();
-    }
-
-    public LinkedList<Event> getAllEventRecord() {
-        return eventRecord;
-    }
-
-    public Event get(int index){
-        return eventRecord.get(index);
-    }
-
-
-
-    // 找对应eventID的索引
-    public int find(int eventID){
-        for (int i = 0; i < eventRecord.size(); i++){
-            if (eventRecord.get(i).getEventID() == eventID){
-
-                return i;
-            }
-        }
-        return -1;
-    }
+public class EventList extends LinkedList<Event>{
+    //原来的实现似乎没有太大必要 后续需要在补充方法
 
 
 
     // 找对应eventID的索引，二分查找，要先排序
-    public int findBinary(int eventID){
+    /*public int findBinary(int eventID){
 
         int start = 0, end = eventRecord.size() - 1;
         int middle;
@@ -72,13 +29,13 @@ public class EventList {
             }
         }
         return -1;
-    }
+    }*/
 
 
 
     // 按eventID排序
     public void sortByEventID(){
-        Collections.sort(eventRecord);
+        Collections.sort(this);
     }
 
 

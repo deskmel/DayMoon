@@ -34,7 +34,7 @@ public class HttpRequest {
         return httpRequest;
     }
 
-    public static void post(String url, Map<String, String> params, DataCallback dataCallbackack) {
+    static void post(String url, Map<String, String> params, DataCallback dataCallbackack) {
         getInstance().inner_post(url, params, dataCallbackack);
     }
 
