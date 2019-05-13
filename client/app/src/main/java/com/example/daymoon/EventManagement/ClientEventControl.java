@@ -1,35 +1,81 @@
 package com.example.daymoon.EventManagement;
 
+import android.os.Handler;
+import android.util.Log;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-public class ClientEventControl {
-    int currentUserID;
-    int currentEventID; // 下一个event的ID，即当前event总数+1，这样可以保证eventID不重复
-    EventList eventList;
+import com.example.daymoon.HttpUtil.HttpRequest;
+import com.example.daymoon.HttpUtil.HttpRequestThread;
+import com.example.daymoon.Define.Constants.*;
 
-    public ClientEventControl(int cuID){
-        currentUserID = cuID;
+import okhttp3.Request;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+public class ClientEventControl {//施工
+
+    private int currentUserID, currentEventID; // 下一个event的ID，即当前event总数+1，这样可以保证eventID不重复
+
+    private EventList eventList;
+
+    private ClientEventControl(int currentEventID){
+        currentUserID = currentEventID;
     }
 
-
-
     // 通过currentUserID向服务器找到当前user的eventList
-    public EventList getEventList(){
+    public void getEventList(){
+        Map<String,String> params = new HashMap<>();
+        params.put("userid",String.valueOf(currentUserID));
+        try{
+            new HttpRequestThread(params, new HttpRequest.DataCallback(){
+                @Override
+                public void requestSuccess(String result) {
+                    Gson gson = new GsonBuilder().create();
+                    Type EventRecordType = new TypeToken<LinkedList<Event>>(){}.getType();
+                    eventList.eventRecord = gson.fromJson(result, EventRecordType);
+                }
 
-        // ！！！！！！！！！！！！！！
-        return null;
+                @Override
+                public void requestFailure(Request request, IOException e) {
+                    Log.e("shit", "oops! Something goes wrong");
+                }
+            }).join();
+        }catch (InterruptedException e){
+            Log.e("shit", "InterruptedException");
+            e.printStackTrace();
+        }
     }
 
 
 
     // 增加一个event
     public void addEvent(Event event){
-
         eventList.add(event);
-        currentEventID += 1;
+        Map<String,String> params = new HashMap<>();
 
+        //TO DO params.put();
+
+        new HttpRequestThread(params, new HttpRequest.DataCallback(){
+            @Override
+            public void requestSuccess(String result) {
+                Log.i("success","add the event successfully");
+            }
+
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                Log.e("shit","oops! Something goes wrong");
+            }
+        }).start();
     }
 
 
@@ -60,9 +106,9 @@ public class ClientEventControl {
 
         if (index != -1){
 
-            eventList.get(index).description = description;
-            eventList.get(index).beginTime = new GregorianCalendar(beginYear, beginMonth - 1, beginDate, beginHour, beginMin);
-            eventList.get(index).endTime = new GregorianCalendar(endYear, endMonth - 1, endDate, endHour, endMin);
+            eventList.get(index).setDescription(description);
+            eventList.get(index).setBeginTime(new GregorianCalendar(beginYear, beginMonth - 1, beginDate, beginHour, beginMin));
+            eventList.get(index).setEndTime(new GregorianCalendar(endYear, endMonth - 1, endDate, endHour, endMin));
             eventList.get(index).whetherProcess = wProcess;
 
             return 0;

@@ -30,8 +30,7 @@ public class EventList {
         return eventRecord.size();
     }
 
-    public LinkedList<Event> getAllEventRecord()
-    {
+    public LinkedList<Event> getAllEventRecord() {
         return eventRecord;
     }
 

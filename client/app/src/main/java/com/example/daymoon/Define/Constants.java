@@ -10,5 +10,6 @@ public class Constants {
      * @ERROR 错误状态
      */
     public static final int ERROR = 1;
-    //
+
+    public static final String SERVER_IP = "http://192.168.1.103:5000/";
 }

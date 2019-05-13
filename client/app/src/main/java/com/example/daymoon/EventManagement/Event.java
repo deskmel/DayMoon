@@ -11,11 +11,9 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class Event implements Comparable<Event>, Serializable {
-    String description;
-    String title;
-    int eventID;
-    GregorianCalendar beginTime;
-    GregorianCalendar endTime;
+    private String description, title;
+    private int eventID;
+    private GregorianCalendar beginTime, endTime;
     boolean whetherProcess;
     // Reminder reminder;
 
@@ -228,7 +226,7 @@ public class Event implements Comparable<Event>, Serializable {
     // 重载比较函数
     @Override
     public int compareTo(Event otherEvent) {
-        return new Integer(this.getEventID()).compareTo(otherEvent.getEventID());
+        return Integer.valueOf(this.getEventID()).compareTo(otherEvent.getEventID());
     }
 
 
