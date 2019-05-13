@@ -48,7 +48,13 @@ public class EventDetailActivity extends AppCompatActivity {
         findViewById(R.id.delete_event).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClientEventControl.deleteEvent(event.getEventID(), getApplicationContext(), new Runnable(){
+                ClientEventControl.deleteEvent(event.getEventID(), getApplicationContext(), new Runnable() {
+                    @Override
+                    public void run() {
+                        setResult(0);
+                        finish();
+                    }
+                }, new Runnable() {
                     @Override
                     public void run() {
                         setResult(0);

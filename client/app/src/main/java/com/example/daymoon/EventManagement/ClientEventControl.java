@@ -74,7 +74,7 @@ public class ClientEventControl {//施工
 
 
     // 增加一个event
-    public static void addEvent(Event_information_holder event_info, Context context, Runnable callback){
+    public static void addEvent(Event_information_holder event_info, Context context, Runnable success, Runnable failure){
         Event event;
         try {
             event = new Event(event_info.title, event_info.descriptions, 0, event_info.Year_, event_info.Month_, event_info.Date_, event_info.startHour_, event_info.startMinute_, event_info.Year_, event_info.Month_, event_info.Date_, event_info.endHour_, event_info.endMinute_, event_info.process);
@@ -99,14 +99,14 @@ public class ClientEventControl {//施工
                 Toast.makeText(context, "成功添加事件并上传", Toast.LENGTH_SHORT).show();
                 event.setEventID(Integer.valueOf(result));
                 getInstance().eventList.add(event);
-                callback.run();
+                success.run();
             }
 
             @Override
             public void requestFailure(Request request, IOException e) {
                 Toast.makeText(context, "出了点问题", Toast.LENGTH_SHORT).show();
                 Log.e("shit","oops! Something goes wrong");
-                callback.run();
+                failure.run();
             }
         }).start();
     }
@@ -114,7 +114,7 @@ public class ClientEventControl {//施工
 
 
     // 删除一个event
-    public static void deleteEvent(int eventID, Context context, Runnable callback){
+    public static void deleteEvent(int eventID, Context context, Runnable success, Runnable failure){
         Map<String,String> params = new HashMap<>();
 
         params.put("userID", String.valueOf(getInstance().currentUserID));
@@ -127,14 +127,14 @@ public class ClientEventControl {//施工
 
                 Toast.makeText(context, "成功删除事件并上传", Toast.LENGTH_SHORT).show();
                 getInstance().eventList.removeByID(eventID);
-                callback.run();
+                success.run();
             }
 
             @Override
             public void requestFailure(Request request, IOException e) {
                 Toast.makeText(context, "出了点问题", Toast.LENGTH_SHORT).show();
                 Log.e("shit","oops! Something goes wrong");
-                callback.run();
+                failure.run();
             }
         }).start();
 

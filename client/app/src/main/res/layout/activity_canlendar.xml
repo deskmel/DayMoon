@@ -76,11 +76,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:gravity="center"
-                android:text="1999 - 2 -18"/>
             <ListView
                 android:id="@+id/list_one"
                 android:layout_width="wrap_content"
