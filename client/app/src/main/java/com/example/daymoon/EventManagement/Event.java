@@ -60,7 +60,7 @@ public class Event implements Comparable<Event>, Serializable {
 
 
     // 检查event信息合法性: 日期和时间的格式，字符串<=100个字
-    public boolean validEventInfo(String description, int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
+    private boolean validEventInfo(String description, int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
                                   int endYear, int endMonth, int endDate, int endHour, int endMin){
         try {
             String date1Str = String.valueOf(beginYear) + '-' + String.valueOf(beginMonth) + '-' + String.valueOf(beginDate);
@@ -92,7 +92,7 @@ public class Event implements Comparable<Event>, Serializable {
 
 
     // 辅助函数，判断beginTime是否先于endTime
-    public boolean endAfterBegin(int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
+    private boolean endAfterBegin(int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
                                  int endYear, int endMonth, int endDate, int endHour, int endMin){
 
         if (endYear > beginYear){
@@ -133,7 +133,7 @@ public class Event implements Comparable<Event>, Serializable {
         return eventName;
     }
 
-    public GregorianCalendar getBeginTime(){
+    GregorianCalendar getBeginTime(){
         return beginTime;
     }
 
@@ -149,7 +149,7 @@ public class Event implements Comparable<Event>, Serializable {
         return dateFormat.format(beginTime.getTime());
     }
 
-    public String getBeginTimeFormat(){
+    String getBeginTimeFormat(){
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
         Log.d("?",dateFormat.format(beginTime.getTime()));
@@ -171,7 +171,7 @@ public class Event implements Comparable<Event>, Serializable {
 
     }
 
-    public String getEndTimeFormat(){
+    String getEndTimeFormat(){
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
         Log.d("?",dateFormat.format(endTime.getTime()));
@@ -186,7 +186,7 @@ public class Event implements Comparable<Event>, Serializable {
      */
     public String getLastingTime_str(){
         SimpleDateFormat dateFormat;
-        dateFormat = new SimpleDateFormat("HH:mm");
+        dateFormat = new SimpleDateFormat("HH:mm", Locale.CHINA);
         String BeginMinute = dateFormat.format(beginTime.getTime());
         String EndMinute = dateFormat.format(endTime.getTime());
         Log.d("BeginMinute",BeginMinute);
@@ -205,26 +205,26 @@ public class Event implements Comparable<Event>, Serializable {
 
 
 
-    public void setDescription(String description) {
+    void setDescription(String description) {
         this.description = description;
     }
 
 
 
     // 最好不更改
-    public void setEventID(int eventID){
+    void setEventID(int eventID){
         this.eventID = eventID;
     }
 
 
 
-    public void setBeginTime(GregorianCalendar beginTime){
+    void setBeginTime(GregorianCalendar beginTime){
         this.beginTime = beginTime;
     }
 
 
 
-    public void setEndTime(GregorianCalendar endTime){
+    void setEndTime(GregorianCalendar endTime){
         this.endTime = endTime;
     }
 

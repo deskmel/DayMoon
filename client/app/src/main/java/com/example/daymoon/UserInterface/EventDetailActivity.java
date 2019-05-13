@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.daymoon.EventManagement.Event;
+import com.example.daymoon.EventManagement.ClientEventControl;
+import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.R;
 
 public class EventDetailActivity extends AppCompatActivity {
@@ -46,8 +48,13 @@ public class EventDetailActivity extends AppCompatActivity {
         findViewById(R.id.delete_event).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIControl.deleteEvent(event.getEventID());
-                finish();
+                ClientEventControl.deleteEvent(event.getEventID(), getApplicationContext(), new Runnable(){
+                    @Override
+                    public void run() {
+                        setResult(0);
+                        finish();
+                    }
+                });
             }
         });
     }

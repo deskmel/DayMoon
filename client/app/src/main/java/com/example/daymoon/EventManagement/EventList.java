@@ -8,7 +8,16 @@ import java.util.LinkedList;
 public class EventList extends LinkedList<Event>{
     //原来的实现似乎没有太大必要 后续需要在补充方法
 
-
+    public void removeByID(int eventID){//A naive implementation
+        int index = -1;
+        for (int i = 0; i < size(); i += 1){
+            if (get(i).getEventID() == eventID){
+                index = i;
+                break;
+            }
+        }
+        if (index >= 0) remove(index);
+    }
 
     // 找对应eventID的索引，二分查找，要先排序
     /*public int findBinary(int eventID){

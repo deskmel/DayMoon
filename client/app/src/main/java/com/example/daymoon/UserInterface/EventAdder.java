@@ -163,7 +163,7 @@ public class EventAdder extends AppCompatActivity {
                 Log.d("begintime",String.format("%d %d %d %d %d\n",event_info.Year_,event_info.Month_,event_info.Date_,event_info.startHour_,event_info.startMinute_));
                 Log.d("endtime",String.format("%d %d %d %d %d\n",event_info.Year_,event_info.Month_,event_info.Date_,event_info.endHour_,event_info.endMinute_));
 
-                ClientEventControl.addEvent(event_info, new Runnable(){
+                ClientEventControl.addEvent(event_info, getApplicationContext(), new Runnable(){
                     @Override
                     public void run() {
                         finish();

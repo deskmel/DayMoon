@@ -1,5 +1,6 @@
 package com.example.daymoon.EventManagement;
 
+import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
@@ -73,7 +74,7 @@ public class ClientEventControl {//施工
 
 
     // 增加一个event
-    public static void addEvent(Event_information_holder event_info, Runnable callback){
+    public static void addEvent(Event_information_holder event_info, Context context, Runnable callback){
         Event event;
         try {
             event = new Event(event_info.title, event_info.descriptions, 0, event_info.Year_, event_info.Month_, event_info.Date_, event_info.startHour_, event_info.startMinute_, event_info.Year_, event_info.Month_, event_info.Date_, event_info.endHour_, event_info.endMinute_, event_info.process);
@@ -94,6 +95,8 @@ public class ClientEventControl {//施工
             @Override
             public void requestSuccess(String result) {
                 Log.i("success","add the event successfully");
+
+                Toast.makeText(context, "成功添加事件并上传", Toast.LENGTH_SHORT).show();
                 event.setEventID(Integer.valueOf(result));
                 getInstance().eventList.add(event);
                 callback.run();
@@ -101,6 +104,7 @@ public class ClientEventControl {//施工
 
             @Override
             public void requestFailure(Request request, IOException e) {
+                Toast.makeText(context, "出了点问题", Toast.LENGTH_SHORT).show();
                 Log.e("shit","oops! Something goes wrong");
                 callback.run();
             }
@@ -110,18 +114,29 @@ public class ClientEventControl {//施工
 
 
     // 删除一个event
-    public int deleteEvent(int eventID){
-        eventList.sortByEventID();
-        int index = 0;//TODO 此处因为二分查找被删了 暂时没有
+    public static void deleteEvent(int eventID, Context context, Runnable callback){
+        Map<String,String> params = new HashMap<>();
 
-        if (index != -1){
-            eventList.remove(index);
-            return 0;
-        }
-        else{
-            System.out.println("EventID not found");
-            return 1;
-        }
+        params.put("userID", String.valueOf(getInstance().currentUserID));
+        params.put("eventID", String.valueOf(eventID));
+
+        new HttpRequestThread(SERVER_IP+"deleteevent", params, new HttpRequest.DataCallback(){
+            @Override
+            public void requestSuccess(String result) {
+                Log.i("success","delete the event successfully");
+
+                Toast.makeText(context, "成功删除事件并上传", Toast.LENGTH_SHORT).show();
+                getInstance().eventList.removeByID(eventID);
+                callback.run();
+            }
+
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                Toast.makeText(context, "出了点问题", Toast.LENGTH_SHORT).show();
+                Log.e("shit","oops! Something goes wrong");
+                callback.run();
+            }
+        }).start();
 
     }
 

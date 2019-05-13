@@ -81,6 +81,16 @@ def submitevent():
         res=db.submitEventInfo(userID,eventName,whetherProcess,beginTime,endTime,description,remind)
     return str(res)
 
+@app.route('/deleteevent',methods=['GET', 'POST'])
+def deleteevent():
+    res=None
+    if request.method == 'POST':
+
+        userID = int(request.form.get('userID'))
+        eventID = int(request.form.get('eventID'))
+        res=db.deleteEventInfo(eventID,userID)
+    return str(res)
+
 if __name__ == '__main__':
     app.debug = True
     app.run(host = "0.0.0.0", port = 5000)

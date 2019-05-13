@@ -3,6 +3,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,7 @@ import com.haibin.calendarview.CalendarView;
 import java.lang.ref.WeakReference;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CalendarActivity extends AppCompatActivity {
@@ -49,7 +51,7 @@ public class CalendarActivity extends AppCompatActivity {
     private CalendarView calendarView;
     private LinearLayout picker;//日期选择器
     private TextView tvMonth;
-    private ListView listevent;
+    private ListView listView;
     private Context mainContext = null;
     private EventViewAdapter adapter = null;
     private Button btn_add;//添加事件的按钮
@@ -58,6 +60,7 @@ public class CalendarActivity extends AppCompatActivity {
     private int selectYear;
     private int selectMonth;
     private int selectDay;
+    private EventList todayEventList;
     public InnerHandler mHandler = new InnerHandler(this);
 
 
@@ -75,7 +78,7 @@ public class CalendarActivity extends AppCompatActivity {
         tvMonth = findViewById(R.id.tv_month);//textview
         btn_add = (Button) findViewById(R.id.addbutton);
         mainContext = CalendarActivity.this;
-        final ListView  listview = (ListView) findViewById(R.id.list_one); //绑定listview
+        listView = (ListView) findViewById(R.id.list_one); //绑定listview
         //UIControl = new TestUserInterfaceControl();
         selectDay = calendarView.getCurDay();
         selectMonth = calendarView.getCurMonth();
@@ -124,16 +127,17 @@ public class CalendarActivity extends AppCompatActivity {
                 //此处需要加入方法获取Eventlist
                 //Event todays = new Event(String.format("%d,%d,%d",selectYear,selectMonth,selectDay));
                 //Events.add(todays);
-                adapter = new EventViewAdapter(ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay), mainContext); //设置adapter
-                listview.setAdapter(adapter);//将adpter绑定在listview上
+                todayEventList = ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay);
+                adapter = new EventViewAdapter(todayEventList, mainContext); //设置adapter
+                listView.setAdapter(adapter);//将adpter绑定在listview上
                 System.out.print("sa");
-                listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         System.out.print(String.valueOf(position));
                         Intent intent = new Intent(CalendarActivity.this,EventDetailActivity.class);
-                        intent.putExtra("event",ClientEventControl.getEventList().get(position));
-                        startActivity(intent);
+                        intent.putExtra("event",ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay).get(position));
+                        startActivityForResult(intent, 0);
                     }
                 });
             }
@@ -150,9 +154,17 @@ public class CalendarActivity extends AppCompatActivity {
                 bundle.putInt("selectMonth",selectMonth);
                 bundle.putInt("selectDay",selectDay);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent, 0);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        todayEventList = ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay);
+        adapter = new EventViewAdapter(todayEventList, mainContext);
+        listView.setAdapter(adapter);
     }
 
     private void initData() {
