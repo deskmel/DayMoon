@@ -11,5 +11,5 @@ public class Constants {
      */
     public static final int ERROR = 1;
 
-    public static final String SERVER_IP = "http://10.162.235.138:5000/";
+    public static final String SERVER_IP = "http://192.168.1.103:5000/";
 }

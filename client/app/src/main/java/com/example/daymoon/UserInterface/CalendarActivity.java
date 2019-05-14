@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class CalendarActivity extends AppCompatActivity {
 
-    private Map<String, Calendar> map = new HashMap<>();
+    private Map<String, Calendar> map;
     private CalendarView calendarView;
     private LinearLayout picker;//日期选择器
     private TextView tvMonth;
@@ -155,14 +155,7 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        Calendar calendar1 = getSchemeCalendar(2018, 8, 11, "1");
-        Calendar calendar2 = getSchemeCalendar(2018, 8, 12, "2");
-        Calendar calendar3 = getSchemeCalendar(2018, 8, 13, "3");
-        Calendar calendar4 = getSchemeCalendar(2018, 8, 6, "4");
-        map.put(calendar1.toString(), calendar1);
-        map.put(calendar2.toString(), calendar2);
-        map.put(calendar3.toString(), calendar3);
-        map.put(calendar4.toString(), calendar4);
+        map=ClientEventControl.getDatesHasEvent();
         calendarView.setSchemeDate(map);
     }
 

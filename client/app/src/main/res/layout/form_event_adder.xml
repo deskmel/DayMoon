@@ -5,17 +5,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@color/iosbackground"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/menu_bg"
             android:orientation="horizontal"
             tools:layout_editor_absoluteX="97dp"
             tools:layout_editor_absoluteY="0dp">
@@ -26,11 +32,14 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center">
 
-                <Button
+                <TextView
                     android:id="@+id/cancel"
+                    android:paddingLeft="10dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/red"
                     android:text="取消" />
 
                 <TextView
@@ -39,22 +48,28 @@
                     android:gravity="center|center_vertical"
                     android:text="新建事件" />
 
-                <Button
+                <TextView
                     android:id="@+id/complete"
+                    android:paddingRight="10dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/red"
                     android:text="完成" />
             </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="30dp"
+            android:background="@color/white"
             android:id="@+id/eventname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <com.rengwuxian.materialedittext.MaterialEditText
+                android:paddingLeft="8dp"
                 android:id="@+id/titleEditView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,8 +77,15 @@
                 />
         </LinearLayout>
         <LinearLayout
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/white_bg">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_bg"
             android:orientation="horizontal">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -79,12 +101,15 @@
                     android:id="@+id/whetherAllday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:jtbJelly="itself"
+                    android:layout_centerVertical="true"
+                    app:jtbLeftBackgroundColor="@android:color/darker_gray"
+                    app:jtbEaseType="ease_in_out_circ"
                     android:layout_alignParentRight="true"
                     />
             </RelativeLayout>
         </LinearLayout>
         <LinearLayout
+            android:background="@drawable/white_bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RelativeLayout
@@ -105,12 +130,13 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
-                    android:text="2018-4-28"
+                    android:text="2018年4年28日"
                     android:gravity="center_vertical"
                     />
             </RelativeLayout>
         </LinearLayout>
         <LinearLayout
+            android:background="@drawable/white_bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -126,14 +152,17 @@
                     android:text="持续"/>
                 <com.nightonke.jellytogglebutton.JellyToggleButton
                     android:id="@+id/whethercontinue"
+                    app:jtbLeftBackgroundColor="@android:color/darker_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     app:jtbEaseType="ease_in_out_circ"
                     android:layout_alignParentRight="true"
                     />
             </RelativeLayout>
         </LinearLayout>
         <LinearLayout
+            android:background="@drawable/white_bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RelativeLayout
@@ -158,6 +187,7 @@
             </RelativeLayout>
         </LinearLayout>
         <LinearLayout
+            android:background="@drawable/white_bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RelativeLayout
@@ -182,6 +212,7 @@
             </RelativeLayout>
         </LinearLayout>
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RelativeLayout
@@ -204,10 +235,15 @@
                     />
             </RelativeLayout>
         </LinearLayout>
+        </LinearLayout>
         <LinearLayout
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
             android:layout_width="match_parent"
+            android:background="@drawable/white_bg"
             android:layout_height="150dp">
             <com.rengwuxian.materialedittext.MaterialEditText
+                android:paddingLeft="10dp"
                 android:id="@+id/DesEditView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -219,4 +255,5 @@
                 />
         </LinearLayout>
     </LinearLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

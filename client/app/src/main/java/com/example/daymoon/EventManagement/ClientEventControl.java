@@ -27,6 +27,7 @@ import com.example.daymoon.UserInterface.Event_information_holder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.haibin.calendarview.Calendar;
 
 public class ClientEventControl {//施工
 
@@ -139,8 +140,29 @@ public class ClientEventControl {//施工
         }).start();
 
     }
+    //返回有事件的日期
+    public static Map<String, Calendar> getDatesHasEvent()
+    {
+        Map<String,Calendar> map=new HashMap<>();
+        Calendar calendar1 = getSchemeCalendar(2019, 5, 11, "1");
+        Calendar calendar2 = getSchemeCalendar(2019, 5, 12, "1");
+        Calendar calendar3 = getSchemeCalendar(2019, 5, 13, "1");
+        Calendar calendar4 = getSchemeCalendar(2019, 5, 6, "1");
+        map.put(calendar1.toString(), calendar1);
+        map.put(calendar2.toString(), calendar2);
+        map.put(calendar3.toString(), calendar3);
+        map.put(calendar4.toString(), calendar4);
+        return map;
+    }
 
-
+    private static Calendar getSchemeCalendar(int year, int month, int day, String text) {
+        Calendar calendar = new Calendar();
+        calendar.setYear(year);
+        calendar.setMonth(month);
+        calendar.setDay(day);
+        calendar.setScheme(text);
+        return calendar;
+    }
 
     // 修改一个event
     public int editEvent(String description, int eventID, int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
@@ -183,7 +205,6 @@ public class ClientEventControl {//施工
             if (event.getBeginTime().get(GregorianCalendar.YEAR) == year
                     && event.getBeginTime().get(GregorianCalendar.MONTH ) + 1 == month
                     && event.getBeginTime().get(GregorianCalendar.DATE) == day){
-
                 resultList.add(event);
             }
         }

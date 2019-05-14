@@ -20,7 +20,10 @@ import com.nightonke.jellytogglebutton.State;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class EventAdder extends AppCompatActivity {
 
@@ -35,7 +38,6 @@ public class EventAdder extends AppCompatActivity {
     private Event_information_holder event_info;
     private Intent intent;
     private Bundle bundle;
-    private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
 
 
     @Override
@@ -52,11 +54,18 @@ public class EventAdder extends AppCompatActivity {
         //为表单绑定日期选择工具
         intent=this.getIntent();
         bundle=intent.getExtras();
-
-        //初始化事件的时间
+        final SimpleDateFormat BeginDate = new SimpleDateFormat("yyyy年MM月dd日",Locale.CHINA);
+        final SimpleDateFormat Hour = new SimpleDateFormat("HH:mm", Locale.CHINA);
         event_info = new Event_information_holder(bundle.getInt("selectYear"),bundle.getInt("selectMonth"),bundle.getInt("selectDay"));
-        UIControl=new TestUserInterfaceControl();
+        //初始化事件的时间
 
+        java.util.Calendar c = java.util.Calendar.getInstance();
+        c.set(event_info.Year_,event_info.Month_,event_info.Date_,event_info.startHour_,event_info.startMinute_);
+        startDate.setText(BeginDate.format(c.getTime()));
+        startTime.setText(Hour.format(c.getTime()));
+        c.set(Calendar.HOUR_OF_DAY,event_info.endHour_);
+        c.set(Calendar.MINUTE,event_info.endMinute_);
+        endTime.setText(Hour.format(c.getTime()));
 
         final boolean[] dateType = {true, true, true, false, false, false};
         final boolean[] timeType = {false, false, false, true, true, false};
@@ -73,7 +82,7 @@ public class EventAdder extends AppCompatActivity {
                         int month = c.get(java.util.Calendar.MONTH)+1;
                         int datee = c.get(java.util.Calendar.DATE);
                         //滚动到指定日期
-                        startDate.setText(String.format("%d-%d-%d",year,month,datee));
+                        startDate.setText(BeginDate.format(c.getTime()));
                         event_info.Year_ = year;
                         event_info.Month_ = month;
                         event_info.Date_ = datee;
@@ -91,12 +100,12 @@ public class EventAdder extends AppCompatActivity {
                     public void onTimeSelect(Date date, View v) {
                         java.util.Calendar c = java.util.Calendar.getInstance();
                         c.setTime(date);
-                        int hour = c.get(java.util.Calendar.HOUR);
+                        int hour = c.get(java.util.Calendar.HOUR_OF_DAY);
                         int minute = c.get(java.util.Calendar.MINUTE);
                         //滚动到指定日期
                         event_info.startHour_=hour;
                         event_info.startMinute_=minute;
-                        startTime.setText(String.format("%d-%d",hour,minute));
+                        startTime.setText(Hour.format(c.getTime()));
                     }
                 }).setType(timeType).build();
                 pvTime.show();
@@ -111,12 +120,12 @@ public class EventAdder extends AppCompatActivity {
                     public void onTimeSelect(Date date, View v) {
                         java.util.Calendar c = java.util.Calendar.getInstance();
                         c.setTime(date);
-                        int hour = c.get(java.util.Calendar.HOUR);
+                        int hour = c.get(Calendar.HOUR_OF_DAY);
                         int minute = c.get(java.util.Calendar.MINUTE);
                         //滚动到指定日期
                         event_info.endHour_=hour;
                         event_info.endMinute_=minute;
-                        endTime.setText(String.format("%d-%d",hour,minute));
+                        endTime.setText(Hour.format(c.getTime()));
                     }
                 }).setType(timeType).build();
                 pvTime.show();

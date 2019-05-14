@@ -3,18 +3,15 @@ package com.example.daymoon.UserInterface;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 
-
-
 import com.example.daymoon.R;
 import com.haibin.calendarview.Calendar;
-import com.haibin.calendarview.MonthView;
+import com.haibin.calendarview.WeekView;
 
-public class MyMonthView extends MonthView {
+public class MyWeekView extends WeekView {
 
     private Paint paint1 = new Paint();
     private Paint paint2 = new Paint();
@@ -22,7 +19,7 @@ public class MyMonthView extends MonthView {
     private Bitmap dayBgBitmap;
     private Bitmap daySuccessBitmap;
     private Paint mTextPaint = new Paint();
-    public MyMonthView(Context context) {
+    public MyWeekView(Context context) {
         super(context);
         this.context = context;
         //取消文字加粗
@@ -54,28 +51,28 @@ public class MyMonthView extends MonthView {
     }
 
     @Override
-    protected boolean onDrawSelected(Canvas canvas, Calendar calendar, int x, int y, boolean hasScheme) {
-        float baselineY = mTextBaseLine + y;
+    protected boolean onDrawSelected(Canvas canvas, Calendar calendar, int x,  boolean hasScheme) {
+        float baselineY = mTextBaseLine;
         int cx = x + mItemWidth / 2;
-        int cy = y + mItemHeight / 2;
+        int cy = mItemHeight / 2;
         Paint paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.black));
-        canvas.drawCircle(x+mItemWidth/2,y+mItemHeight/2,mItemWidth/3,paint);
+        canvas.drawCircle(x+mItemWidth/2,mItemHeight/2,mItemWidth/3,paint);
 
         return false;
     }
 
     @Override
-    protected void onDrawScheme(Canvas canvas, Calendar calendar, int x, int y) {
+    protected void onDrawScheme(Canvas canvas, Calendar calendar, int x) {
 
     }
 
     @Override
-    protected void onDrawText(Canvas canvas, Calendar calendar, int x, int y, boolean hasScheme, boolean isSelected) {
+    protected void onDrawText(Canvas canvas, Calendar calendar, int x, boolean hasScheme, boolean isSelected) {
         //这里的x、y 是每日的起点坐标
-        float baselineY = mTextBaseLine + y;
+        float baselineY = mTextBaseLine;
         int cx = x + mItemWidth / 2;
-        int cy = y + mItemHeight / 2;
+        int cy = mItemHeight / 2;
 
         if (isSelected)
         {
@@ -90,7 +87,7 @@ public class MyMonthView extends MonthView {
                 canvas.drawCircle(cx, cy + 3, mItemWidth / 3, paint1);
             } else if ("2".equals(calendar.getScheme())) {
                 //可以完成的，先绘制背景图再写文字，防止文字被遮住
-                canvas.drawBitmap(dayBgBitmap, x + mItemWidth / 4 - 5, y + mItemHeight / 4 + 8, paint2);
+                canvas.drawBitmap(dayBgBitmap, x + mItemWidth / 4 - 5, mItemHeight / 4 + 8, paint2);
                 canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, paint2);
             } else if ("3".equals(calendar.getScheme())) {
                 //今日已完成的，绘制圆+打勾图片
@@ -98,12 +95,12 @@ public class MyMonthView extends MonthView {
                 canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, paint1);
                 paint1.setStrokeWidth(dpToPx(context, 1));
                 canvas.drawCircle(cx, cy + 3, mItemWidth / 4 - 9, paint1);
-                canvas.drawBitmap(daySuccessBitmap, x + mItemWidth * 3 / 4 - 18, y + mItemHeight * 3 / 4 - 24, paint1);
+                canvas.drawBitmap(daySuccessBitmap, x + mItemWidth * 3 / 4 - 18, mItemHeight * 3 / 4 - 24, paint1);
             } else if ("4".equals(calendar.getScheme())) {
                 //历史已完成的，绘制打勾图片
                 paint1.setStrokeWidth(0);
                 canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, paint1);
-                canvas.drawBitmap(daySuccessBitmap, x + mItemWidth * 3 / 4 - 18, y + mItemHeight * 3 / 4 - 40, paint1);
+                canvas.drawBitmap(daySuccessBitmap, x + mItemWidth * 3 / 4 - 18, mItemHeight * 3 / 4 - 40, paint1);
             }
         }
         else {
@@ -128,5 +125,4 @@ public class MyMonthView extends MonthView {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
-
 }

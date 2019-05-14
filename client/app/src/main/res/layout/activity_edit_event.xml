@@ -86,7 +86,7 @@
             android:id="@+id/whethercontinue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:jtbRightBackgroundColor="@android:color/darker_gray"
+            app:jtbLeftBackgroundColor="@android:color/darker_gray"
             app:jtbColorChangeType="hsv"
             app:jtbEaseType="ease_in_out_circ"
             android:layout_alignParentRight="true"

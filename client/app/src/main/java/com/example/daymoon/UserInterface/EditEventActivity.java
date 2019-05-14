@@ -67,7 +67,7 @@ public class EditEventActivity extends AppCompatActivity {
                         event_information_holder.Year_=c.get(java.util.Calendar.YEAR);;
                         event_information_holder.Month_=c.get(java.util.Calendar.MONTH)+1;
                         event_information_holder.Date_=c.get(Calendar.DATE);
-                        event_information_holder.startHour_=c.get(Calendar.HOUR);
+                        event_information_holder.startHour_=c.get(Calendar.HOUR_OF_DAY);
                         event_information_holder.startMinute_=c.get(Calendar.MINUTE);
                     }
                 }).setType(startTimeType).setDate(beginTime).build();
@@ -85,7 +85,7 @@ public class EditEventActivity extends AppCompatActivity {
                         java.util.Calendar c = java.util.Calendar.getInstance();
                         c.setTime(date);
                         endTimeView.setText(EndTime.format(c.getTime()));
-                        event_information_holder.startHour_=c.get(Calendar.HOUR);
+                        event_information_holder.startHour_=c.get(Calendar.HOUR_OF_DAY);
                         event_information_holder.startMinute_=c.get(Calendar.MINUTE);
                     }
                 }).setType(endTimeType).setDate(endTime).build();

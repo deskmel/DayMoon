@@ -25,9 +25,9 @@ public class Event_information_holder {
         Year_=beginTime.get(Calendar.YEAR);
         Month_=beginTime.get(Calendar.MONTH);
         Date_=beginTime.get(Calendar.DATE);
-        startHour_=beginTime.get(Calendar.HOUR);
+        startHour_=beginTime.get(Calendar.HOUR_OF_DAY);
         startMinute_=beginTime.get(Calendar.MINUTE);
-        endHour_=endTime.get(Calendar.HOUR);
+        endHour_=endTime.get(Calendar.HOUR_OF_DAY);
         endMinute_=endTime.get(Calendar.MINUTE);
         allday=event.getWhetherProcess();
         process=event.getWhetherProcess();
@@ -39,9 +39,9 @@ public class Event_information_holder {
         Month_=m;
         Date_=d;
         java.util.Calendar c = java.util.Calendar.getInstance();
-        startHour_=c.HOUR;
+        startHour_=c.get(Calendar.HOUR_OF_DAY);
         startMinute_=0;
-        endHour_=startHour_+1;
-        endMinute_ = 0;
+        endHour_=startHour_;
+        endMinute_ = 59;
     };
 }
