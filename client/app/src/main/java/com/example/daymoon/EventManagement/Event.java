@@ -168,16 +168,14 @@ public class Event implements Comparable<Event>, Serializable {
     public String getEndTime_str(){
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("y年M月d日 H时m分",Locale.CHINA);
-        return dateFormat.format(endTime);
+        return dateFormat.format(endTime.getTime());
 
     }
-
     public String getEndHour(){
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("HH:mm",Locale.CHINA);
         return dateFormat.format(endTime.getTime());
     }
-
     String getEndTimeFormat(){
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);

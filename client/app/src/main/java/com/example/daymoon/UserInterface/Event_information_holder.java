@@ -18,7 +18,6 @@ public class Event_information_holder {
     public boolean process;
     public String descriptions;
     public String title;
-
     public Event_information_holder(Event event)
     {
         GregorianCalendar beginTime=event.getBeginTime();
@@ -35,7 +34,6 @@ public class Event_information_holder {
         descriptions=event.getDescription();
         title=event.getTitle();
     }
-
     public Event_information_holder(int y,int m,int d){
         Year_=y;
         Month_=m;

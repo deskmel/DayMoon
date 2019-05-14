@@ -1,4 +1,3 @@
-
 package com.example.daymoon.UserInterface;
 
 import android.support.v7.app.AppCompatActivity;
