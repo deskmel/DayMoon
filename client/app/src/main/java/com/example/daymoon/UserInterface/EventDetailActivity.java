@@ -1,5 +1,6 @@
 package com.example.daymoon.UserInterface;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -36,7 +37,9 @@ public class EventDetailActivity extends AppCompatActivity {
         findViewById(R.id.edit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent=new Intent(EventDetailActivity.this,EditEventActivity.class);;
+                intent.putExtra("event",event);
+                startActivityForResult(intent,0);
             }
         });
         findViewById(R.id.getback).setOnClickListener(new View.OnClickListener() {
