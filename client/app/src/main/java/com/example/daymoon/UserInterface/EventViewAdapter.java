@@ -14,9 +14,11 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.EventManagement.Event;
 import com.example.daymoon.EventManagement.EventList;
+import com.example.daymoon.Layout.CustomSwipeLayout;
 import com.example.daymoon.R;
 
 import java.util.LinkedList;
@@ -56,18 +58,18 @@ public class EventViewAdapter extends RecyclerView.Adapter<EventViewAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.swipeLayout.setOnClickItemListener(new CustomSwipeLayout.OnClickItemListener() {
             @Override
-            public boolean onLongClick(View view) {
+            public void onClick(View view) {
                 System.out.println(holder.getAdapterPosition());
                 mListener.onItemClick(view, holder.getAdapterPosition());
-                return false;
             }
         });
 
         holder.title.setText(eventList.get(position).getTitle());
         holder.time.setText(eventList.get(position).getBeginTime_str());
         holder.des.setText(eventList.get(position).getDescription());
+        holder.confirmDelete.setText("删除"+eventList.get(position).getTitle()+"？");
         holder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,13 +92,18 @@ public class EventViewAdapter extends RecyclerView.Adapter<EventViewAdapter.View
         TextView title;
         TextView time;
         TextView des;
+        TextView confirmDelete;
         Button btn;
+        CustomSwipeLayout swipeLayout;
+
         public ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.event_title);
             time = itemView.findViewById(R.id.event_time);
             des = itemView.findViewById(R.id.event_descriptions);
             btn = itemView.findViewById(R.id.delete);
+            confirmDelete = itemView.findViewById(R.id.confirmDelete);
+            swipeLayout = itemView.findViewById(R.id.swipe);
         }
     }
 }

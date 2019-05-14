@@ -67,9 +67,9 @@ public class CalendarActivity extends AppCompatActivity {
         btn_add = (Button) findViewById(R.id.addbutton);
         mainContext = CalendarActivity.this;
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView = (RecyclerView) findViewById(R.id.list_one); //绑定listview
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
 
 
