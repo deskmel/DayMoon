@@ -6,6 +6,10 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,7 +41,7 @@ public class CalendarActivity extends AppCompatActivity {
     private CalendarView calendarView;
     private LinearLayout picker;//日期选择器
     private TextView tvMonth;
-    private ListView listView;
+    private RecyclerView recyclerView;
     private Context mainContext = null;
     private EventViewAdapter adapter = null;
     private Button btn_add;//添加事件的按钮
@@ -62,7 +66,13 @@ public class CalendarActivity extends AppCompatActivity {
         tvMonth = findViewById(R.id.tv_month);//textview
         btn_add = (Button) findViewById(R.id.addbutton);
         mainContext = CalendarActivity.this;
-        listView = (ListView) findViewById(R.id.list_one); //绑定listview
+
+        recyclerView = (RecyclerView) findViewById(R.id.list_one); //绑定listview
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+
+
         //UIControl = new TestUserInterfaceControl();
         selectDay = calendarView.getCurDay();
         selectMonth = calendarView.getCurMonth();
@@ -101,27 +111,10 @@ public class CalendarActivity extends AppCompatActivity {
         calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Calendar calendar, boolean isClick) {
-                //Log.i("??","touched");
                 selectYear = calendar.getYear();
                 selectMonth = calendar.getMonth();
                 selectDay = calendar.getDay();
-                //Log.i("??",String.format("%d,%d,%d",selectYear,selectMonth,selectDay));
-
-
-                //此处需要加入方法获取Eventlist
-                //Event todays = new Event(String.format("%d,%d,%d",selectYear,selectMonth,selectDay));
-                //Events.add(todays);
-                //将adpter绑定在listview上
                 flushListView();
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        System.out.print(String.valueOf(position));
-                        Intent intent = new Intent(CalendarActivity.this,EventDetailActivity.class);
-                        intent.putExtra("event",ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay).get(position));
-                        startActivityForResult(intent, 0);
-                    }
-                });
             }
         });
 
@@ -144,7 +137,15 @@ public class CalendarActivity extends AppCompatActivity {
     private void flushListView(){
         todayEventList = ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay);
         adapter = new EventViewAdapter(todayEventList, mainContext); //设置adapter
-        listView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
+        adapter.setonItemClickListener(new EventViewAdapter.OnRecyclerItemClickListener() {
+            @Override
+            public void onItemClick(View v, int Position) {
+                Intent intent = new Intent(CalendarActivity.this,EventDetailActivity.class);
+                intent.putExtra("event",ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay).get(Position));
+                startActivityForResult(intent, 0);
+            }
+        });
     }
 
     @Override
