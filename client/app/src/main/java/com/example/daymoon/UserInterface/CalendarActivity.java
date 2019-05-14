@@ -64,11 +64,11 @@ public class CalendarActivity extends AppCompatActivity {
         calendarView = findViewById(R.id.calendarView);//绑定calendar
         picker = findViewById(R.id.picker);//时间选择器
         tvMonth = findViewById(R.id.tv_month);//textview
-        btn_add = (Button) findViewById(R.id.addbutton);
+        btn_add = findViewById(R.id.addbutton);
         mainContext = CalendarActivity.this;
 
+        recyclerView = findViewById(R.id.list_one); //绑定listview
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recyclerView = (RecyclerView) findViewById(R.id.list_one); //绑定listview
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
 

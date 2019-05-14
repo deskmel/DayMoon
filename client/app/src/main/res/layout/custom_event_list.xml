@@ -3,6 +3,7 @@
     xmlns:swipe="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swipe"
+    android:background="@drawable/text_bg"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     swipe:leftEdgeSwipeOffset="0dp"

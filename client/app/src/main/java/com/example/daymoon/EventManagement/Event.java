@@ -133,7 +133,7 @@ public class Event implements Comparable<Event>, Serializable {
         return eventName;
     }
 
-    GregorianCalendar getBeginTime(){
+    public GregorianCalendar getBeginTime(){
         return beginTime;
     }
 
@@ -160,6 +160,7 @@ public class Event implements Comparable<Event>, Serializable {
         return endTime;
     }
 
+
     /**
      *
      * @return 返回事件的字符串形式 如2016年8月18日 22时35分
@@ -169,6 +170,12 @@ public class Event implements Comparable<Event>, Serializable {
         dateFormat = new SimpleDateFormat("y年M月d日 H时m分",Locale.CHINA);
         return dateFormat.format(endTime);
 
+    }
+
+    public String getEndHour(){
+        SimpleDateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("HH:mm",Locale.CHINA);
+        return dateFormat.format(endTime.getTime());
     }
 
     String getEndTimeFormat(){
