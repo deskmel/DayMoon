@@ -33,20 +33,6 @@ import java.util.Map;
 
 public class CalendarActivity extends AppCompatActivity {
 
-    private static class InnerHandler extends Handler{
-        private final WeakReference<CalendarActivity> mActivity;
-        private InnerHandler(CalendarActivity activity){
-            mActivity = new WeakReference<CalendarActivity>(activity);
-        }
-        @Override
-        public void handleMessage(Message msg){
-            CalendarActivity activity = mActivity.get();
-            if (activity != null) {
-
-            }
-        }
-    }
-
     private Map<String, Calendar> map = new HashMap<>();
     private CalendarView calendarView;
     private LinearLayout picker;//日期选择器
@@ -61,8 +47,6 @@ public class CalendarActivity extends AppCompatActivity {
     private int selectMonth;
     private int selectDay;
     private EventList todayEventList;
-    public InnerHandler mHandler = new InnerHandler(this);
-
 
     //String[] dis={"哈皮","sb戴哥邀请跑步","贯神之狼","李晓肝甲甲","超哥归寝"};
     //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,dis);
@@ -127,10 +111,8 @@ public class CalendarActivity extends AppCompatActivity {
                 //此处需要加入方法获取Eventlist
                 //Event todays = new Event(String.format("%d,%d,%d",selectYear,selectMonth,selectDay));
                 //Events.add(todays);
-                todayEventList = ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay);
-                adapter = new EventViewAdapter(todayEventList, mainContext); //设置adapter
-                listView.setAdapter(adapter);//将adpter绑定在listview上
-                System.out.print("sa");
+                //将adpter绑定在listview上
+                flushListView();
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -159,12 +141,16 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
+    private void flushListView(){
+        todayEventList = ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay);
+        adapter = new EventViewAdapter(todayEventList, mainContext); //设置adapter
+        listView.setAdapter(adapter);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        todayEventList = ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay);
-        adapter = new EventViewAdapter(todayEventList, mainContext);
-        listView.setAdapter(adapter);
+        flushListView();
     }
 
     private void initData() {

@@ -3,6 +3,7 @@ package com.example.daymoon.UserInterface;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
@@ -46,7 +47,10 @@ public class MyMonthView extends MonthView {
 
     @Override
     protected boolean onDrawSelected(Canvas canvas, Calendar calendar, int x, int y, boolean hasScheme) {
-        return false;
+        Paint paint = new Paint();
+        paint.setColor(getResources().getColor(R.color.green));
+        canvas.drawRect(x,y,x+mItemWidth,y+mItemHeight,paint);
+        return true;
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.daymoon.EventManagement.ClientEventControl;
@@ -44,6 +45,7 @@ public class EventViewAdapter extends BaseAdapter {
             holder.title = (TextView) convertView.findViewById(R.id.event_title);
             holder.time = (TextView) convertView.findViewById(R.id.event_time);
             holder.des = (TextView) convertView.findViewById(R.id.event_descriptions);
+            holder.btn = (Button) convertView.findViewById(R.id.delete);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
@@ -51,6 +53,22 @@ public class EventViewAdapter extends BaseAdapter {
         holder.title.setText(eventList.get(position).getTitle());
         holder.time.setText(eventList.get(position).getBeginTime_str());
         holder.des.setText(eventList.get(position).getDescription());
+        holder.btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ClientEventControl.deleteEvent(eventList.get(position).getEventID(), mContext, new Runnable() {
+                    @Override
+                    public void run() {
+                        eventList.remove(position);
+                        notifyDataSetChanged();
+                    }
+                }, new Runnable() {
+                    @Override
+                    public void run() {
+                    }
+                });
+            }
+        });
         return convertView;
     }
 
@@ -58,5 +76,6 @@ public class EventViewAdapter extends BaseAdapter {
         TextView title;
         TextView time;
         TextView des;
+        Button btn;
     }
 }
