@@ -16,23 +16,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e700dff6-471f-4877-b64b-efced3cc405d" name="Default Changelist" comment="replace ListView with RecyclerView and add animation">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/GroupManagement/ClientGroupControl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/GroupManagement/Group.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/Define/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/Define/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/EventManagement/ClientEventControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/EventManagement/ClientEventControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/EventManagement/EventList.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/EventManagement/EventList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/CalendarActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/CalendarActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/EditEventActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/EditEventActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/EventAdder.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/EventAdder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/EventDetailActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/EventDetailActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/Event_information_holder.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/EventInformationHolder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/TestUserInterfaceControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/TestUserInterfaceControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/UserInterfaceControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/daymoon/UserInterface/UserInterfaceControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/try_flask.py" beforeDir="false" afterPath="$PROJECT_DIR$/../server/try_flask.py" afterDir="false" />
-    </list>
+    <list default="true" id="e700dff6-471f-4877-b64b-efced3cc405d" name="Default Changelist" comment="replace ListView with RecyclerView and add animation" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
