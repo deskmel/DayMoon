@@ -35,7 +35,7 @@ public interface UserInterfaceControl {
      * @return
      *  Constants.NORMAL or Constants.ERROR
      */
-    int addEvent(Event_information_holder event_info);
+    int addEvent(EventInformationHolder event_info);
 
     /**
      *
@@ -51,7 +51,7 @@ public interface UserInterfaceControl {
      * @return
      * Constant.ERROR or Constant.NORMAL
      */
-    int editEvent(Event_information_holder event_info);
+    int editEvent(EventInformationHolder event_info);
 
 
 
