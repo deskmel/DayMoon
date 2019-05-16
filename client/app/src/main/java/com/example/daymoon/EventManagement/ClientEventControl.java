@@ -54,7 +54,7 @@ public class ClientEventControl {//施工
     }
 
     // 通过currentUserID向服务器找到当前user的eventList
-    public static void getEventListFromServer(){
+    public static void getEventListFromServer(Runnable callback){
         Map<String,String> params = new HashMap<>();
         params.put("userID",String.valueOf(getInstance().currentUserID));
         new HttpRequestThread(SERVER_IP+"getallmyevents",params, new HttpRequest.DataCallback(){
@@ -65,6 +65,7 @@ public class ClientEventControl {//施工
                 System.out.println(result);
                 Type EventRecordType = new TypeToken<EventList>(){}.getType();
                 getInstance().eventList = gson.fromJson(result, EventRecordType);
+                callback.run();
             }
             @Override
             public void requestFailure(Request request, IOException e) {
@@ -141,19 +142,7 @@ public class ClientEventControl {//施工
 
     }
     //返回有事件的日期
-    public static Map<String, Calendar> getDatesHasEvent()
-    {
-        Map<String,Calendar> map=new HashMap<>();
-        Calendar calendar1 = getSchemeCalendar(2019, 5, 11, "1");
-        Calendar calendar2 = getSchemeCalendar(2019, 5, 12, "1");
-        Calendar calendar3 = getSchemeCalendar(2019, 5, 13, "1");
-        Calendar calendar4 = getSchemeCalendar(2019, 5, 6, "1");
-        map.put(calendar1.toString(), calendar1);
-        map.put(calendar2.toString(), calendar2);
-        map.put(calendar3.toString(), calendar3);
-        map.put(calendar4.toString(), calendar4);
-        return map;
-    }
+
 
     private static Calendar getSchemeCalendar(int year, int month, int day, String text) {
         Calendar calendar = new Calendar();
@@ -211,7 +200,17 @@ public class ClientEventControl {//施工
         return resultList;
     }
 
-
+    public static Map<String, Calendar> getDatesHasEvent()
+    {
+        Map<String,Calendar> map=new HashMap<>();
+        System.out.print(getInstance().eventList.size());
+        for (Event event:getInstance().eventList) {
+            GregorianCalendar c=event.getBeginTime();
+            Calendar calendar=getSchemeCalendar(c.get(java.util.Calendar.YEAR),c.get(java.util.Calendar.MONTH)+1,c.get(java.util.Calendar.DATE),"1");
+            map.put(calendar.toString(),calendar);
+        }
+        return map;
+    }
 
     // 测试
     public static void main(String[] args){

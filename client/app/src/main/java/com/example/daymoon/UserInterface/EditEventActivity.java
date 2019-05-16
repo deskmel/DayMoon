@@ -77,8 +77,6 @@ public class EditEventActivity extends AppCompatActivity {
         endTimeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 TimePickerView pvTime = new TimePickerBuilder(EditEventActivity.this, new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(Date date, View v) {

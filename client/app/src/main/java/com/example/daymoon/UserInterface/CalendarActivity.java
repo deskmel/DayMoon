@@ -59,7 +59,12 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         ClientEventControl.setCurrentUserID(1);//TODO 替换为由登录界面传递过来的ID
-        ClientEventControl.getEventListFromServer();
+        ClientEventControl.getEventListFromServer(new Runnable() {
+            @Override
+            public void run() {
+                initData();
+            }
+        });
         setContentView(R.layout.activity_canlendar);//绑定界面
         calendarView = findViewById(R.id.calendarView);//绑定calendar
         picker = findViewById(R.id.picker);//时间选择器
@@ -77,7 +82,6 @@ public class CalendarActivity extends AppCompatActivity {
         selectDay = calendarView.getCurDay();
         selectMonth = calendarView.getCurMonth();
         selectYear = calendarView.getCurYear();
-        initData();
         //初始化当前年月
         tvMonth.setText(calendarView.getCurYear() + "年" + calendarView.getCurMonth() + "月");
         //月份切换改变事件
