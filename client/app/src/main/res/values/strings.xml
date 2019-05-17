@@ -12,4 +12,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="profile_name">戴狗</string>
+    <string name="profile_description">这个人很懒，什么都没留下</string>
+    <string name="menu_item_setting">"设置"</string>
+    <string name="menu_item_group">"小组"</string>
 </resources>

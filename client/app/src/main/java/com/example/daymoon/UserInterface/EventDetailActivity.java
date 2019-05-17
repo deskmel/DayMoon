@@ -15,8 +15,6 @@ public class EventDetailActivity extends AppCompatActivity {
     Event event;
     private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

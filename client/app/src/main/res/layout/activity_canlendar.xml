@@ -1,12 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="0dp"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageButton
+            android:id="@+id/user"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="5dp"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:background="@color/white"
+            android:src="@mipmap/user"/>
+        <ImageButton
+            android:id="@+id/group"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitCenter"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/more"
+            android:background="@color/white"
+            android:src="@mipmap/group"/>
+        <ImageButton
+            android:id="@+id/more"
+            android:scaleType="fitCenter"
+            android:layout_marginRight="10dp"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/other"
+            android:background="@color/white"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,6 +106,14 @@
                 android:textAllCaps="false" />
         </RelativeLayout>
     </LinearLayout>
+        <com.haibin.calendarview.CalendarLayout
+            android:id="@+id/calendarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:orientation="vertical"
+            app:calendar_show_mode="both_month_week_view"
+            app:default_status="shrink">
     <com.haibin.calendarview.CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
@@ -72,10 +124,12 @@
         app:current_month_text_color="#212121"
         app:day_text_size="13sp"
         app:calendar_height="40dp"
-        app:month_view="com.example.daymoon.UserInterface.MyMonthView"
+        app:month_view="com.example.daymoon.Layout.MyMonthView"
         app:month_view_show_mode="mode_fix"
+        app:week_view="com.exampe.daymoon.Layout.MyWeekView"
         app:other_month_text_color="#cccccc"
         app:week_line_background="#e6e6e6" />
+        </com.haibin.calendarview.CalendarLayout>
     </LinearLayout>
     <ScrollView
         android:id="@+id/scrollView1"
@@ -94,3 +148,5 @@
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>

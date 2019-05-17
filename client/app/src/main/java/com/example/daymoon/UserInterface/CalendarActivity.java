@@ -1,9 +1,11 @@
 package com.example.daymoon.UserInterface;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,8 +13,10 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,18 +31,28 @@ import static com.example.daymoon.Define.Constants.SERVER_IP;
 import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.R;
 import com.haibin.calendarview.Calendar;
+import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
+import com.heinrichreimersoftware.materialdrawer.DrawerActivity;
+import com.heinrichreimersoftware.materialdrawer.structure.DrawerItem;
+import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile;
+import com.heinrichreimersoftware.materialdrawer.theme.DrawerTheme;
 
 import java.lang.ref.WeakReference;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.MotionEvent;
+import android.widget.Toast;
 
-public class CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends DrawerActivity implements CalendarView.OnViewChangeListener{
 
     private Map<String, Calendar> map;
     private CalendarView calendarView;
+    private CalendarLayout calendarLayout;
     private LinearLayout picker;//日期选择器
     private TextView tvMonth;
     private RecyclerView recyclerView;
@@ -46,12 +60,14 @@ public class CalendarActivity extends AppCompatActivity {
     private EventViewAdapter adapter = null;
     private Button btn_add;//添加事件的按钮
     private AlertDialog alert = null;//提醒框
+    private ImageButton user,more,group;
     //private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
     private int selectYear;
     private int selectMonth;
     private int selectDay;
     private EventList todayEventList;
-
+    private GestureDetector mDetector;
+    private int userId;
     //String[] dis={"哈皮","sb戴哥邀请跑步","贯神之狼","李晓肝甲甲","超哥归寝"};
     //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,dis);
     @Override
@@ -67,10 +83,14 @@ public class CalendarActivity extends AppCompatActivity {
         });
         setContentView(R.layout.activity_canlendar);//绑定界面
         calendarView = findViewById(R.id.calendarView);//绑定calendar
+        calendarLayout=findViewById(R.id.calendarLayout);
         picker = findViewById(R.id.picker);//时间选择器
         tvMonth = findViewById(R.id.tv_month);//textview
         btn_add = findViewById(R.id.addbutton);
         mainContext = CalendarActivity.this;
+        user=findViewById(R.id.user);
+        more=findViewById(R.id.more);
+        group=findViewById(R.id.group);
 
         recyclerView = findViewById(R.id.list_one); //绑定listview
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -110,7 +130,16 @@ public class CalendarActivity extends AppCompatActivity {
                 pvTime.show();
             }
         });
+        //周视图和月视图转换
+        /*
+        calendarLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return mDetector.onTouchEvent(event);
+            }
+        });*/
 
+        calendarView.setOnViewChangeListener(this);
         //日期点击选择事件
         calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
             @Override
@@ -136,8 +165,67 @@ public class CalendarActivity extends AppCompatActivity {
                 startActivityForResult(intent, 0);
             }
         });
-    }
+        //绑定小组页面
+        group.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(CalendarActivity.this,GroupActivity.class);
+                startActivity(intent);
+            }
+        });
 
+
+
+
+        //绑定more操作
+        more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+        //侧滑菜单实现
+        initMenu();
+    }
+    private void initMenu(){
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
+        setDrawerTheme(
+                new DrawerTheme(this)
+        );
+        addProfile(
+                new DrawerProfile()
+                .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.mipmap.user))
+                .setBackground(getResources().getDrawable(R.drawable.cv_bg_material))
+                .setName(getString(R.string.profile_name))
+                .setDescription(getString((R.string.profile_description)))
+                .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
+                    @Override
+                    public void onClick(DrawerProfile drawerProfile, long l) {
+                        Toast.makeText(CalendarActivity.this,"clicked profile",Toast.LENGTH_SHORT).show();
+                    }
+                })
+        );
+        addItem(new DrawerItem()
+                    .setImage(ContextCompat.getDrawable(this,R.drawable.group))
+                    .setTextPrimary(getString(R.string.menu_item_group))
+        );
+        addDivider();
+        addItem(new DrawerItem()
+                .setImage(ContextCompat.getDrawable(this,R.drawable.setting))
+                    .setTextPrimary(getString(R.string.menu_item_setting))
+        );
+        addDivider();
+        user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDrawer();
+            }
+        });
+    }
     private void flushListView(){
         todayEventList = ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay);
         adapter = new EventViewAdapter(todayEventList, mainContext); //设置adapter
@@ -151,7 +239,9 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
     }
-
+    public void onViewChange(boolean isMonthView) {
+        Log.e("onViewChange", "  ---  " + (isMonthView ? "月视图" : "周视图"));
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

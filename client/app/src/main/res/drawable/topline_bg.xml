@@ -3,12 +3,12 @@
     <!-- 连框颜色值 -->
     <item>
         <shape>
-            <solid android:color="@color/red" />
+            <solid android:color="@color/gray" />
         </shape>
     </item>
     <!-- 主体背景颜色值 -->
     <item
-        android:right="2dp">
+        android:top="2dp">
         <shape>
             <solid android:color="@color/white" />
         </shape>

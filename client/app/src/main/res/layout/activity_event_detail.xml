@@ -9,8 +9,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-
-
     android:layout_marginBottom="5dp">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -54,8 +52,7 @@
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:textColor="@color/black"
-        android:text="母亲节"
-        android:textStyle="bold"/>
+        android:text="母亲节" />
     <TextView
         android:id="@+id/event_time"
         android:layout_width="wrap_content"
@@ -70,23 +67,52 @@
         android:textSize="12dp"
         android:text="19:00-20:00"/>
 
-    <TextView
-        android:layout_marginTop="40dp"
+        <FrameLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+            <ViewSwitcher
+                android:id="@+id/viewswicther"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </ViewSwitcher>
+        </FrameLayout>
+        <TextView
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:paddingTop="5dp"
+        android:background="@drawable/topline_bg"
+        android:text="日历"
+        android:textSize="15dp"
+        android:textColor="@color/black" />
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:paddingTop="5dp"
+        android:background="@drawable/topline_bg"
+        android:text="提醒"
+        android:textColor="@color/black"/>
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:paddingTop="5dp"
         android:textColor="@color/black"
+        android:background="@drawable/topline_bg"
         android:text="描述"/>
     <TextView
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:id="@+id/event_descriptions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp"
         android:minHeight="100dp"
-        android:background="@drawable/text_bg"
+        android:background="@color/white"
         android:textSize="15dp"/>
     </LinearLayout>
 </LinearLayout>

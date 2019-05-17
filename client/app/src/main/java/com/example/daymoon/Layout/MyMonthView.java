@@ -1,4 +1,4 @@
-package com.example.daymoon.UserInterface;
+package com.example.daymoon.Layout;
 
 import android.content.Context;
 import android.graphics.Bitmap;
