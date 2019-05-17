@@ -1,5 +1,7 @@
+
 package com.example.daymoon.UserInterface;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -30,13 +32,19 @@ public class EditEventActivity extends AppCompatActivity {
     final SimpleDateFormat EndTime=new SimpleDateFormat("HH:mm", Locale.CHINA);
     final boolean[] startTimeType = {true, true, true, true, true, false};
     final boolean[] endTimeType = {false, false, false, true, true, false};
-    private Event_information_holder event_information_holder;
+    Intent intent;
+
+    private EventInformationHolder eventInformationHolder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_event);
         event=(Event) getIntent().getSerializableExtra("event");
-        event_information_holder=new Event_information_holder(event);
+
+        //先前遗留问题
+        eventInformationHolder=new EventInformationHolder(event);
+        eventInformationHolder.Month_ += 1;
+
         jtb_whethercontinue=findViewById(R.id.whethercontinue);
         startTimeView=findViewById(R.id.start_time);
         endTimeView=findViewById(R.id.end_time);
@@ -64,11 +72,11 @@ public class EditEventActivity extends AppCompatActivity {
                         java.util.Calendar c = java.util.Calendar.getInstance();
                         c.setTime(date);
                         startTimeView.setText(BeginTime.format(c.getTime()));
-                        event_information_holder.Year_=c.get(java.util.Calendar.YEAR);;
-                        event_information_holder.Month_=c.get(java.util.Calendar.MONTH)+1;
-                        event_information_holder.Date_=c.get(Calendar.DATE);
-                        event_information_holder.startHour_=c.get(Calendar.HOUR_OF_DAY);
-                        event_information_holder.startMinute_=c.get(Calendar.MINUTE);
+                        eventInformationHolder.Year_ = c.get(java.util.Calendar.YEAR);
+                        eventInformationHolder.Month_ = c.get(java.util.Calendar.MONTH)+1;
+                        eventInformationHolder.Date_ = c.get(Calendar.DATE);
+                        eventInformationHolder.startHour_ = c.get(Calendar.HOUR);
+                        eventInformationHolder.startMinute_ = c.get(Calendar.MINUTE);
                     }
                 }).setType(startTimeType).setDate(beginTime).build();
                 pvTime.show();
@@ -77,14 +85,16 @@ public class EditEventActivity extends AppCompatActivity {
         endTimeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 TimePickerView pvTime = new TimePickerBuilder(EditEventActivity.this, new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(Date date, View v) {
                         java.util.Calendar c = java.util.Calendar.getInstance();
                         c.setTime(date);
                         endTimeView.setText(EndTime.format(c.getTime()));
-                        event_information_holder.startHour_=c.get(Calendar.HOUR_OF_DAY);
-                        event_information_holder.startMinute_=c.get(Calendar.MINUTE);
+                        eventInformationHolder.startHour_=c.get(Calendar.HOUR);
+                        eventInformationHolder.startMinute_=c.get(Calendar.MINUTE);
                     }
                 }).setType(endTimeType).setDate(endTime).build();
 
@@ -97,10 +107,10 @@ public class EditEventActivity extends AppCompatActivity {
             @Override
             public void onStateChange(float process, State state, JellyToggleButton jtb) {
                 if (state.equals(State.LEFT)) {
-                    event_information_holder.process=false;
+                    eventInformationHolder.process=false;
                 }
                 if (state.equals(State.RIGHT)) {
-                    event_information_holder.process=true;
+                    eventInformationHolder.process=true;
                 }
             }
         });
@@ -109,9 +119,27 @@ public class EditEventActivity extends AppCompatActivity {
         complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event_information_holder.title=title.getText().toString();
-                event_information_holder.descriptions=description.getText().toString();
-                finish();
+                eventInformationHolder.title=title.getText().toString();
+                eventInformationHolder.descriptions=description.getText().toString();
+                ClientEventControl.editEvent(event.getEventID(), eventInformationHolder, getApplicationContext(), new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            event = new Event(eventInformationHolder.title, eventInformationHolder.descriptions, event.getEventID(), eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.startHour_, eventInformationHolder.startMinute_, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.endHour_, eventInformationHolder.endMinute_, eventInformationHolder.process);
+                        } catch (Exception e) {
+                            finish();
+                        }
+                        Intent intent = new Intent(EditEventActivity.this, EventDetailActivity.class);
+                        intent.putExtra("event", event);
+                        setResult(1, intent);
+                        finish();
+                    }
+                }, new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                });
             }
         });
         back.setOnClickListener(new View.OnClickListener() {

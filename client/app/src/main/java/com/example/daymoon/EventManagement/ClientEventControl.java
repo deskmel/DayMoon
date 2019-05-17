@@ -20,13 +20,15 @@ import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.HttpUtil.HttpRequestThread;
 import static com.example.daymoon.Define.Constants.SERVER_IP;
+import com.example.daymoon.UserInterface.EventInformationHolder;
 
 import okhttp3.Request;
 
-import com.example.daymoon.UserInterface.Event_information_holder;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
 import com.haibin.calendarview.Calendar;
 
 public class ClientEventControl {//施工
@@ -76,10 +78,10 @@ public class ClientEventControl {//施工
 
 
     // 增加一个event
-    public static void addEvent(Event_information_holder event_info, Context context, Runnable success, Runnable failure){
+    public static void addEvent(EventInformationHolder eventInformationHolder, Context context, Runnable success, Runnable failure){
         Event event;
         try {
-            event = new Event(event_info.title, event_info.descriptions, 0, event_info.Year_, event_info.Month_, event_info.Date_, event_info.startHour_, event_info.startMinute_, event_info.Year_, event_info.Month_, event_info.Date_, event_info.endHour_, event_info.endMinute_, event_info.process);
+            event = new Event(eventInformationHolder.title, eventInformationHolder.descriptions, 0, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.startHour_, eventInformationHolder.startMinute_, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.endHour_, eventInformationHolder.endMinute_, eventInformationHolder.process);
         }catch(Exception e){
             return;
         }
@@ -141,8 +143,6 @@ public class ClientEventControl {//施工
         }).start();
 
     }
-    //返回有事件的日期
-
 
     private static Calendar getSchemeCalendar(int year, int month, int day, String text) {
         Calendar calendar = new Calendar();
@@ -154,26 +154,44 @@ public class ClientEventControl {//施工
     }
 
     // 修改一个event
-    public int editEvent(String description, int eventID, int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
-                         int endYear, int endMonth, int endDate, int endHour, int endMin, boolean wProcess){
-        eventList.sortByEventID();
-        int index = 0;//TODO 此处因为二分查找被删了 暂时没有
-
-        if (index != -1){
-
-            eventList.get(index).setDescription(description);
-            eventList.get(index).setBeginTime(new GregorianCalendar(beginYear, beginMonth - 1, beginDate, beginHour, beginMin));
-            eventList.get(index).setEndTime(new GregorianCalendar(endYear, endMonth - 1, endDate, endHour, endMin));
-            eventList.get(index).whetherProcess = wProcess;
-
-            return 0;
+    public static void editEvent(int eventID, EventInformationHolder eventInformationHolder,  Context context, Runnable success, Runnable failure){
+        Event event;
+        try {
+            event = new Event(eventInformationHolder.title, eventInformationHolder.descriptions, eventID, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.startHour_, eventInformationHolder.startMinute_, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.endHour_, eventInformationHolder.endMinute_, eventInformationHolder.process);
+        }catch(Exception e){
+            return;
         }
-        else{
 
-            System.out.println("EventID not found.");
-            return 1;
+        int index = getInstance().eventList.findByID(eventID);
+        Map<String,String> params = new HashMap<>();
 
-        }
+        params.put("userID", String.valueOf(getInstance().currentUserID));
+        params.put("eventID", String.valueOf(eventID));
+        params.put("eventName", event.getTitle());
+        //params.put("whetherProcess", event.whetherProcess?"1":"0");
+        params.put("beginTime", event.getBeginTimeFormat());
+        params.put("endTime", event.getEndTimeFormat());
+        params.put("description", event.getDescription());
+
+        if (index == -1) return;
+        new HttpRequestThread(SERVER_IP+"editevent", params, new HttpRequest.DataCallback(){
+            @Override
+            public void requestSuccess(String result) {
+                Log.i("success","add the event successfully");
+
+                Toast.makeText(context, "成功修改事件并上传", Toast.LENGTH_SHORT).show();
+                getInstance().eventList.set(index, event);
+                success.run();
+            }
+
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                Toast.makeText(context, "出了点问题", Toast.LENGTH_SHORT).show();
+                Log.e("shit","oops! Something goes wrong");
+                failure.run();
+            }
+        }).start();
+
     }
 
 
@@ -194,23 +212,26 @@ public class ClientEventControl {//施工
             if (event.getBeginTime().get(GregorianCalendar.YEAR) == year
                     && event.getBeginTime().get(GregorianCalendar.MONTH ) + 1 == month
                     && event.getBeginTime().get(GregorianCalendar.DATE) == day){
+
                 resultList.add(event);
             }
         }
         return resultList;
     }
 
+
     public static Map<String, Calendar> getDatesHasEvent()
     {
         Map<String,Calendar> map=new HashMap<>();
         System.out.print(getInstance().eventList.size());
         for (Event event:getInstance().eventList) {
-            GregorianCalendar c=event.getBeginTime();
-            Calendar calendar=getSchemeCalendar(c.get(java.util.Calendar.YEAR),c.get(java.util.Calendar.MONTH)+1,c.get(java.util.Calendar.DATE),"1");
+            GregorianCalendar c = event.getBeginTime();
+            Calendar calendar = getSchemeCalendar(c.get(java.util.Calendar.YEAR),c.get(java.util.Calendar.MONTH)+1,c.get(java.util.Calendar.DATE),"1");
             map.put(calendar.toString(),calendar);
         }
         return map;
     }
+
 
     // 测试
     public static void main(String[] args){

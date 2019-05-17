@@ -20,10 +20,7 @@ import com.nightonke.jellytogglebutton.State;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class EventAdder extends AppCompatActivity {
 
@@ -35,9 +32,10 @@ public class EventAdder extends AppCompatActivity {
     private JellyToggleButton jtb_whetherAllday ;
     private MaterialEditText TitleView;
     private MaterialEditText DescriptionView;
-    private Event_information_holder event_info;
+    private EventInformationHolder eventInformationHolder;
     private Intent intent;
     private Bundle bundle;
+    private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
 
 
     @Override
@@ -54,18 +52,11 @@ public class EventAdder extends AppCompatActivity {
         //为表单绑定日期选择工具
         intent=this.getIntent();
         bundle=intent.getExtras();
-        final SimpleDateFormat BeginDate = new SimpleDateFormat("yyyy年MM月dd日",Locale.CHINA);
-        final SimpleDateFormat Hour = new SimpleDateFormat("HH:mm", Locale.CHINA);
-        event_info = new Event_information_holder(bundle.getInt("selectYear"),bundle.getInt("selectMonth"),bundle.getInt("selectDay"));
-        //初始化事件的时间
 
-        java.util.Calendar c = java.util.Calendar.getInstance();
-        c.set(event_info.Year_,event_info.Month_,event_info.Date_,event_info.startHour_,event_info.startMinute_);
-        startDate.setText(BeginDate.format(c.getTime()));
-        startTime.setText(Hour.format(c.getTime()));
-        c.set(Calendar.HOUR_OF_DAY,event_info.endHour_);
-        c.set(Calendar.MINUTE,event_info.endMinute_);
-        endTime.setText(Hour.format(c.getTime()));
+        //初始化事件的时间
+        eventInformationHolder = new EventInformationHolder(bundle.getInt("selectYear"),bundle.getInt("selectMonth"),bundle.getInt("selectDay"));
+        UIControl=new TestUserInterfaceControl();
+
 
         final boolean[] dateType = {true, true, true, false, false, false};
         final boolean[] timeType = {false, false, false, true, true, false};
@@ -82,10 +73,10 @@ public class EventAdder extends AppCompatActivity {
                         int month = c.get(java.util.Calendar.MONTH)+1;
                         int datee = c.get(java.util.Calendar.DATE);
                         //滚动到指定日期
-                        startDate.setText(BeginDate.format(c.getTime()));
-                        event_info.Year_ = year;
-                        event_info.Month_ = month;
-                        event_info.Date_ = datee;
+                        startDate.setText(String.format("%d-%d-%d",year,month,datee));
+                        eventInformationHolder.Year_ = year;
+                        eventInformationHolder.Month_ = month;
+                        eventInformationHolder.Date_ = datee;
                     }
                 }).setType(dateType).build();
                 pvTime.show();
@@ -100,12 +91,12 @@ public class EventAdder extends AppCompatActivity {
                     public void onTimeSelect(Date date, View v) {
                         java.util.Calendar c = java.util.Calendar.getInstance();
                         c.setTime(date);
-                        int hour = c.get(java.util.Calendar.HOUR_OF_DAY);
+                        int hour = c.get(java.util.Calendar.HOUR);
                         int minute = c.get(java.util.Calendar.MINUTE);
                         //滚动到指定日期
-                        event_info.startHour_=hour;
-                        event_info.startMinute_=minute;
-                        startTime.setText(Hour.format(c.getTime()));
+                        eventInformationHolder.startHour_=hour;
+                        eventInformationHolder.startMinute_=minute;
+                        startTime.setText(String.format("%d-%d",hour,minute));
                     }
                 }).setType(timeType).build();
                 pvTime.show();
@@ -120,12 +111,12 @@ public class EventAdder extends AppCompatActivity {
                     public void onTimeSelect(Date date, View v) {
                         java.util.Calendar c = java.util.Calendar.getInstance();
                         c.setTime(date);
-                        int hour = c.get(Calendar.HOUR_OF_DAY);
+                        int hour = c.get(java.util.Calendar.HOUR);
                         int minute = c.get(java.util.Calendar.MINUTE);
                         //滚动到指定日期
-                        event_info.endHour_=hour;
-                        event_info.endMinute_=minute;
-                        endTime.setText(Hour.format(c.getTime()));
+                        eventInformationHolder.endHour_=hour;
+                        eventInformationHolder.endMinute_=minute;
+                        endTime.setText(String.format("%d-%d",hour,minute));
                     }
                 }).setType(timeType).build();
                 pvTime.show();
@@ -136,10 +127,10 @@ public class EventAdder extends AppCompatActivity {
             @Override
             public void onStateChange(float process, State state, JellyToggleButton jtb) {
                 if (state.equals(State.LEFT)) {
-                    event_info.allday=false;
+                    eventInformationHolder.allday=false;
                 }
                 if (state.equals(State.RIGHT)) {
-                    event_info.allday=true;
+                    eventInformationHolder.allday=true;
                 }
             }
         });
@@ -148,10 +139,10 @@ public class EventAdder extends AppCompatActivity {
             @Override
             public void onStateChange(float process, State state, JellyToggleButton jtb) {
                 if (state.equals(State.LEFT)) {
-                    event_info.process=false;
+                    eventInformationHolder.process=false;
                 }
                 if (state.equals(State.RIGHT)) {
-                    event_info.process=true;
+                    eventInformationHolder.process=true;
                 }
             }
         });
@@ -167,16 +158,14 @@ public class EventAdder extends AppCompatActivity {
         findViewById(R.id.complete).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event_info.title=TitleView.getText().toString();
-                event_info.descriptions = DescriptionView.getText().toString();
-                Log.d("begintime",String.format("%d %d %d %d %d\n",event_info.Year_,event_info.Month_,event_info.Date_,event_info.startHour_,event_info.startMinute_));
-                Log.d("endtime",String.format("%d %d %d %d %d\n",event_info.Year_,event_info.Month_,event_info.Date_,event_info.endHour_,event_info.endMinute_));
+                eventInformationHolder.title=TitleView.getText().toString();
+                eventInformationHolder.descriptions = DescriptionView.getText().toString();
+                Log.d("begintime",String.format("%d %d %d %d %d\n",eventInformationHolder.Year_,eventInformationHolder.Month_,eventInformationHolder.Date_,eventInformationHolder.startHour_,eventInformationHolder.startMinute_));
+                Log.d("endtime",String.format("%d %d %d %d %d\n",eventInformationHolder.Year_,eventInformationHolder.Month_,eventInformationHolder.Date_,eventInformationHolder.endHour_,eventInformationHolder.endMinute_));
 
-                ClientEventControl.addEvent(event_info, getApplicationContext(), new Runnable() {
+                ClientEventControl.addEvent(eventInformationHolder, getApplicationContext(), new Runnable() {
                     @Override
-                    public void run() {
-                        finish();
-                    }
+                    public void run() { finish(); }
                 }, new Runnable() {
                     @Override
                     public void run() {

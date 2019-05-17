@@ -66,7 +66,7 @@ public class TestUserInterfaceControl implements UserInterfaceControl{
      * @param event_info 事件信息
      * @return 返回状态 具体定义见 Define.Constants
      */
-    public int addEvent(Event_information_holder event_info){
+    public int addEvent(EventInformationHolder event_info){
         try{
             Event today;
             return Constants.NORMAL;
@@ -81,7 +81,7 @@ public class TestUserInterfaceControl implements UserInterfaceControl{
     public int deleteEvent(int EventID){
         return  1;
     }
-    public int editEvent(Event_information_holder event_info)
+    public int editEvent(EventInformationHolder event_info)
     {
         return 1;
     }

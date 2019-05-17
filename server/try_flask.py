@@ -85,10 +85,24 @@ def submitevent():
 def deleteevent():
     res=None
     if request.method == 'POST':
-
         userID = int(request.form.get('userID'))
         eventID = int(request.form.get('eventID'))
         res=db.deleteEventInfo(eventID,userID)
+    return str(res)
+
+@app.route('/editevent',methods=['GET', 'POST'])
+def editevent():
+    res=None
+    if request.method == 'POST':
+        eventID = int(request.form.get('eventID'))
+        userID = int(request.form.get('userID'))
+        eventName = request.form.get('eventName')
+        whetherProcess = bool(request.form.get('whetherProcess'))
+        beginTime = request.form.get('beginTime')
+        endTime = request.form.get('endTime')
+        description = request.form.get('description')
+        remind = rem.str()
+        res=db.editEventInfo(eventID, userID, eventName, beginTime, endTime, description, remind)
     return str(res)
 
 if __name__ == '__main__':

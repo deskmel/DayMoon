@@ -148,12 +148,7 @@ public class Event implements Comparable<Event>, Serializable {
         Log.d("?",dateFormat.format(beginTime.getTime()));
         return dateFormat.format(beginTime.getTime());
     }
-    public String getBeginHour_str(){
-        SimpleDateFormat dateFormat;
-        dateFormat = new SimpleDateFormat("HH:mm",Locale.CHINA);
-        Log.d("?",dateFormat.format(beginTime.getTime()));
-        return dateFormat.format(beginTime.getTime());
-    }
+
     String getBeginTimeFormat(){
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
@@ -173,14 +168,16 @@ public class Event implements Comparable<Event>, Serializable {
     public String getEndTime_str(){
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("y年M月d日 H时m分",Locale.CHINA);
-        return dateFormat.format(endTime.getTime());
+        return dateFormat.format(endTime);
 
     }
+
     public String getEndHour(){
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("HH:mm",Locale.CHINA);
         return dateFormat.format(endTime.getTime());
     }
+
     String getEndTimeFormat(){
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);

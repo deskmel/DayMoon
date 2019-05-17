@@ -66,26 +66,6 @@
         android:layout_height="wrap_content"
         android:textSize="12dp"
         android:text="19:00-20:00"/>
-
-        <FrameLayout
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="100dp">
-            <ViewSwitcher
-                android:id="@+id/viewswicther"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </ViewSwitcher>
-        </FrameLayout>
-        <TextView
-        android:layout_marginTop="50dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:background="@drawable/topline_bg"
-        android:text="日历"
-        android:textSize="15dp"
-        android:textColor="@color/black" />
     <TextView
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"

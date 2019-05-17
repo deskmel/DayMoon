@@ -67,7 +67,7 @@ public class EventViewAdapter extends RecyclerView.Adapter<EventViewAdapter.View
         });
 
         holder.title.setText(eventList.get(position).getTitle());
-        holder.time.setText(eventList.get(position).getBeginHour_str());
+        holder.time.setText(eventList.get(position).getBeginTime_str());
         holder.des.setText(eventList.get(position).getDescription());
         holder.confirmDelete.setText("删除"+eventList.get(position).getTitle()+"？");
         holder.btn.setOnClickListener(new View.OnClickListener() {

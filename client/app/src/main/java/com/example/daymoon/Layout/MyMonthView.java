@@ -21,21 +21,13 @@ public class MyMonthView extends MonthView {
     private Context context;
     private Bitmap dayBgBitmap;
     private Bitmap daySuccessBitmap;
-    private Paint mTextPaint = new Paint();
+
     public MyMonthView(Context context) {
         super(context);
         this.context = context;
         //取消文字加粗
         mCurMonthTextPaint.setFakeBoldText(false);
-        mCurDayTextPaint.setColor(ContextCompat.getColor(context, R.color.red));
         mOtherMonthTextPaint.setFakeBoldText(false);
-
-        mTextPaint.setTextSize(spToPx(context, 13));
-        mTextPaint.setColor(0xffffffff);
-        mTextPaint.setAntiAlias(false);
-        mTextPaint.setFakeBoldText(true);
-        mTextPaint.setStyle(Paint.Style.FILL);
-        mTextPaint.setTextAlign(Paint.Align.CENTER);
 
         paint1.setColor(ContextCompat.getColor(context, R.color.green));
         paint1.setTextSize(spToPx(context, 13));
@@ -44,7 +36,7 @@ public class MyMonthView extends MonthView {
         paint1.setTextAlign(Paint.Align.CENTER);
 
         paint2.setColor(ContextCompat.getColor(context, R.color.white));
-        paint2.setTextSize(spToPx(context, 15));
+        paint2.setTextSize(spToPx(context, 13));
         paint2.setAntiAlias(true);
         paint2.setTextAlign(Paint.Align.CENTER);
 
@@ -55,14 +47,10 @@ public class MyMonthView extends MonthView {
 
     @Override
     protected boolean onDrawSelected(Canvas canvas, Calendar calendar, int x, int y, boolean hasScheme) {
-        float baselineY = mTextBaseLine + y;
-        int cx = x + mItemWidth / 2;
-        int cy = y + mItemHeight / 2;
         Paint paint = new Paint();
-        paint.setColor(ContextCompat.getColor(context, R.color.black));
-        canvas.drawCircle(x+mItemWidth/2,y+mItemHeight/2,mItemWidth/3,paint);
-
-        return false;
+        paint.setColor(getResources().getColor(R.color.green));
+        canvas.drawRect(x,y,x+mItemWidth,y+mItemHeight,paint);
+        return true;
     }
 
     @Override
@@ -76,46 +64,31 @@ public class MyMonthView extends MonthView {
         float baselineY = mTextBaseLine + y;
         int cx = x + mItemWidth / 2;
         int cy = y + mItemHeight / 2;
-
-        if (isSelected)
-        {
-            canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, mTextPaint);
-        }
-        else if (hasScheme) {
-            if ("1".equals(calendar.getScheme())) {
-                // 不可完成的，绘制圆
-                paint1.setStrokeWidth(0);
-                canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, mCurMonthTextPaint);
-                paint1.setStrokeWidth(dpToPx(context, 1));
-                canvas.drawCircle(cx, cy + 3, mItemWidth / 3, paint1);
-            } else if ("2".equals(calendar.getScheme())) {
-                //可以完成的，先绘制背景图再写文字，防止文字被遮住
-                canvas.drawBitmap(dayBgBitmap, x + mItemWidth / 4 - 5, y + mItemHeight / 4 + 8, paint2);
-                canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, paint2);
-            } else if ("3".equals(calendar.getScheme())) {
-                //今日已完成的，绘制圆+打勾图片
-                paint1.setStrokeWidth(0);
-                canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, paint1);
-                paint1.setStrokeWidth(dpToPx(context, 1));
-                canvas.drawCircle(cx, cy + 3, mItemWidth / 4 - 9, paint1);
-                canvas.drawBitmap(daySuccessBitmap, x + mItemWidth * 3 / 4 - 18, y + mItemHeight * 3 / 4 - 24, paint1);
-            } else if ("4".equals(calendar.getScheme())) {
-                //历史已完成的，绘制打勾图片
-                paint1.setStrokeWidth(0);
-                canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, paint1);
-                canvas.drawBitmap(daySuccessBitmap, x + mItemWidth * 3 / 4 - 18, y + mItemHeight * 3 / 4 - 40, paint1);
-            }
-        }
-        else {
+        if ("1".equals(calendar.getScheme())) {
+            // 不可完成的，绘制圆
+            paint1.setStrokeWidth(0);
+            canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, paint1);
+            paint1.setStrokeWidth(dpToPx(context, 1));
+            canvas.drawCircle(cx, cy + 3, mItemWidth / 4 - 9, paint1);
+        } else if ("2".equals(calendar.getScheme())) {
+            //可以完成的，先绘制背景图再写文字，防止文字被遮住
+            canvas.drawBitmap(dayBgBitmap, x + mItemWidth / 4 - 5, y + mItemHeight / 4 + 8, paint2);
+            canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, paint2);
+        } else if ("3".equals(calendar.getScheme())) {
+            //今日已完成的，绘制圆+打勾图片
+            paint1.setStrokeWidth(0);
+            canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, paint1);
+            paint1.setStrokeWidth(dpToPx(context, 1));
+            canvas.drawCircle(cx, cy + 3, mItemWidth / 4 - 9, paint1);
+            canvas.drawBitmap(daySuccessBitmap, x + mItemWidth * 3 / 4 - 18, y + mItemHeight * 3 / 4 - 24, paint1);
+        } else if ("4".equals(calendar.getScheme())) {
+            //历史已完成的，绘制打勾图片
+            paint1.setStrokeWidth(0);
+            canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, paint1);
+            canvas.drawBitmap(daySuccessBitmap, x + mItemWidth * 3 / 4 - 18, y + mItemHeight * 3 / 4 - 40, paint1);
+        } else {
             //正常日期的显示
-            if (calendar.isCurrentDay())
-            {
-                canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, mCurDayTextPaint);
-            }
-            else{
-                canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, calendar.isCurrentMonth() ? mCurMonthTextPaint : mOtherMonthTextPaint);
-            }
-
+            canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, calendar.isCurrentMonth() ? mCurMonthTextPaint : mOtherMonthTextPaint);
         }
     }
 

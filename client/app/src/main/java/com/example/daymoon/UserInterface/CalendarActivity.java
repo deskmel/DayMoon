@@ -50,7 +50,7 @@ import android.widget.Toast;
 
 public class CalendarActivity extends DrawerActivity implements CalendarView.OnViewChangeListener{
 
-    private Map<String, Calendar> map;
+    private Map<String, Calendar> map = new HashMap<>();
     private CalendarView calendarView;
     private CalendarLayout calendarLayout;
     private LinearLayout picker;//日期选择器
@@ -102,6 +102,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         selectDay = calendarView.getCurDay();
         selectMonth = calendarView.getCurMonth();
         selectYear = calendarView.getCurYear();
+        initData();
         //初始化当前年月
         tvMonth.setText(calendarView.getCurYear() + "年" + calendarView.getCurMonth() + "月");
         //月份切换改变事件
@@ -249,7 +250,14 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     }
 
     private void initData() {
-        map=ClientEventControl.getDatesHasEvent();
+        Calendar calendar1 = getSchemeCalendar(2018, 8, 11, "1");
+        Calendar calendar2 = getSchemeCalendar(2018, 8, 12, "2");
+        Calendar calendar3 = getSchemeCalendar(2018, 8, 13, "3");
+        Calendar calendar4 = getSchemeCalendar(2018, 8, 6, "4");
+        map.put(calendar1.toString(), calendar1);
+        map.put(calendar2.toString(), calendar2);
+        map.put(calendar3.toString(), calendar3);
+        map.put(calendar4.toString(), calendar4);
         calendarView.setSchemeDate(map);
     }
 
