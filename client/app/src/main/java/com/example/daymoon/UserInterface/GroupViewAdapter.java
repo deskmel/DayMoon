@@ -20,7 +20,6 @@ import com.example.daymoon.R;
 
 public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.ViewHolder>  {
     private GroupList groupList;
-    private EventList eventList;
     private Context mContext;
     private OnRecyclerItemClickListener mListener;
     private ClientGroupEventControl clientGroupEventControl;
@@ -40,13 +39,13 @@ public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.View
 
     @Override
     public int getItemCount() {
-        return eventList.size();
+        return groupList.size();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.custom_event_list,parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.custom_group_list,parent,false);
         return new ViewHolder(view);
     }
 
@@ -96,6 +95,7 @@ public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.View
             super(itemView);
             groupname=itemView.findViewById(R.id.groupname);
             last_event_info=itemView.findViewById(R.id.last_event_info);
+            swipeLayout=itemView.findViewById(R.id.swipe);
         }
     }
 }

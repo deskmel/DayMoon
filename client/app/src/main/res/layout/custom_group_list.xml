@@ -1,7 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<com.example.daymoon.Layout.CustomSwipeLayout
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    swipe:leftEdgeSwipeOffset="0dp"
+    swipe:rightEdgeSwipeOffset="0dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#FF5534"
+        android:gravity="center"
+        android:tag="Bottom3"
+        android:weightSum="10">
+
+        <ImageView
+            android:id="@+id/trash"
+            android:layout_width="27dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:src="@mipmap/trash" />
+
+        <TextView
+            android:id="@+id/confirmDelete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:textColor="#fff"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="4"
+            android:background="@color/white"
+            android:text="Yes,Delete"
+            android:textColor="#FF5534" />
+    </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="60dp"
@@ -11,7 +48,6 @@
         android:layout_height="match_parent"
         android:background="@drawable/white_bg">
         <ImageView
-            android:background="@drawable/menu_bg"
             android:id="@+id/groupimage"
             android:layout_marginLeft="20dp"
             android:src="@mipmap/group"
@@ -20,7 +56,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true" />
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_toRightOf="@+id/groupimage"
                 android:orientation="vertical"
                 android:layout_height="match_parent">
@@ -44,4 +80,4 @@
             </LinearLayout>
     </RelativeLayout>
 </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</com.example.daymoon.Layout.CustomSwipeLayout>
