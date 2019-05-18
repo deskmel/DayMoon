@@ -1,11 +1,13 @@
 from flask import Flask
 from flask import render_template,redirect,url_for
 from flask import request
+import os
 from sql_utils import *
 
 app = Flask(__name__)
 rem=Remind()
 db=DayMoonDB()
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 @app.route('/')
 def index():
@@ -104,6 +106,22 @@ def editevent():
         remind = rem.str()
         res=db.editEventInfo(eventID, userID, eventName, beginTime, endTime, description, remind)
     return str(res)
+
+@app.route('/creategroup',methods=['GET', 'POST'])
+def creategroup():
+    res=None
+    if request.method == 'POST':
+        groupName = request.form.get('groupName')
+        description = request.form.get('description')
+        leaderID = int(request.form.get('leaderID'))
+        imgName = request.form.get('imgName')
+        f = request.files['file']
+        path = basedir + "/static/uploads/"
+        file_path = path + f.filename + ".png"
+        f.save(file_path)
+        res = db.createGroup(leaderID, groupName, imgName)
+    return str(res)
+
 
 if __name__ == '__main__':
     app.debug = True

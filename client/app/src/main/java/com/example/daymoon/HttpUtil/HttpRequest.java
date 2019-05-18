@@ -53,8 +53,8 @@ public class HttpRequest {
 
     private void innerPostFile(String url, String name, String fileName, File file, Map<String,String> params, final DataCallback dataCallback){
         RequestBody fileBody = RequestBody.create(MediaType.parse("image/png"), file);
-        MultipartBody.Builder builder = new MultipartBody.Builder();
-        builder.addFormDataPart("img", fileName, fileBody);
+        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        builder.addFormDataPart("file", fileName, fileBody);
         for (Map.Entry<String,String> pair : params.entrySet()){
             builder.addFormDataPart(pair.getKey(), pair.getValue());
         }
