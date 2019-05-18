@@ -18,6 +18,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group_schedule);
         tools=findViewById(R.id.tools);
         back=findViewById(R.id.back);
+        initButton();
 
     }
 

@@ -13,5 +13,6 @@
     <color name="topbg">#F7F7F7</color>
     <color name="sgray">#F5F5F5</color>
     <color name="blue">#40E0D0</color>
+    <color name="textgray">#696969</color>
 
 </resources>
