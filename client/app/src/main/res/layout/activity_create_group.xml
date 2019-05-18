@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".UserInterface.CreateGroupActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:background="@drawable/menu_bg">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="60dp">
         <TextView
             android:id="@+id/dismiss"
             android:layout_width="wrap_content"
@@ -30,4 +34,51 @@
             android:text="创建小组"/>
     </RelativeLayout>
 </LinearLayout>
+<LinearLayout
+    android:layout_marginTop="40dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+        <ImageView
+            android:id="@+id/profilephote"
+            android:scaleType="fitCenter"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:src="@mipmap/addprofilephoto"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/groupname"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:hint="填写小组名称"
+            />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_marginTop="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/createbutton"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:background="@drawable/addbutton"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:text="创建小组"/>
+    </RelativeLayout>
+</LinearLayout>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

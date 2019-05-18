@@ -28,6 +28,7 @@ android {
         exclude 'META-INF/android.support.design_material.version'
     }
 }
+
 repositories {
     // ...
     maven { url 'https://jitpack.io' }
