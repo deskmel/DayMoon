@@ -86,7 +86,8 @@ public class GroupActivity extends AppCompatActivity {
         vPopupWindow.findViewById(R.id.creategroup).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupWindow.dismiss();
+                Intent intent = new Intent(GroupActivity.this,CreateGroupActivity.class);
+                startActivityForResult(intent,0);
             }
         });
         vPopupWindow.findViewById(R.id.joingroup).setOnClickListener(new View.OnClickListener() {

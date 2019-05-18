@@ -61,7 +61,7 @@ public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.View
 
         holder.groupname.setText(groupList.get(position).getGroupName());
         clientGroupEventControl = new ClientGroupEventControl();
-        holder.last_event_info.setText(clientGroupEventControl.getLatestGroupEventDes(groupList.get(position).getGroupId()));
+        holder.last_event_info.setText(clientGroupEventControl.getLatestGroupEventDes(groupList.get(position).getGroupID()));
         //holder.des.setText(eventList.get(position).getDescription());
         //holder.confirmDelete.setText("删除"+eventList.get(position).getTitle()+"？");
         /*

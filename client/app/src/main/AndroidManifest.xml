@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UserInterface.GroupDetailActivity"></activity>
+        <activity android:name=".UserInterface.CreateGroupActivity"></activity>
+        <activity android:name=".UserInterface.GroupDetailActivity" />
         <activity android:name=".UserInterface.GroupScheduleActivity" />
         <activity android:name=".UserInterface.GroupActivity" />
         <activity android:name=".UserInterface.EditEventActivity" />
