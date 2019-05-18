@@ -1,5 +1,7 @@
 package com.example.daymoon.UserInterface;
 
+import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,10 +11,14 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.daymoon.R;
@@ -27,6 +33,9 @@ public class CreateGroupActivity extends AppCompatActivity {
     private MaterialEditText groupname;
     private Button submit;
     private TextView dismiss;
+    private PopupWindow popupWindow;
+
+
 
     //相册请求码
     private static final int ALBUM_REQUEST_CODE = 1;
@@ -66,7 +75,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         profilephoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getPicFromAlbum();
+                showNoneEffect();
             }
         });
     }
@@ -165,6 +174,50 @@ public class CreateGroupActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return null;
+    }
+    private void showNoneEffect(){
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View vPopupWindow = inflater.inflate(R.layout.popupmenu_profilephoto, null, false);
+        popupWindow = new PopupWindow(vPopupWindow, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
+        addBackground();
+
+        //popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
+        View parentView = LayoutInflater.from(CreateGroupActivity.this).inflate(R.layout.layout_popupwindow, null);
+        //popupWindow.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
+        popupWindow.showAtLocation(parentView,Gravity.BOTTOM,0,0);
+        vPopupWindow.findViewById(R.id.takepotato).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getPicFromCamera();
+            }
+        });
+        vPopupWindow.findViewById(R.id.album).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getPicFromAlbum();
+            }
+        });
+        vPopupWindow.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+    }
+    private void addBackground() {
+        // 设置背景颜色变暗
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = 0.7f;//调节透明度
+        getWindow().setAttributes(lp);
+        //dismiss时恢复原样
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                lp.alpha = 1f;
+                getWindow().setAttributes(lp);
+            }
+        });
     }
 
 
