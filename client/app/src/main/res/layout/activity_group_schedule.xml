@@ -23,6 +23,13 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:src="@mipmap/back"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:text="小组"/>
         <ImageButton
             android:id="@+id/tools"
             android:scaleType="fitCenter"
