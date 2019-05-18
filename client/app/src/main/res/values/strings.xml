@@ -16,5 +16,5 @@
     <string name="profile_description">这个人很懒，什么都没留下</string>
     <string name="menu_item_setting">"设置"</string>
     <string name="menu_item_group">"小组"</string>
-    <string name="description">"这个组长很懒，什么都没留下"</string>
+    <string name="group_description">"这个组长很懒，什么都没留下"</string>
 </resources>

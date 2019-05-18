@@ -5,9 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UserInterface.GroupDetailActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/iosbackground"
     android:orientation="vertical">
     <LinearLayout
@@ -46,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <view
+        <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/bordergray"/>
@@ -158,7 +161,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_height="200dp"
                     android:layout_marginLeft="10dp"
-                    android:text="@string/description"/>
+                    android:text="@string/group_description"/>
 
 
             </LinearLayout>
@@ -171,7 +174,7 @@
 
 
     <LinearLayout
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="60dp"
         android:layout_width="match_parent"
         android:background="@drawable/white_bg"
         android:layout_height="wrap_content">
@@ -184,4 +187,5 @@
             android:text="删除并退出"/>
     </LinearLayout>
 </LinearLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>
