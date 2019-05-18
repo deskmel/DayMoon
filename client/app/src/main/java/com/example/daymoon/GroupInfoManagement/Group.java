@@ -8,7 +8,6 @@ public class Group {
     private String groupDescription;
     private int groupId;
 
-
     public Group(String groupName,String groupDescription)
     {
         this.groupName=groupName;
