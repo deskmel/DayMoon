@@ -7,98 +7,146 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    android:layout_marginTop="20dp"
-    android:background="@drawable/calendar_bg"
-    android:orientation="vertical">
-
     <LinearLayout
-        android:id="@+id/picker"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/tv_month"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:includeFontPadding="false"
-            android:layout_gravity="left|center_vertical"
-            android:textColor="@color/green"
-            android:textSize="13sp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|center_vertical"
-            android:src="@mipmap/ic_down" />
-
-
-        <LinearLayout
-            android:id="@+id/adder"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:gravity="right"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <Button
-                android:id="@+id/addbutton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="right"
-                android:text="+"
-                android:textAllCaps="false" />
-        </LinearLayout>
-    </LinearLayout>
-        <com.haibin.calendarview.CalendarLayout
-            android:id="@+id/calendarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:orientation="vertical"
-            app:calendar_show_mode="both_month_week_view"
-            app:default_status="shrink">
-    <com.haibin.calendarview.CalendarView
-        android:id="@+id/calendarView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        app:current_month_text_color="#212121"
-        app:day_text_size="10sp"
-        app:month_view="com.example.daymoon.UserInterface.MyMonthView"
-        app:month_view_show_mode="mode_fix"
-        app:week_view="com.exampe.daymoon.Layout.MyWeekView"
-        app:other_month_text_color="#cccccc"
-        app:week_line_background="#e6e6e6" />
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
+        android:layout_marginTop="0dp"
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list_one"
-                android:layout_width="wrap_content"
-                android:layout_height="400dp">
-            </android.support.v7.widget.RecyclerView>
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageButton
+                    android:id="@+id/user"
+                    android:scaleType="fitCenter"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:background="@color/white"
+                    android:src="@mipmap/user"/>
+                <ImageButton
+                    android:id="@+id/group"
+                    android:layout_marginRight="10dp"
+                    android:scaleType="fitCenter"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/more"
+                    android:background="@color/white"
+                    android:src="@mipmap/group"/>
+                <ImageButton
+                    android:id="@+id/more"
+                    android:scaleType="fitCenter"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/other"
+                    android:background="@color/white"
+                    android:layout_alignParentRight="true"/>
+
+            </RelativeLayout>
         </LinearLayout>
-    </ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/calendar_bg"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/picker"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingRight="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/tv_month"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:includeFontPadding="false"
+                            android:layout_gravity="start|center_vertical"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/green"
+                            android:textSize="13sp" />
 
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@+id/tv_month"
+                            android:layout_gravity="center|center_vertical"
+                            android:src="@mipmap/ic_down" />
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:text="日历"/>
+                    <Button
+                        android:id="@+id/addbutton"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@mipmap/add_button"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="right"
+                        android:textAllCaps="false" />
+                </RelativeLayout>
+            </LinearLayout>
+            <com.haibin.calendarview.CalendarLayout
+                android:id="@+id/calendarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:orientation="vertical"
+                app:calendar_show_mode="both_month_week_view"
+                app:default_status="shrink">
+                <com.haibin.calendarview.CalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="0dp"
+                    app:current_month_text_color="#212121"
+                    app:day_text_size="13sp"
+                    app:calendar_height="40dp"
+                    app:month_view="com.example.daymoon.Layout.MyMonthView"
+                    app:month_view_show_mode="mode_fix"
+                    app:week_view="com.exampe.daymoon.Layout.MyWeekView"
+                    app:other_month_text_color="#cccccc"
+                    app:week_line_background="#e6e6e6" />
+            </com.haibin.calendarview.CalendarLayout>
+        </LinearLayout>
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-</LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="400dp">
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>
