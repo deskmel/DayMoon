@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
+import com.example.daymoon.GroupInfoManagement.GroupInformationHolder;
 import com.example.daymoon.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -34,18 +36,15 @@ public class CreateGroupActivity extends AppCompatActivity {
     private Button submit;
     private TextView dismiss;
     private PopupWindow popupWindow;
+    private GroupInformationHolder groupInformationHolder;
 
-
-
-    //相册请求码
     private static final int ALBUM_REQUEST_CODE = 1;
-    //相机请求码
     private static final int CAMERA_REQUEST_CODE = 2;
-    //剪裁请求码
     private static final int CROP_REQUEST_CODE = 3;
 
 
     private File tempFile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +55,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         submit=findViewById(R.id.createbutton);
         dismiss=findViewById(R.id.dismiss);
 
-
-
+        groupInformationHolder = new GroupInformationHolder();
 
         dismiss.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +67,20 @@ public class CreateGroupActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                groupInformationHolder.groupName = groupname.getText().toString();
+                groupInformationHolder.image = tempFile;
+                groupInformationHolder.description = "placeholder";
+                ClientGroupInfoControl.createGroup(groupInformationHolder, new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                }, new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                });
             }
         });
         profilephoto.setOnClickListener(new View.OnClickListener() {
@@ -104,22 +115,14 @@ public class CreateGroupActivity extends AppCompatActivity {
             case CROP_REQUEST_CODE:
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
-                    //在这里获得了剪裁后的Bitmap对象，可以用于上传
                     Bitmap image = bundle.getParcelable("data");
-                    //设置到ImageView上
                     profilephoto.setImageBitmap(image);
-                    //也可以进行一些保存、压缩等操作后上传
                     String path = saveImage("userHeader", image);
-                    //File file = new File(path);
-                    /*
-                     *上传文件的额操作
-                     */
+                    tempFile = new File(path);
                 }
                 break;
         }
     }
-
-
 
     private void getPicFromCamera() {
         //用于保存调用相机拍照后所生成的文件
@@ -162,11 +165,11 @@ public class CreateGroupActivity extends AppCompatActivity {
         if (!appDir.exists()) {
             appDir.mkdir();
         }
-        String fileName = name + ".jpg";
+        String fileName = name + ".png";
         File file = new File(appDir, fileName);
         try {
             FileOutputStream fos = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
             return file.getAbsolutePath();

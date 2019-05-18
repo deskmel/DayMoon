@@ -29,6 +29,7 @@ import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.EventManagement.Event;
 import static com.example.daymoon.Define.Constants.SERVER_IP;
 import com.example.daymoon.EventManagement.EventList;
+import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
 import com.example.daymoon.R;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
@@ -81,6 +82,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 initData();
             }
         });
+        ClientGroupInfoControl.setCurrentUserID(1);
         setContentView(R.layout.activity_canlendar);//绑定界面
         calendarView = findViewById(R.id.calendarView);//绑定calendar
         calendarLayout=findViewById(R.id.calendarLayout);

@@ -232,7 +232,7 @@ class DayMoonDB(object):
     # -----------personalEvent的增、改、查、删-----------#
 
     # -----------group的创、删、进、退、踢、查-----------#
-    def createGroup(self,leaderID,groupName,description=''):
+    def createGroup(self,leaderID,groupName,imgName,description=''):
         '''
         leader创建小组时调用
         :param leaderID: int
@@ -240,7 +240,7 @@ class DayMoonDB(object):
         :param description: str,默认为空
         :return: 若成功，返回groupID，若失败，返回err
         '''
-        sql = '''INSERT INTO `groups` (`groupID`, `groupName`, `description`, `memberIDs`, `eventIDs`, `leaderID`) VALUES (NULL, '%s', '%s', '[]', '[]', '%d');''' % (groupName,description,leaderID)
+        sql = '''INSERT INTO `groups` (`groupID`, `groupName`, `description`, `memberIDs`, `eventIDs`, `leaderID`, `imgName`) VALUES (NULL, '%s', '%s', '[]', '[]', '%d', '%s');''' % (groupName,description,leaderID,imgName)
         try:
             self.cur.execute(sql)
             self.db.commit()
