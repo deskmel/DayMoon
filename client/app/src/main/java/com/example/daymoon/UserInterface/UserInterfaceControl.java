@@ -1,4 +1,5 @@
 package com.example.daymoon.UserInterface;
+import com.example.daymoon.EventManagement.EventInformationHolder;
 import com.example.daymoon.EventManagement.EventList;
 
 /**

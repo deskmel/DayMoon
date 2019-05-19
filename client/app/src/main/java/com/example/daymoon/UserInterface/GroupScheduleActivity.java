@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -14,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.daymoon.EventManagement.ClientEventControl;
+import com.example.daymoon.Adapter.TimeLineAdapter;
 import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.R;

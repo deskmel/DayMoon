@@ -1,29 +1,18 @@
-package com.example.daymoon.UserInterface;
+package com.example.daymoon.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.Transformation;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.daimajia.swipe.SwipeLayout;
 import com.example.daymoon.EventManagement.ClientEventControl;
-import com.example.daymoon.EventManagement.Event;
 import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.Layout.CustomSwipeLayout;
 import com.example.daymoon.R;
-
-import java.util.LinkedList;
-
-import static android.view.FrameMetrics.ANIMATION_DURATION;
 
 public class EventViewAdapter extends RecyclerView.Adapter<EventViewAdapter.ViewHolder> {
     private EventList eventList;

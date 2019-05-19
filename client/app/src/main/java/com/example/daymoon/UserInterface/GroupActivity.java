@@ -19,9 +19,8 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 
-import com.example.daymoon.GroupEventManagement.GroupEventList;
+import com.example.daymoon.Adapter.GroupViewAdapter;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
-import com.example.daymoon.GroupInfoManagement.Group;
 import com.example.daymoon.GroupInfoManagement.GroupList;
 import com.example.daymoon.R;
 import com.example.daymoon.Tool.PermissionUtil;

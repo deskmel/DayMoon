@@ -1,26 +1,19 @@
 package com.example.daymoon.EventManagement;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.HttpUtil.HttpRequestThread;
 import static com.example.daymoon.Define.Constants.SERVER_IP;
-import com.example.daymoon.UserInterface.EventInformationHolder;
 
 import okhttp3.Request;
 

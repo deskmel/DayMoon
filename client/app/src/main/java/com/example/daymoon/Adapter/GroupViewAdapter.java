@@ -1,7 +1,6 @@
-package com.example.daymoon.UserInterface;
+package com.example.daymoon.Adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,21 +10,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.daymoon.EventManagement.ClientEventControl;
-import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
-import com.example.daymoon.GroupEventManagement.GroupEventControl;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
-import com.example.daymoon.GroupInfoManagement.Group;
 import com.example.daymoon.GroupInfoManagement.GroupList;
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.HttpUtil.HttpRequestThread;
 import com.example.daymoon.Layout.CustomSwipeLayout;
 import com.example.daymoon.R;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import okhttp3.Request;
 

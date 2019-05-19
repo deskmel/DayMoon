@@ -12,6 +12,7 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.EventManagement.Event;
+import com.example.daymoon.EventManagement.EventInformationHolder;
 import com.example.daymoon.R;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.nightonke.jellytogglebutton.State;

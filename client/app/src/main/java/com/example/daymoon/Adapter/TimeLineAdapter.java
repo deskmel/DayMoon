@@ -1,7 +1,6 @@
-package com.example.daymoon.UserInterface;
+package com.example.daymoon.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,10 +16,7 @@ import android.widget.TextView;
 import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
 import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventList;
-import com.example.daymoon.Layout.CustomSwipeLayout;
 import com.example.daymoon.R;
-
-import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHolder> {
     private GroupEventList groupEventList;

@@ -1,4 +1,4 @@
-package com.example.daymoon.UserInterface;
+package com.example.daymoon.EventManagement;
 
 import com.example.daymoon.EventManagement.Event;
 
@@ -18,7 +18,7 @@ public class EventInformationHolder {
     public String descriptions;
     public String title;
 
-    EventInformationHolder(Event event)
+    public EventInformationHolder(Event event)
     {
         GregorianCalendar beginTime=event.getBeginTime();
         GregorianCalendar endTime=event.getEndTime();
@@ -35,7 +35,7 @@ public class EventInformationHolder {
         title=event.getTitle();
     }
 
-    EventInformationHolder(int y,int m,int d){
+    public EventInformationHolder(int y,int m,int d){
         Year_=y;
         Month_=m;
         Date_=d;

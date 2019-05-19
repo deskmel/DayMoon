@@ -4,6 +4,7 @@ import android.util.Log;
 import com.example.daymoon.Define.Constants;
 import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.EventManagement.Event;
+import com.example.daymoon.EventManagement.EventInformationHolder;
 import com.example.daymoon.EventManagement.EventList;
 
 public class TestUserInterfaceControl implements UserInterfaceControl{
