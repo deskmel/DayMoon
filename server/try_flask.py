@@ -1,6 +1,8 @@
 from flask import Flask
 from flask import render_template,redirect,url_for
 from flask import request
+from flask import Response
+
 import os
 from sql_utils import *
 
@@ -67,6 +69,14 @@ def getallmyevents():
         res=db.getAllMyEvents(userID)
     return res
 
+@app.route('/getallmygroups',methods=['GET', 'POST'])
+def getallmygroups():
+    res=None
+    if request.method == 'POST':
+        userID=int(request.form.get('userID'))
+        res=db.getAllMyGroups(userID)
+    return res
+
 @app.route('/submitevent',methods=['GET', 'POST'])
 def submitevent():
     res=None
@@ -122,7 +132,14 @@ def creategroup():
         res = db.createGroup(leaderID, groupName, imgName)
     return str(res)
 
+@app.route("/image/<imageName>")
+def getimage(imageName):
+    imagePath =basedir + '/static/uploads/' + imageName + '.png'
+    with open(imagePath,"rb") as f:
+        image = f.read()
+    return Response(image, mimetype="image/png")
 
+from flask import render_template, jsonify
 if __name__ == '__main__':
     app.debug = True
     app.run(host = "0.0.0.0", port = 5000)

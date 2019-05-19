@@ -1,5 +1,7 @@
 package com.example.daymoon.GroupInfoManagement;
 
+import android.graphics.Bitmap;
+
 import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.UserInfoManagement.User;
@@ -11,7 +13,9 @@ public class Group {
     private String description;
     private int groupID;
     private int leaderID;
+    private int[] memberIDs, eventIDs; //临时使用一下
     private List<User> groupMember;
+    private String imgName;
 
     public Group(String groupName,String groupDescription)
     {
@@ -35,7 +39,12 @@ public class Group {
         return groupID;
     }
 
+    public String getImgName() {
+        return imgName;
+    }
+
     public List<User> getGroupMember() {
         return groupMember;
     }
+
 }

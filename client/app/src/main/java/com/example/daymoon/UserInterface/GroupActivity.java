@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 
 import com.example.daymoon.GroupEventManagement.GroupEventList;
@@ -41,7 +42,18 @@ public class GroupActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
-        flushGroupList();
+        ClientGroupInfoControl.getGroupListFromServer(new Runnable() {
+            @Override
+            public void run() {
+                groupList = ClientGroupInfoControl.getGroupList();
+                flushGroupList();
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), "something goes wrong", Toast.LENGTH_LONG).show();
+            }
+        });
 
         more = findViewById(R.id.more);
         more.setOnClickListener(new View.OnClickListener() {
@@ -53,12 +65,6 @@ public class GroupActivity extends AppCompatActivity {
     }
     private void flushGroupList()
     {
-        //groupList =ClientGroupInfoControl.getGroupList() ;
-        groupList=new GroupList();
-        Group group1 = new Group("哈哈","hehe");
-        Group group2 = new Group("东15","基佬群");
-        groupList.add(group1);
-        groupList.add(group2);
         adapter = new GroupViewAdapter(groupList, mainContext);
         recyclerView.setAdapter(adapter);
         adapter.setonItemClickListener(new GroupViewAdapter.OnRecyclerItemClickListener() {
