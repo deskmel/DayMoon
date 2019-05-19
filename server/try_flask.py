@@ -3,6 +3,7 @@ from flask import render_template,redirect,url_for
 from flask import request
 from flask import Response
 
+import uuid
 import os
 from sql_utils import *
 
@@ -138,6 +139,26 @@ def getimage(imageName):
     with open(imagePath,"rb") as f:
         image = f.read()
     return Response(image, mimetype="image/png")
+
+@app.route('/genqrcode', methods=['GET', 'POST'])
+def genqrcode():
+    res = ''
+    if request.method == 'POST':
+        groupID = int (request.form.get('groupID'))
+        res = db.genQRCode(groupID)
+    return res
+
+@app.route('/joingroupbyqrcode', methods=['GET', 'POST'])
+def joingroupbyqrcode():
+    res = ''
+    if request.method == 'POST':
+        qrCodeKey = request.form.get('qrCodeKey')
+        userID = int(request.form.get('userID'))
+        res = db.joinGroupByQRCode(userID, qrCodeKey)
+        if res:
+            return str(res)
+        return ''
+    return res
 
 from flask import render_template, jsonify
 if __name__ == '__main__':

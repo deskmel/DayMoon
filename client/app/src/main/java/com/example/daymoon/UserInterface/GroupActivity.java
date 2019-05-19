@@ -3,6 +3,7 @@ package com.example.daymoon.UserInterface;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,8 +24,13 @@ import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
 import com.example.daymoon.GroupInfoManagement.Group;
 import com.example.daymoon.GroupInfoManagement.GroupList;
 import com.example.daymoon.R;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 public class GroupActivity extends AppCompatActivity {
+    private final int REQUEST_QRCODE = 1;
+
     private int userId;
     private RecyclerView recyclerView;
     private GroupViewAdapter adapter =null;
@@ -33,9 +39,13 @@ public class GroupActivity extends AppCompatActivity {
     private Context mainContext = null;
     private ClientGroupInfoControl clientGroupInfoControl;
     private PopupWindow popupWindow;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ZXingLibrary.initDisplayOpinion(this);
         setContentView(R.layout.activity_group);
         mainContext = GroupActivity.this;
         recyclerView=findViewById(R.id.group_list);
@@ -71,6 +81,7 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int Position) {
                 Intent intent = new Intent(GroupActivity.this,GroupScheduleActivity.class);
+                intent.putExtra("groupID", groupList.get(Position).getGroupID());
                 startActivityForResult(intent, 0);
             }
         });
@@ -98,7 +109,8 @@ public class GroupActivity extends AppCompatActivity {
         vPopupWindow.findViewById(R.id.joingroup).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupWindow.dismiss();
+                Intent intent = new Intent(GroupActivity.this, CaptureActivity.class);
+                startActivityForResult(intent, REQUEST_QRCODE);
             }
         });
 
@@ -118,5 +130,33 @@ public class GroupActivity extends AppCompatActivity {
                 getWindow().setAttributes(lp);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_QRCODE) {
+            if (null != data) {
+                Bundle bundle = data.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                    String result = bundle.getString(CodeUtils.RESULT_STRING);
+                    ClientGroupInfoControl.joinGroupByQRCode(result, new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    }, new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    });
+                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                    Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 }
