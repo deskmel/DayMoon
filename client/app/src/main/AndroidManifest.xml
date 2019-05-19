@@ -33,15 +33,20 @@
         <activity android:name=".UserInterface.QRCodeActivity"/>
         <activity
             android:name=".UserInterface.LoginActivity"
-            android:label="@string/app_name" />
-        <activity
-            android:name=".UserInterface.CalendarActivity"
             android:label="DayMoon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".UserInterface.CalendarActivity"
+            android:label="DayMoon">
+        </activity>
+        <activity
+            android:name=".UserInterface.RegisterActivity"
+            android:label="DayMoon">
         </activity>
 
         <provider
