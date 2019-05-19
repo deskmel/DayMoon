@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TimeLineAdapter timeLineAdapter=null;
     private GroupEventList groupEventList;
-
+    private ImageView eventaddbutton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +31,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
         tools=findViewById(R.id.tools);
         back=findViewById(R.id.back);
         recyclerView=findViewById(R.id.event_list);
-
+        eventaddbutton=findViewById(R.id.add_event_image);
         initButton();
         initData();
 
@@ -59,6 +60,13 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 finish();
             }
         });
+        eventaddbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
     private void initData(){
         groupEventList=new GroupEventList();
