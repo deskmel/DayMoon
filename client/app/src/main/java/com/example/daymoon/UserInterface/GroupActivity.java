@@ -24,6 +24,7 @@ import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
 import com.example.daymoon.GroupInfoManagement.Group;
 import com.example.daymoon.GroupInfoManagement.GroupList;
 import com.example.daymoon.R;
+import com.example.daymoon.Tool.PermissionUtil;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
@@ -44,7 +45,7 @@ public class GroupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        PermissionUtil.verifyStoragePermissions(GroupActivity.this);
         ZXingLibrary.initDisplayOpinion(this);
         setContentView(R.layout.activity_group);
         mainContext = GroupActivity.this;

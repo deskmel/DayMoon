@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
 import com.example.daymoon.GroupInfoManagement.GroupInformationHolder;
 import com.example.daymoon.R;
+import com.example.daymoon.Tool.PermissionUtil;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.io.File;
@@ -41,11 +42,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     private TextView dismiss;
     private PopupWindow popupWindow;
     private GroupInformationHolder groupInformationHolder;
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
+
     private static final int ALBUM_REQUEST_CODE = 1;
     private static final int CAMERA_REQUEST_CODE = 2;
     private static final int CROP_REQUEST_CODE = 3;
@@ -56,7 +53,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        verifyStoragePermissions(CreateGroupActivity.this);
+        PermissionUtil.verifyCameraPermission(CreateGroupActivity.this);
         setContentView(R.layout.activity_create_group);
 
         profilephoto=findViewById(R.id.profilephote);
@@ -231,19 +228,7 @@ public class CreateGroupActivity extends AppCompatActivity {
             }
         });
     }
-    public static void verifyStoragePermissions(Activity activity) {
-        // Check if we have write permission
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
-        }
-    }
 
 
 
