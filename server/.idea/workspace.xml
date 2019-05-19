@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dfb9ab52-ac06-400b-bea2-7d08df6bf3de" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/GroupInfoManagement/ClientGroupInfoControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/GroupInfoManagement/ClientGroupInfoControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/GroupInfoManagement/Group.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/GroupInfoManagement/Group.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/HttpUtil/HttpRequestThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/HttpUtil/HttpRequestThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInfoManagement/ClientUserInfoControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInfoManagement/ClientUserInfoControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInfoManagement/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInfoManagement/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../client/app/src/main/res/xml/provider_paths.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/CreateGroupActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/CreateGroupActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../client/local.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/sql_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/try_flask.py" beforeDir="false" afterPath="$PROJECT_DIR$/try_flask.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -155,7 +152,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-62" />
     <option name="y" value="473" />
     <option name="width" value="1555" />
@@ -270,8 +267,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
-    <editor active="true" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19839142" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />

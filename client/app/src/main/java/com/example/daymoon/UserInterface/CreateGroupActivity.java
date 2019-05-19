@@ -97,7 +97,7 @@ public class CreateGroupActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     //用相机返回的照片去调用剪裁也需要对Uri进行处理
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        Uri contentUri = FileProvider.getUriForFile(CreateGroupActivity.this, "com.hansion.chosehead", tempFile);
+                        Uri contentUri = FileProvider.getUriForFile(CreateGroupActivity.this, "com.example.daymoon.fileprovider", tempFile);
                         cropPhoto(contentUri);//裁剪图片
                     } else {
                         cropPhoto(Uri.fromFile(tempFile));//裁剪图片
@@ -132,7 +132,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         //判断版本
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {   //如果在Android7.0以上,使用FileProvider获取Uri
             intent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            Uri contentUri = FileProvider.getUriForFile(CreateGroupActivity.this, "com.hansion.chosehead", tempFile);
+            Uri contentUri = FileProvider.getUriForFile(CreateGroupActivity.this, "com.example.daymoon.fileprovider", tempFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
         } else {    //否则使用Uri.fromFile(file)方法获取Uri
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
