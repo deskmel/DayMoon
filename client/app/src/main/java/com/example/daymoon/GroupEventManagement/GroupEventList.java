@@ -1,4 +1,6 @@
 package com.example.daymoon.GroupEventManagement;
 
-public class GroupEventList {
+import java.util.LinkedList;
+
+public class GroupEventList extends LinkedList<GroupEvent> {
 }

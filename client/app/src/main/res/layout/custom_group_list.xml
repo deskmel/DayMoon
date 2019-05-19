@@ -9,7 +9,7 @@
     swipe:rightEdgeSwipeOffset="0dp">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:background="#FF5534"
         android:gravity="center"
         android:tag="Bottom3"
@@ -41,18 +41,19 @@
     </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="50dp"
     android:orientation="horizontal">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/white_bg">
+        android:background="@color/white">
         <ImageView
             android:id="@+id/groupimage"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:src="@mipmap/group"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:background="@drawable/imagebackground"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true" />
             <LinearLayout
@@ -66,14 +67,15 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:text="2018 ieee 试点班"/>
                 <TextView
                     android:id="@+id/last_event_info"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="6dp"
                     android:gravity="bottom"
-                    android:textColor="@color/black"
+                    android:textSize="12dp"
+                    android:textColor="@color/textgray"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="班会 8：00 - 9：00 东上院"/>
