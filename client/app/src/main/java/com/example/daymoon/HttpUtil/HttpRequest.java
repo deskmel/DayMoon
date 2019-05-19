@@ -11,6 +11,7 @@ import com.example.daymoon.R;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -49,6 +50,30 @@ public class HttpRequest {
     }
     static void postFile(String url, String name, String fileName, File file, Map<String,String> params, DataCallback dataCallback){
         getInstance().innerPostFile(url, name, fileName, file, params, dataCallback);
+    }
+
+    static void getFile(String url, FileCallback fileCallback){
+        getInstance().innerGetFile(url, fileCallback);
+    }
+
+    private void innerGetFile(String url, FileCallback fileCallback){
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
+                deliverFileFailure(request, e, fileCallback);
+            }
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                    deliverFileSuccess(bitmap, fileCallback);
+                } else {
+                    throw new IOException(response + "");
+                }
+            }
+        });
     }
 
     private void innerPostFile(String url, String name, String fileName, File file, Map<String,String> params, final DataCallback dataCallback){
@@ -107,12 +132,38 @@ public class HttpRequest {
 
     }
 
+    private void deliverFileFailure(final Request request, final IOException e, final FileCallback fileCallback) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (fileCallback != null) {
+                    fileCallback.requestFailure(request, e);
+                }
+            }
+        });
+    }
+
     private void deliverDataFailure(final Request request, final IOException e, final DataCallback dataCallback) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 if (dataCallback != null) {
                     dataCallback.requestFailure(request, e);
+                }
+            }
+        });
+    }
+
+    private void deliverFileSuccess(final Bitmap result, final FileCallback fileCallback) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (fileCallback != null) {
+                    try {
+                        fileCallback.requestSuccess(result);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -135,6 +186,11 @@ public class HttpRequest {
 
     public interface DataCallback{
         void requestSuccess(String result) throws Exception;
+        void requestFailure(Request request, IOException e);
+    }
+
+    public interface FileCallback{
+        void requestSuccess(Bitmap result) throws Exception;
         void requestFailure(Request request, IOException e);
     }
 }

@@ -4,14 +4,17 @@ import android.graphics.Bitmap;
 
 public class User {
     private int id;
-    private String name, description, email, phoneNumber;
+    private String name, description, mailAddress, phoneNumber;
+    private int[] groupIDs, eventIDs;
     private Bitmap profilePhoto;
 
-    public User(int id, String name, String description, String email, String phoneNumber){
+    User(){}
+
+    public User(int id, String name, String description, String mailAddress, String phoneNumber){
         this.id = id;
         this.name = name;
         this.description = description;
-        this.email = email;
+        this.mailAddress = mailAddress;
         this.phoneNumber = phoneNumber;
     }
 
@@ -20,11 +23,11 @@ public class User {
         this.name = name;
     }
 
-    public void CopyFrom(User user){
+    void CopyFrom(User user){
         id = user.id;
         name = user.name;
         description = user.description;
-        email = user.email;
+        mailAddress = user.mailAddress;
         phoneNumber = user.phoneNumber;
         profilePhoto = user.profilePhoto;
     }
@@ -37,8 +40,8 @@ public class User {
         this.description = description;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setmailAddress(String mailAddress) {
+        this.mailAddress = mailAddress;
     }
 
     public void setName(String name) {
@@ -61,8 +64,8 @@ public class User {
         return description;
     }
 
-    public String getEmail() {
-        return email;
+    public String getMailAddress() {
+        return mailAddress;
     }
 
     public String getName() {

@@ -3,12 +3,17 @@ package com.example.daymoon.GroupInfoManagement;
 import android.util.Log;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.HttpUtil.HttpRequestThread;
+import com.example.daymoon.UserInfoManagement.User;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import okhttp3.Request;
 
@@ -17,15 +22,15 @@ import static com.example.daymoon.Define.Constants.SERVER_IP;
 
 public class ClientGroupInfoControl {
     private int userId;
-    private static GroupList groupList;
+    private GroupList groupList;
     private int currentUserID;
     private static ClientGroupInfoControl clientGroupInfoControl;
 
-    public static ClientGroupInfoControl getInstance()
+    private static ClientGroupInfoControl getInstance()
     {
         if (clientGroupInfoControl==null) {
             clientGroupInfoControl = new ClientGroupInfoControl();
-            groupList=new GroupList();
+            clientGroupInfoControl.groupList=new GroupList();
         }
         return clientGroupInfoControl;
     }
@@ -36,7 +41,26 @@ public class ClientGroupInfoControl {
 
     public static GroupList getGroupList()
     {
-        return groupList;
+        return getInstance().groupList;
+    }
+
+    public static void getGroupListFromServer(Runnable success, Runnable failure){
+        Map<String, String> params = new HashMap<>();
+        params.put("userID", String.valueOf(getInstance().currentUserID));
+        new HttpRequestThread(SERVER_IP+"getallmygroups", params, new HttpRequest.DataCallback(){
+            @Override
+            public void requestSuccess(String result) {
+                Gson gson = new GsonBuilder().create();
+                Type GroupRecordType = new TypeToken<GroupList>(){}.getType();
+                getInstance().groupList = gson.fromJson(result, GroupRecordType);
+                success.run();
+            }
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                Log.e("shit", "oops! Something goes wrong");
+                failure.run();
+            }
+        }).start();
     }
 
     public static void createGroup(GroupInformationHolder groupInformationHolder, Runnable success, Runnable failure){
@@ -58,6 +82,10 @@ public class ClientGroupInfoControl {
                 failure.run();
             }
         }).start();
+    }
+
+    public static String getLatestGroupEventDes(int groupID){
+        return "这是"+String.valueOf(groupID)+"小组 占位";
     }
 
 

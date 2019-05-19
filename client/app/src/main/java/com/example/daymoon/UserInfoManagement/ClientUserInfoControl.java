@@ -21,6 +21,22 @@ import static com.example.daymoon.Define.Constants.SERVER_IP;
 
 public class ClientUserInfoControl {
 
+    private User currentUser;
+
+    private static ClientUserInfoControl clientUserInfoControl;
+
+    private static ClientUserInfoControl getInstance()
+    {
+        if (clientUserInfoControl==null) {
+            clientUserInfoControl = new ClientUserInfoControl();
+            clientUserInfoControl.currentUser=new User();
+        }
+        return clientUserInfoControl;
+    }
+    public static void setCurrentUser(int userID, Runnable success, Runnable failure) {
+        getUserInfoFromServer(getInstance().currentUser, userID, success, failure);
+    }
+
     public static void getUserInfoFromServer(User user, int userID, Runnable success, Runnable failure){
         Map<String,String> params = new HashMap<>();
         params.put("userID", String.valueOf(userID));

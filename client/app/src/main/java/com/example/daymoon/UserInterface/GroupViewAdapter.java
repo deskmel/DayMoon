@@ -1,11 +1,14 @@
 package com.example.daymoon.UserInterface;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.daymoon.EventManagement.ClientEventControl;
@@ -15,8 +18,18 @@ import com.example.daymoon.GroupEventManagement.GroupEventControl;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
 import com.example.daymoon.GroupInfoManagement.Group;
 import com.example.daymoon.GroupInfoManagement.GroupList;
+import com.example.daymoon.HttpUtil.HttpRequest;
+import com.example.daymoon.HttpUtil.HttpRequestThread;
 import com.example.daymoon.Layout.CustomSwipeLayout;
 import com.example.daymoon.R;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import okhttp3.Request;
+
+import static com.example.daymoon.Define.Constants.SERVER_IP;
 
 public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.ViewHolder>  {
     private GroupList groupList;
@@ -60,8 +73,18 @@ public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.View
         });
 
         holder.groupname.setText(groupList.get(position).getGroupName());
-        clientGroupEventControl = new ClientGroupEventControl();
-        holder.last_event_info.setText(clientGroupEventControl.getLatestGroupEventDes(groupList.get(position).getGroupID()));
+        holder.last_event_info.setText(ClientGroupInfoControl.getLatestGroupEventDes(groupList.get(position).getGroupID()));
+        new HttpRequestThread(SERVER_IP + "image/" + groupList.get(position).getImgName(), new HttpRequest.FileCallback() {
+            @Override
+            public void requestSuccess(Bitmap bitmap) throws Exception {
+                holder.groupImage.setImageBitmap(bitmap);
+            }
+
+            @Override
+            public void requestFailure(Request request, IOException e) {
+
+            }
+        }).run();
         //holder.des.setText(eventList.get(position).getDescription());
         //holder.confirmDelete.setText("删除"+eventList.get(position).getTitle()+"？");
         /*
@@ -89,11 +112,13 @@ public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.View
         TextView des;
         TextView confirmDelete;
         Button btn;
+        ImageView groupImage;
         CustomSwipeLayout swipeLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
             groupname=itemView.findViewById(R.id.groupname);
+            groupImage=itemView.findViewById(R.id.groupimage);
             last_event_info=itemView.findViewById(R.id.last_event_info);
             swipeLayout=itemView.findViewById(R.id.swipe);
         }
