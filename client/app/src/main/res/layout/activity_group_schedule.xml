@@ -30,6 +30,16 @@
             android:textColor="@color/black"
             android:textSize="16dp"
             android:text="小组"/>
+
+        <ImageButton
+            android:scaleType="fitCenter"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@color/topbg"
+            android:layout_toLeftOf="@+id/tools"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="5dp"
+            android:src="@mipmap/add_button"/>
         <ImageButton
             android:id="@+id/tools"
             android:scaleType="fitCenter"
@@ -41,15 +51,5 @@
             android:layout_alignParentRight="true"
             />
     </RelativeLayout>
-    <LinearLayout
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:id="@+id/qccode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </LinearLayout>
-    </LinearLayout>
 </LinearLayout>
 </android.support.constraint.ConstraintLayout>
