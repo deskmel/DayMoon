@@ -1,7 +1,10 @@
 # -*- coding: UTF-8 -*-
 import pymysql
 import json
+import uuid
 import datetime,time
+
+QRCodeValidDuration = 100000
 
 class Remind(object):
     '''
@@ -250,7 +253,8 @@ class DayMoonDB(object):
             return groupID
         except Exception as err:
             self.db.rollback()
-            return str(err)
+            print(err)
+            return False
 
     def deleteGroup(self,leaderID,groupID):
         '''
@@ -552,7 +556,7 @@ class DayMoonDB(object):
             return True
         except Exception as err:
             self.db.rollback()
-            return str(err)
+            return False
     # -----------groupEvent的增、改、查、删-----------#
 
     # -----------个人信息汇总-----------#
@@ -617,7 +621,31 @@ class DayMoonDB(object):
         return json.dumps(allMyGroupEvents,ensure_ascii=False)
     # -----------个人信息汇总-----------#
 
+    def genQRCode(self, groupID):
+        qrCodeKey = str(uuid.uuid4())
+        startTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        sql = '''INSERT INTO `qrcode` (`qrCodeKey`, `groupID`, `startTime`) VALUES ('%s', '%d', '%s');''' % (qrCodeKey, groupID ,startTime)
+        self.cur.execute(sql)
+        self.db.commit()
+        return qrCodeKey
 
+    def joinGroupByQRCode(self, userID, qrCodeKey):
+        print(qrCodeKey)
+        sql = '''SELECT * FROM `qrcode` WHERE `qrCodeKey`= \'%s\'''' % qrCodeKey
+        print(sql)
+        self.cur.execute(sql)
+        info = self.cur.fetchone()
+
+        if not info: return False
+        startTime = info[2]
+        if ((datetime.datetime.now()-startTime).seconds <= QRCodeValidDuration):
+            groupID = int(info[1])
+            if self.joinGroup(userID, groupID):
+                return groupID
+            else:
+                return False
+        else:
+            return False
 
 if __name__ == '__main__':
     rem=Remind()

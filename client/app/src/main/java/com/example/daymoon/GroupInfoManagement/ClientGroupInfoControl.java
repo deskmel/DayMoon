@@ -1,5 +1,6 @@
 package com.example.daymoon.GroupInfoManagement;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import com.example.daymoon.UserInfoManagement.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import okhttp3.Request;
 
@@ -88,6 +90,28 @@ public class ClientGroupInfoControl {
         return "这是"+String.valueOf(groupID)+"小组 占位";
     }
 
+    public static void generateQRCode(int groupID, HttpRequest.DataCallback dataCallback){
+        Map<String, String> params = new HashMap<>();
+        params.put("groupID", String.valueOf(groupID));
+        new HttpRequestThread(SERVER_IP+"genqrcode", params, dataCallback).start();
+    }
 
+    public static void joinGroupByQRCode(String qrCodeKey, Runnable success, Runnable failure){
+        Map<String, String> params = new HashMap<>();
+        params.put("qrCodeKey", qrCodeKey);
+        params.put("userID", String.valueOf(getInstance().currentUserID));
+        new HttpRequestThread(SERVER_IP+"joingroupbyqrcode", params, new HttpRequest.DataCallback(){
+            @Override
+            public void requestSuccess(String result) {
+                //TODO 服务器不同返回值进行不同操作
+                success.run();
+            }
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                Log.e("shit", "oops! Something goes wrong");
+                failure.run();
+            }
+        }).start();
+    }
 }
 

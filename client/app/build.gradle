@@ -48,6 +48,7 @@ dependencies {
     implementation 'com.nightonke:jellytogglebutton:1.0.2'
     implementation 'com.squareup.okhttp3:okhttp:3.14.1'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
+    implementation 'com.daimajia.swipelayout:library:1.2.0@aar'
     implementation 'com.heinrichreimersoftware:material-drawer:2.3.3'
+    implementation 'cn.yipianfengye.android:zxing-library:2.2'
 }
