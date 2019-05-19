@@ -43,9 +43,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:background="@color/white"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:paddingLeft="10dp">
             <TextView
                 android:id="@+id/event_name"
                 android:layout_width="wrap_content"
@@ -77,32 +77,47 @@
                     android:layout_height="match_parent">
                 </ViewSwitcher>
             </FrameLayout>
-            <TextView
-                android:layout_marginTop="50dp"
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_bg"
+            android:paddingLeft="10dp"
+            android:orientation="vertical">
+            <View
+
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:background="@drawable/topline_bg"
+                android:layout_height="1dp"
+                android:background="@color/bordergray"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:gravity="center_vertical"
                 android:text="日历"
                 android:textSize="15dp"
                 android:textColor="@color/black" />
-            <TextView
-                android:layout_marginTop="5dp"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/bordergray"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:gravity="center_vertical"
                 android:textSize="15dp"
-                android:paddingTop="5dp"
-                android:background="@drawable/topline_bg"
                 android:text="提醒"
                 android:textColor="@color/black"/>
-            <TextView
-                android:layout_marginTop="5dp"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/bordergray"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:gravity="center_vertical"
                 android:textSize="15dp"
-                android:paddingTop="5dp"
                 android:textColor="@color/black"
-                android:background="@drawable/topline_bg"
                 android:text="描述"/>
             <TextView
                 android:layout_marginTop="5dp"
@@ -114,6 +129,10 @@
                 android:minHeight="100dp"
                 android:background="@color/white"
                 android:textSize="15dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/bordergray"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -123,7 +142,7 @@
 
         <TextView
             android:id="@+id/delete_event"
-            android:background="@drawable/menu_bg"
+            android:background="@drawable/white_bg"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"

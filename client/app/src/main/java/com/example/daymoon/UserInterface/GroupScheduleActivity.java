@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.R;
@@ -36,15 +38,24 @@ public class GroupScheduleActivity extends AppCompatActivity {
         initData();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        timeLineAdapter=new TimeLineAdapter(groupEventList,this);
-        recyclerView.setAdapter(timeLineAdapter);
-
-        initaddevent();
+        flushList();
+        initaddeventbutton();
 
 
 
     }
-
+    private void flushList(){
+        timeLineAdapter=new TimeLineAdapter(groupEventList,this);
+        recyclerView.setAdapter(timeLineAdapter);
+        timeLineAdapter.setonItemClickListener(new TimeLineAdapter.OnRecyclerItemClickListener() {
+            @Override
+            public void onItemClick(View v, int Position) {
+                Intent intent=new Intent(GroupScheduleActivity.this,GroupEventDetailActivity.class);
+                intent.putExtra("groupevent",groupEventList.get(Position));
+                startActivityForResult(intent,0);
+            }
+        });
+    }
     private void initButton()
     {
         tools.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +74,8 @@ public class GroupScheduleActivity extends AppCompatActivity {
         eventaddbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent=new Intent(GroupScheduleActivity.this,AddGroupEventActivity.class);
+                startActivityForResult(intent,0);
 
             }
         });
@@ -77,7 +90,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
         groupEventList.add(event2);
         groupEventList.add(event3);
     }
-    private void initaddevent(){
+    private void initaddeventbutton(){
         LinearLayout addeventtime=findViewById(R.id.addeventtime);
         TextView addeventtext=findViewById(R.id.addeventtext);
         if (groupEventList.size()%2==0) {

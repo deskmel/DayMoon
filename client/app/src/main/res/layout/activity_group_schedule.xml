@@ -59,8 +59,12 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
+        android:layout_height="match_parent"
+        >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -70,64 +74,65 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
             </android.support.v7.widget.RecyclerView>
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        </LinearLayout>
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <View
+                android:id="@+id/v_line"
+                android:layout_width="1dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:background="#666666" />
+            <RelativeLayout
+                android:id="@+id/rl_title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-                <View
-                    android:id="@+id/v_line"
-                    android:layout_width="1dp"
-                    android:layout_height="40dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+                <ImageView
+                    android:background="@color/white"
+                    android:id="@+id/add_event_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:background="#666666" />
-                <RelativeLayout
-                    android:id="@+id/rl_title"
+                    android:src="@mipmap/addprofilephoto" />
+                <LinearLayout
+                    android:id="@+id/addeventtime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp">
-                    <ImageView
-                        android:background="@color/white"
-                        android:id="@+id/add_event_image"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-                        android:layout_centerHorizontal="true"
-                        android:src="@mipmap/addprofilephoto" />
-                    <LinearLayout
-                        android:id="@+id/addeventtime"
+                    android:orientation="vertical"
+                    android:layout_centerVertical="true">
+                    <TextView
+                        android:id="@+id/event_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_centerVertical="true">
-                        <TextView
-                            android:id="@+id/event_time"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="5:32"
-                            android:textSize="12dp" />
-                        <TextView
-                            android:id="@+id/event_date"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-
-                            android:text="2015年1月2日"
-                            android:textSize="12dp" />
-                    </LinearLayout>
-
+                        android:gravity="center_horizontal"
+                        android:text="5:32"
+                        android:textSize="12dp" />
                     <TextView
-                        android:id="@+id/addeventtext"
-                        android:layout_width="100dp"
+                        android:id="@+id/event_date"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:textColor="@color/black"
-                        android:text="添加事件"
-                        android:textSize="15sp" />
-                </RelativeLayout>
+                        android:gravity="center_horizontal"
+
+                        android:text="2015年1月2日"
+                        android:textSize="12dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/addeventtext"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:text="添加事件"
+                    android:textSize="15sp" />
             </RelativeLayout>
-        </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
     </ScrollView>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

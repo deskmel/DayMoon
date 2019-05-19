@@ -72,7 +72,6 @@ public class GroupActivity extends AppCompatActivity {
             public void onItemClick(View v, int Position) {
                 Intent intent = new Intent(GroupActivity.this,GroupScheduleActivity.class);
                 startActivityForResult(intent, 0);
-
             }
         });
     }
