@@ -50,7 +50,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     private EventViewAdapter adapter = null;
     private Button btn_add;//添加事件的按钮
     private AlertDialog alert = null;//提醒框
-    private ImageButton user,more,group;
+    private ImageButton user,calendarButton,group;
     //private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
     private int selectYear;
     private int selectMonth;
@@ -80,7 +80,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         btn_add = findViewById(R.id.addbutton);
         mainContext = CalendarActivity.this;
         user=findViewById(R.id.user);
-        more=findViewById(R.id.more);
+        calendarButton=findViewById(R.id.calendar);
         group=findViewById(R.id.group);
 
         recyclerView = findViewById(R.id.list_one); //绑定listview
@@ -170,12 +170,6 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
 
 
         //绑定more操作
-        more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
 
         //侧滑菜单实现
@@ -190,7 +184,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         );
         addProfile(
                 new DrawerProfile()
-                .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.mipmap.user))
+                 .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.mipmap.user))
                 .setBackground(getResources().getDrawable(R.drawable.cv_bg_material))
                 .setName(getString(R.string.profile_name))
                 .setDescription(getString((R.string.profile_description)))

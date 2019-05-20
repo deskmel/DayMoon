@@ -10,13 +10,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:layout_marginTop="0dp"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             >
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -25,33 +23,38 @@
                     android:id="@+id/user"
                     android:scaleType="fitCenter"
                     android:layout_marginLeft="5dp"
+                    android:layout_centerVertical="true"
                     android:layout_width="30dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_alignParentLeft="true"
-                    android:background="@color/white"
-                    android:src="@mipmap/user"/>
+                    android:background="@color/topbg"
+                    android:src="@mipmap/user_red"/>
+                <ImageButton
+                    android:id="@+id/calendar"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:padding="2dp"
+                    android:scaleType="fitCenter"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_toLeftOf="@+id/group"
+                    android:background="@drawable/red_background"
+                    android:src="@mipmap/calendar_white"/>
                 <ImageButton
                     android:id="@+id/group"
+                    android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:scaleType="fitCenter"
                     android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/more"
-                    android:background="@color/white"
-                    android:src="@mipmap/group"/>
-                <ImageButton
-                    android:id="@+id/more"
-                    android:scaleType="fitCenter"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/other"
-                    android:background="@color/white"
-                    android:layout_alignParentRight="true"/>
-
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@color/topbg"
+                    android:src="@mipmap/group_red"/>
             </RelativeLayout>
         </LinearLayout>
         <LinearLayout
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/calendar_bg"

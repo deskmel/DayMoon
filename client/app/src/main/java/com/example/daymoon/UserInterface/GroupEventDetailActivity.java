@@ -37,6 +37,5 @@ public class GroupEventDetailActivity extends AppCompatActivity {
         starttime.setText(String.format("%s %s %s","开始",event.getBeginDate(),event.getBeginHour()));
         endtime.setText(String.format("%s %s %s","开始",event.getEndDate(),event.getEndHour()));
 
-
     }
 }

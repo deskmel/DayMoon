@@ -106,8 +106,20 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             groupeventtime.setText(event.getBeginHour());
             groupeventdate.setText(event.getBeginDate());
             title.setText(event.getTitle());
-            int height=relativeLayout.getLayoutParams().height;
-            Log.d("height",String.valueOf(height));
+            switch ( event.getEventType())
+            {
+                case game:
+                    eventimage.setImageResource(R.mipmap.game);
+                    break;
+                case meeting:
+                    eventimage.setImageResource(R.mipmap.meeting);
+                    break;
+                case discussion:
+                    eventimage.setImageResource(R.mipmap.discuss);
+                    break;
+            }
+
+
             if(position%2==0){
                 RelativeLayout.LayoutParams ll =(RelativeLayout.LayoutParams) time.getLayoutParams();
                 ll.addRule(RelativeLayout.LEFT_OF,R.id.event_image);

@@ -26,12 +26,12 @@
             android:background="@color/topbg"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="15dp"
-            android:src="@mipmap/back"/>
+            android:src="@mipmap/left_red"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textColor="@color/black"
+            android:textColor="@color/red"
             android:textSize="16dp"
             android:text="小组"/>
 
@@ -42,16 +42,17 @@
             android:background="@color/topbg"
             android:layout_toLeftOf="@+id/tools"
             android:layout_centerInParent="true"
-            android:layout_marginRight="5dp"
-            android:src="@mipmap/add_button"/>
+            android:layout_marginRight="5dp" />
         <ImageButton
             android:id="@+id/tools"
             android:scaleType="fitCenter"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:background="@color/topbg"
-            android:src="@mipmap/tools"
-            android:layout_marginRight="5dp"
+            android:padding="2dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/circle"
+            android:src="@mipmap/info_white"
+            android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             />
     </RelativeLayout>
@@ -60,11 +61,50 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <ImageButton
+                    android:scaleType="fitCenter"
+                    android:padding="5dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/gray_background"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@mipmap/search"/>
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_centerInParent="true"
+                    android:textStyle="bold"
+                    android:layout_height="30dp"
+                    android:text="2019/9/5"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:background="@drawable/gray_corner_bg"/>
+                <ImageButton
+                    android:scaleType="fitCenter"
+                    android:padding="5dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/gray_background"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@mipmap/tools_white"/>
+            </RelativeLayout>
+
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

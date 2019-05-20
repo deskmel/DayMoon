@@ -58,6 +58,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
+                        app:met_hideUnderline="true"
                         android:hint="标题"
                         />
                 </LinearLayout>
@@ -203,6 +204,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="top"
                             android:inputType="textMultiLine"
+                            app:met_hideUnderline="true"
                             android:minLines="8"
                             android:maxLines="10"
                             />

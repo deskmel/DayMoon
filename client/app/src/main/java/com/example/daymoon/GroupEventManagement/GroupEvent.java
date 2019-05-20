@@ -19,7 +19,10 @@ public class GroupEvent implements Serializable {
     private boolean AllDay;
     private boolean AllMember;
     private int[] MemberID;
-    private int Icon=1;
+    public enum EVENTTYPE{
+        game,meeting,discussion
+    };
+    private EVENTTYPE eventType=EVENTTYPE.game;
     private GregorianCalendar beginTime, endTime;
 
     /**
@@ -98,6 +101,7 @@ public class GroupEvent implements Serializable {
         Log.d("?",dateFormat.format(endTime.getTime()));
         return dateFormat.format(endTime.getTime());
     }
+    public EVENTTYPE getEventType() {return this.eventType;}
     public String getTitle(){
         return this.title;
     }

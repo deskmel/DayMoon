@@ -69,7 +69,7 @@ public class GroupActivity extends AppCompatActivity {
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showNoneEffect();
+                showPopUpMenu();
             }
         });
     }
@@ -86,7 +86,7 @@ public class GroupActivity extends AppCompatActivity {
             }
         });
     }
-    private void showNoneEffect(){
+    private void showPopUpMenu(){
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View vPopupWindow = inflater.inflate(R.layout.popupmenu, null, false);
         popupWindow = new PopupWindow(vPopupWindow, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
