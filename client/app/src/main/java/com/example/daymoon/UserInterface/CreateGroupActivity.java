@@ -92,7 +92,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         profilephoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showNoneEffect();
+                showPopUpWindow();
             }
         });
     }
@@ -184,7 +184,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         }
         return null;
     }
-    private void showNoneEffect(){
+    private void showPopUpWindow(){
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View vPopupWindow = inflater.inflate(R.layout.popupmenu_profilephoto, null, false);
         popupWindow = new PopupWindow(vPopupWindow, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT, true);

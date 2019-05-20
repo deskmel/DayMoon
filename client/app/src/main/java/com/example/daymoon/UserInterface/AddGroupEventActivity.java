@@ -62,6 +62,7 @@ public class AddGroupEventActivity extends AppCompatActivity {
                 groupEventInfomationHolder.title=title.getText().toString();
                 groupEventInfomationHolder.location=location.getText().toString();
                 groupEventInfomationHolder.allMember=true;
+
                 finish();
             }
         });

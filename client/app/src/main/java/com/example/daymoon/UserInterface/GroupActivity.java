@@ -1,6 +1,7 @@
 package com.example.daymoon.UserInterface;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -90,15 +91,14 @@ public class GroupActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View vPopupWindow = inflater.inflate(R.layout.popupmenu, null, false);
         popupWindow = new PopupWindow(vPopupWindow, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
-        addBackground();
         int width = more.getMeasuredWidth();//按钮宽度
         popupWindow.setWidth(width*4);
-
         //popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
         View parentView = LayoutInflater.from(GroupActivity.this).inflate(R.layout.layout_popupwindow, null);
         //popupWindow.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
-
+        popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
         popupWindow.showAsDropDown(more,29,0,Gravity.RIGHT);
+        addBackground(GroupActivity.this,0.8f);
         vPopupWindow.findViewById(R.id.creategroup).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,11 +116,16 @@ public class GroupActivity extends AppCompatActivity {
 
 
     }
-    private void addBackground() {
+    private void addBackground(Activity activity,float bgAlpha) {
         // 设置背景颜色变暗
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.alpha = 0.7f;//调节透明度
-        getWindow().setAttributes(lp);
+        WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
+        lp.alpha = bgAlpha;
+        if (bgAlpha == 1) {
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//不移除该Flag的话,在有视频的页面上的视频会出现黑屏的bug
+        } else {
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//此行代码主要是解决在华为手机上半透明效果无效的bug
+        }
+        activity.getWindow().setAttributes(lp);
         //dismiss时恢复原样
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
