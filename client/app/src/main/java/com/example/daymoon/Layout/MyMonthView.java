@@ -18,6 +18,7 @@ public class MyMonthView extends MonthView {
 
     private Paint paint1 = new Paint();
     private Paint paint2 = new Paint();
+    private Paint paint3 = new Paint();
     private Context context;
     private Bitmap dayBgBitmap;
     private Bitmap daySuccessBitmap;
@@ -37,7 +38,7 @@ public class MyMonthView extends MonthView {
         mTextPaint.setStyle(Paint.Style.FILL);
         mTextPaint.setTextAlign(Paint.Align.CENTER);
 
-        paint1.setColor(ContextCompat.getColor(context, R.color.green));
+        paint1.setColor(ContextCompat.getColor(context, R.color.black));
         paint1.setTextSize(spToPx(context, 13));
         paint1.setStyle(Paint.Style.STROKE);
         paint1.setAntiAlias(true);
@@ -47,6 +48,12 @@ public class MyMonthView extends MonthView {
         paint2.setTextSize(spToPx(context, 15));
         paint2.setAntiAlias(true);
         paint2.setTextAlign(Paint.Align.CENTER);
+
+        paint3.setColor(ContextCompat.getColor(context, R.color.white));
+        paint3.setTextSize(spToPx(context, 13));
+        paint3.setStyle(Paint.Style.FILL);
+        paint3.setAntiAlias(true);
+        paint3.setTextAlign(Paint.Align.CENTER);
 
         dayBgBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.day_bg);
         daySuccessBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.day_success);
@@ -59,8 +66,14 @@ public class MyMonthView extends MonthView {
         int cx = x + mItemWidth / 2;
         int cy = y + mItemHeight / 2;
         Paint paint = new Paint();
-        paint.setColor(ContextCompat.getColor(context, R.color.black));
-        canvas.drawCircle(x+mItemWidth/2,y+mItemHeight/2,mItemWidth/3,paint);
+        if (calendar.isCurrentDay()){
+            paint.setColor(ContextCompat.getColor(context, R.color.red));
+        }
+        else{
+            paint.setColor(ContextCompat.getColor(context, R.color.black));
+        }
+
+        canvas.drawCircle(x+mItemWidth/2,y+mItemHeight/2+10,mItemWidth/3,paint);
 
         return false;
     }
@@ -80,14 +93,17 @@ public class MyMonthView extends MonthView {
         if (isSelected)
         {
             canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, mTextPaint);
+            if (hasScheme){
+                canvas.drawCircle(cx , cy + 45, mItemWidth / 15, paint3);
+            }
         }
         else if (hasScheme) {
             if ("1".equals(calendar.getScheme())) {
                 // 不可完成的，绘制圆
                 paint1.setStrokeWidth(0);
                 canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, mCurMonthTextPaint);
-                paint1.setStrokeWidth(dpToPx(context, 1));
-                canvas.drawCircle(cx, cy + 3, mItemWidth / 3, paint1);
+                paint1.setStyle(Paint.Style.FILL);
+                canvas.drawCircle(cx , cy + 45, mItemWidth / 15, paint1);
             } else if ("2".equals(calendar.getScheme())) {
                 //可以完成的，先绘制背景图再写文字，防止文字被遮住
                 canvas.drawBitmap(dayBgBitmap, x + mItemWidth / 4 - 5, y + mItemHeight / 4 + 8, paint2);
