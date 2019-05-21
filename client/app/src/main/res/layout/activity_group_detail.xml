@@ -54,6 +54,115 @@
             android:layout_height="0.5dp"
             android:background="@color/bordergray"/>
         <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="70dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/white">
+
+                <RelativeLayout
+                    android:id="@+id/group_member_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:text="小组成员"
+                        android:textColor="@color/black"
+                        android:textSize="14dp" />
+
+                    <RelativeLayout
+                        android:id="@+id/check_group_info"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true">
+
+                        <ImageView
+                            android:id="@+id/group_info_right"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:src="@mipmap/right" />
+
+                        <TextView
+                        android:id="@+id/ren"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_toLeftOf="@+id/group_info_right"
+                        android:gravity="center_vertical"
+                        android:text="人"
+                        android:textColor="@color/black"
+                        android:textSize="14dp" />
+
+                        <TextView
+                        android:id="@+id/how_many_group_member"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/ren"
+                        android:gravity="center_vertical"
+                        android:text="5"
+                        android:textColor="@color/black"
+                        android:textSize="14dp" />
+
+                        <TextView
+                        android:id="@+id/gongyou"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toStartOf="@+id/how_many_group_member"
+                        android:layout_toLeftOf="@+id/how_many_group_member"
+                        android:gravity="center_vertical"
+                        android:text="共有"
+                        android:textColor="@color/black"
+                        android:textSize="14dp" />
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/member3"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_toLeftOf="@+id/check_group_info"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="15dp"
+                        android:src="@mipmap/user" />
+
+                    <ImageView
+                        android:id="@+id/member2"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_toLeftOf="@+id/member3"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="15dp"
+                        android:src="@mipmap/user" />
+
+                    <ImageView
+                        android:id="@+id/member1"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_toLeftOf="@+id/member2"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="15dp"
+                        android:src="@mipmap/user" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/bordergray"/>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/white">
@@ -128,7 +237,7 @@
                         android:layout_height="30dp" />
                 </RelativeLayout>
             </LinearLayout>
-            </LinearLayout>
+        </LinearLayout>
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"

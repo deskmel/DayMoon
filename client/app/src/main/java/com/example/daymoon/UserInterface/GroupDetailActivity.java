@@ -28,5 +28,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
     }
 }
