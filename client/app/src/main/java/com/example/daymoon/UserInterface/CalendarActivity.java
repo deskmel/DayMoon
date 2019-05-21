@@ -22,6 +22,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.daymoon.Adapter.EventViewAdapter;
 import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.EventManagement.EventList;
+import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
 import com.example.daymoon.R;
 import com.haibin.calendarview.Calendar;
@@ -73,6 +74,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
             }
         });
         ClientGroupInfoControl.setCurrentUserID(userId);
+        ClientGroupEventControl.setCurrentUserID(userId);
         setContentView(R.layout.activity_canlendar);//绑定界面
         calendarView = findViewById(R.id.calendarView);//绑定calendar
         calendarLayout=findViewById(R.id.calendarLayout);

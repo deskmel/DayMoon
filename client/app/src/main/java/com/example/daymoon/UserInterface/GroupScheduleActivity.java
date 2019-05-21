@@ -1,6 +1,7 @@
 package com.example.daymoon.UserInterface;
 
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -12,22 +13,43 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.daymoon.Adapter.TimeLineAdapter;
+import com.example.daymoon.EventManagement.EventList;
+import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
 import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventList;
+import com.example.daymoon.HttpUtil.CalendarSerializer;
+import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.R;
+import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.GregorianCalendar;
+
+import okhttp3.Request;
 
 public class GroupScheduleActivity extends AppCompatActivity {
     private ImageButton tools;
     private ImageButton back;
+    private int groupID;
     private RecyclerView recyclerView;
     private TimeLineAdapter timeLineAdapter=null;
     private GroupEventList groupEventList;
+    private static int ADD_EVENT = 100;
+    private static int SUCCESS_CODE = 1;
+    private static int FAILURE_CODE = 0;
     private ImageView eventaddbutton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        groupID = getIntent().getIntExtra("groupID",-1);
+
         setContentView(R.layout.activity_group_schedule);
         tools=findViewById(R.id.tools);
         back=findViewById(R.id.back);
@@ -37,7 +59,6 @@ public class GroupScheduleActivity extends AppCompatActivity {
         initData();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        flushList();
         initaddeventbutton();
 
 
@@ -74,20 +95,28 @@ public class GroupScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(GroupScheduleActivity.this,AddGroupEventActivity.class);
-                startActivityForResult(intent,0);
-
+                startActivityForResult(intent,ADD_EVENT);
             }
         });
-
     }
+
     private void initData(){
         groupEventList=new GroupEventList();
-        GroupEvent event1=new GroupEvent(1,0,"东上院组会","",2019,5,6,12,30);
-        GroupEvent event2=new GroupEvent(1,0,"东上院跳舞","",2019,5,6,16,30);
-        GroupEvent event3=new GroupEvent(1,0,"寝室乱嗨","",2019,5,6,19,30);
-        groupEventList.add(event1);
-        groupEventList.add(event2);
-        groupEventList.add(event3);
+        ClientGroupEventControl.getGroupEventListFromServer(new HttpRequest.DataCallback() {
+            @Override
+            public void requestSuccess(String result) throws Exception {
+                Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
+                        new CalendarSerializer()).create();
+                Type GroupEventRecordType = new TypeToken<GroupEventList>(){}.getType();
+                groupEventList = gson.fromJson(result, GroupEventRecordType);
+                flushList();
+            }
+
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                Toast.makeText(getApplicationContext(),"oops something goes wrong", Toast.LENGTH_LONG).show();
+            }
+        });
     }
     private void initaddeventbutton(){
         LinearLayout addeventtime=findViewById(R.id.addeventtime);
@@ -107,6 +136,29 @@ public class GroupScheduleActivity extends AppCompatActivity {
             ll =(RelativeLayout.LayoutParams) addeventtext.getLayoutParams();
             ll.addRule(RelativeLayout.LEFT_OF,R.id.add_event_image);
             addeventtext.setLayoutParams(ll);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == ADD_EVENT && resultCode == SUCCESS_CODE){
+            int eventID;
+            eventID = data.getIntExtra("eventID", -1);
+            ClientGroupEventControl.getGroupEventFromServer(eventID, new HttpRequest.DataCallback() {
+                @Override
+                public void requestSuccess(String result) throws Exception {
+                    Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
+                            new CalendarSerializer()).create();
+                    GroupEvent groupEvent = gson.fromJson(result, GroupEvent.class);
+                    groupEventList.add(groupEvent);
+                    flushList();
+                }
+
+                @Override
+                public void requestFailure(Request request, IOException e) {
+
+                }
+            });
         }
     }
 }

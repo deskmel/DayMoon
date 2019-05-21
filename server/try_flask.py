@@ -71,6 +71,24 @@ def getallmyevents():
         res=db.getAllMyEvents(userID)
     return res
 
+@app.route('/getgroupevent',methods=['GET', 'POST'])
+def getgroupevent():
+    res='{}'
+    if request.method == 'POST':
+        userID=int(request.form.get('userID'))
+        eventID=int(request.form.get('eventID'))
+        res=db.getGroupEventInfo(eventID,userID)
+    return res
+
+@app.route('/getallmygroupevents',methods=['GET', 'POST'])
+def getallmygroupevents():
+    res='[]'
+    if request.method == 'POST':
+        userID = int(request.form.get('userID'))
+        groupID = int(request.form.get('groupID'))
+        res = db.getAllMyGroupEvents(groupID,userID)
+    return res
+
 @app.route('/getallmygroups',methods=['GET', 'POST'])
 def getallmygroups():
     res=None
@@ -78,6 +96,8 @@ def getallmygroups():
         userID=int(request.form.get('userID'))
         res=db.getAllMyGroups(userID)
     return res
+
+
 
 @app.route('/submitevent',methods=['GET', 'POST'])
 def submitevent():
@@ -93,6 +113,25 @@ def submitevent():
         remind=rem.str()
 
         res=db.submitEventInfo(userID,eventName,whetherProcess,beginTime,endTime,description,remind)
+    return str(res)
+
+@app.route('/submitgroupevent',methods=['GET', 'POST'])
+def submitgroupevent():
+    res=None
+    if request.method == 'POST':
+
+        groupID=int(request.form.get('groupID'))
+        eventName = request.form.get('eventName')
+        eventType = int(request.form.get('eventType'))
+        whetherProcess = bool(request.form.get('whetherProcess'))
+        location = request.form.get('location')
+        beginTime = request.form.get('beginTime')
+        endTime = request.form.get('endTime')
+        description = request.form.get('description')
+        remind=rem.str()
+
+        res=db.submitGroupEventInfo(groupID,eventName,eventType,whetherProcess,location,beginTime,endTime,description)
+    print(str(res))
     return str(res)
 
 @app.route('/deleteevent',methods=['GET', 'POST'])
