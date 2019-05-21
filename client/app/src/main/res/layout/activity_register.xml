@@ -15,7 +15,7 @@
         android:layout_height="70dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="25dp"
-        android:src="@drawable/white_bg"/>
+        android:src="@drawable/head_icon"/>
     <!--三个编辑框-->
     <EditText
         android:id="@+id/et_user_name"

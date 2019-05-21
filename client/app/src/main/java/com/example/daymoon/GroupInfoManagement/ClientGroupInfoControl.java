@@ -5,10 +5,15 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
+import com.example.daymoon.GroupEventManagement.GroupEventList;
+import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.HttpUtil.HttpRequestThread;
 import com.example.daymoon.UserInfoManagement.User;
@@ -26,6 +31,7 @@ public class ClientGroupInfoControl {
     private int userId;
     private GroupList groupList;
     private int currentUserID;
+    private static GroupEventList groupEventList;
     private static ClientGroupInfoControl clientGroupInfoControl;
 
     private static ClientGroupInfoControl getInstance()
@@ -86,8 +92,28 @@ public class ClientGroupInfoControl {
         }).start();
     }
 
-    public static String getLatestGroupEventDes(int groupID){
-        return "这是"+String.valueOf(groupID)+"小组 占位";
+    public static String getLatestGroupEventDes(int groupId){
+        groupEventList=new GroupEventList();
+        ClientGroupEventControl.getGroupEventListFromServer(new HttpRequest.DataCallback() {
+            @Override
+            public void requestSuccess(String result) throws Exception {
+                Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
+                        new CalendarSerializer()).create();
+                Type GroupEventRecordType = new TypeToken<GroupEventList>(){}.getType();
+                groupEventList = gson.fromJson(result, GroupEventRecordType);
+            }
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                groupEventList=null;
+            }
+        });
+        if (groupEventList==null || groupEventList.size()==0){
+            return "暂无事件";
+        }
+        else {
+            Collections.sort(groupEventList);
+            return String.format("%s %s %s",groupEventList.getLast().getTitle(),groupEventList.getLast().getLocation(),groupEventList.getLast().getBeginDate());
+        }
     }
 
     public static void generateQRCode(int groupID, HttpRequest.DataCallback dataCallback){

@@ -18,6 +18,8 @@ import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.R;
 
+import java.util.Collections;
+
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHolder> {
     private GroupEventList groupEventList;
     private Context mContext;
@@ -25,6 +27,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
     private ClientGroupEventControl clientGroupEventControl;
     public  TimeLineAdapter(){}
     public  TimeLineAdapter(GroupEventList groupEventList,Context mContext){
+        Collections.sort(groupEventList);
         this.groupEventList=groupEventList;
         this.mContext=mContext;
     }
@@ -117,6 +120,19 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
                 case GroupEvent.EVENTTYPE.discussion:
                     eventimage.setImageResource(R.mipmap.discuss);
                     break;
+                case GroupEvent.EVENTTYPE.lesson:
+                    eventimage.setImageResource(R.mipmap.lession);
+                    break;
+                case GroupEvent.EVENTTYPE.sports:
+                    eventimage.setImageResource(R.mipmap.sports);
+                    break;
+                case GroupEvent.EVENTTYPE.travel:
+                    eventimage.setImageResource(R.mipmap.travel);
+                    break;
+                case GroupEvent.EVENTTYPE.Default:
+                    eventimage.setImageResource(R.mipmap.event_default_white);
+                    break;
+
             }
 
 

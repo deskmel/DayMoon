@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class GroupEvent implements Serializable {
+public class GroupEvent implements Serializable,Comparable<GroupEvent> {
     private String title;
     private String description;
     private String location;
@@ -23,6 +23,7 @@ public class GroupEvent implements Serializable {
 
     private int eventType=EVENTTYPE.Default;
     private GregorianCalendar beginTime, endTime;
+
 
     /**
      * 未完善，需要修改
@@ -79,10 +80,13 @@ public class GroupEvent implements Serializable {
     public GregorianCalendar getEndCalendar(){
         return this.endTime;
     }
-
+    public int compareTo(GroupEvent groupEvent)
+    {
+        return this.beginTime.compareTo(groupEvent.getBeginCalendar());
+    }
     public String getBeginDate(){
         SimpleDateFormat dateFormat;
-        dateFormat = new SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA);
+        dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
         Log.d("?",dateFormat.format(beginTime.getTime()));
         return dateFormat.format(beginTime.getTime());
     }

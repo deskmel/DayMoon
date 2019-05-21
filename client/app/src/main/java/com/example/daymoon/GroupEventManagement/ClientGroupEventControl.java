@@ -5,10 +5,17 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.daymoon.GroupInfoManagement.Group;
+import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.HttpUtil.HttpRequestThread;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +27,7 @@ public class ClientGroupEventControl {
     private int GroupID;
     private int GroupEventID;
     private int currentUserID;
+    private GroupEventList groupEventList;
     private static ClientGroupEventControl clientGroupEventControl;
     private static ClientGroupEventControl getInstance(){
         if (clientGroupEventControl==null){
@@ -67,6 +75,26 @@ public class ClientGroupEventControl {
     }
 
     public String getLatestGroupEventDes(int groupId){
-        return "组会 东上院 9:00-10:00";
+        groupEventList=new GroupEventList();
+        ClientGroupEventControl.getGroupEventListFromServer(new HttpRequest.DataCallback() {
+            @Override
+            public void requestSuccess(String result) throws Exception {
+                Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
+                        new CalendarSerializer()).create();
+                Type GroupEventRecordType = new TypeToken<GroupEventList>(){}.getType();
+                groupEventList = gson.fromJson(result, GroupEventRecordType);
+            }
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                groupEventList=null;
+            }
+        });
+        if (groupEventList==null || groupEventList.size()==0){
+            return "暂无事件";
+        }
+        else {
+            Collections.sort(groupEventList);
+            return String.format("%s %s %s",groupEventList.getLast().getTitle(),groupEventList.getLast().getLocation(),groupEventList.getLast().getBeginDate());
+        }
     }
 }

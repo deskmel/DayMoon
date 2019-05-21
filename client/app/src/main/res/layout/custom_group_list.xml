@@ -78,7 +78,7 @@
                     android:textColor="@color/textgray"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="班会 8：00 - 9：00 东上院"/>
+                    android:text="暂无事件"/>
             </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

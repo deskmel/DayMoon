@@ -30,12 +30,14 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 
 import okhttp3.Request;
 
 public class GroupScheduleActivity extends AppCompatActivity {
     private ImageButton tools;
+    private ImageButton info;
     private ImageButton back;
     private int groupID;
     private RecyclerView recyclerView;
@@ -51,7 +53,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
         groupID = getIntent().getIntExtra("groupID",-1);
 
         setContentView(R.layout.activity_group_schedule);
-        tools=findViewById(R.id.tools);
+        info=findViewById(R.id.info);
         back=findViewById(R.id.back);
         recyclerView=findViewById(R.id.event_list);
         eventaddbutton=findViewById(R.id.add_event_image);
@@ -78,7 +80,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
     }
     private void initButton()
     {
-        tools.setOnClickListener(new View.OnClickListener() {
+        info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GroupScheduleActivity.this,GroupDetailActivity.class);
@@ -111,7 +113,6 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 groupEventList = gson.fromJson(result, GroupEventRecordType);
                 flushList();
             }
-
             @Override
             public void requestFailure(Request request, IOException e) {
                 Toast.makeText(getApplicationContext(),"oops something goes wrong", Toast.LENGTH_LONG).show();
@@ -120,23 +121,6 @@ public class GroupScheduleActivity extends AppCompatActivity {
     }
     private void initaddeventbutton(){
         LinearLayout addeventtime=findViewById(R.id.addeventtime);
-        TextView addeventtext=findViewById(R.id.addeventtext);
-        if (groupEventList.size()%2==0) {
-            RelativeLayout.LayoutParams ll =(RelativeLayout.LayoutParams) addeventtime.getLayoutParams();
-            ll.addRule(RelativeLayout.LEFT_OF,R.id.add_event_image);
-            addeventtime.setLayoutParams(ll);
-            ll =(RelativeLayout.LayoutParams) addeventtext.getLayoutParams();
-            ll.addRule(RelativeLayout.RIGHT_OF,R.id.add_event_image);
-            addeventtext.setLayoutParams(ll);
-        }
-        else{
-            RelativeLayout.LayoutParams ll =(RelativeLayout.LayoutParams) addeventtime.getLayoutParams();
-            ll.addRule(RelativeLayout.RIGHT_OF,R.id.add_event_image);
-            addeventtime.setLayoutParams(ll);
-            ll =(RelativeLayout.LayoutParams) addeventtext.getLayoutParams();
-            ll.addRule(RelativeLayout.LEFT_OF,R.id.add_event_image);
-            addeventtext.setLayoutParams(ll);
-        }
     }
 
     @Override
