@@ -1,9 +1,13 @@
 package com.example.daymoon.GroupEventManagement;
 
+import android.util.Log;
+
 import com.example.daymoon.EventManagement.Event;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class GroupEventInfomationHolder {
     public int startYear_;
@@ -18,7 +22,8 @@ public class GroupEventInfomationHolder {
     public int endHour_;
     public int endMinute_;
 
-    public GroupEvent.EVENTTYPE eventType;
+    private GregorianCalendar beginTime, endTime;
+    public int eventType;
     public boolean allday;
 
     public String location;
@@ -40,22 +45,26 @@ public class GroupEventInfomationHolder {
         endDate_=c.get(Calendar.DATE);
         endHour_=c.get(Calendar.HOUR);
         endMinute_=59;
+        beginTime = new GregorianCalendar(startYear_, startMonth_, startDate_, startHour_, startMinute_);
+        endTime = new GregorianCalendar(endYear_, endMonth_, endDate_, endHour_, endMinute_);
     }
     public void setBeginTime(Calendar c)
     {
         startYear_=c.get(Calendar.YEAR);
-        startMonth_=c.get(Calendar.MONTH)+1;
+        startMonth_=c.get(Calendar.MONTH);
         startDate_=c.get(Calendar.DATE);
         startHour_=c.get(Calendar.HOUR);
         startMinute_=c.get(Calendar.MINUTE);
+        beginTime = new GregorianCalendar(startYear_, startMonth_, startDate_, startHour_, startMinute_);
     }
     public void setEndTime(Calendar c)
     {
         endYear_=c.get(Calendar.YEAR);
-        endMonth_=c.get(Calendar.MONTH)+1;
+        endMonth_=c.get(Calendar.MONTH);
         endDate_=c.get(Calendar.DATE);
         endHour_=c.get(Calendar.HOUR);
         endMinute_=c.get(Calendar.MINUTE);
+        endTime = new GregorianCalendar(endYear_, endMonth_, endDate_, endHour_, endMinute_);
     }
     public GroupEventInfomationHolder(Event event)
     {
@@ -92,4 +101,18 @@ public class GroupEventInfomationHolder {
         endHour_=startHour_;
         endMinute_ = 59;
     };
+
+    String getEndTimeFormat(){
+        SimpleDateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
+        Log.d("?",dateFormat.format(endTime.getTime()));
+        return dateFormat.format(endTime.getTime());
+    }
+
+    String getBeginTimeFormat(){
+        SimpleDateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
+        Log.d("?",dateFormat.format(beginTime.getTime()));
+        return dateFormat.format(beginTime.getTime());
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.daymoon.UserInterface;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,8 +16,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
 import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventInfomationHolder;
+import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.R;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
@@ -25,6 +28,7 @@ import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.nightonke.jellytogglebutton.State;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,8 +36,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.Request;
+
 public class AddGroupEventActivity extends AppCompatActivity {
-    private GroupEvent.EVENTTYPE selector= GroupEvent.EVENTTYPE.Default;
+    private int selector= GroupEvent.EVENTTYPE.Default;
     private MaterialEditText title;
     private MaterialEditText location;
     private MaterialEditText description;
@@ -44,6 +50,8 @@ public class AddGroupEventActivity extends AppCompatActivity {
     private TextView complete;
     private Calendar currentTime;
     private ImageView iconEvent;
+    private static int SUCCESS_CODE=1;
+    private static int FAILURE_CODE=0;
     private GroupEventInfomationHolder groupEventInfomationHolder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +87,27 @@ public class AddGroupEventActivity extends AppCompatActivity {
                 groupEventInfomationHolder.title=title.getText().toString();
                 groupEventInfomationHolder.location=location.getText().toString();
                 groupEventInfomationHolder.allMember=true;
+                ClientGroupEventControl.createGroupEvent(groupEventInfomationHolder, new HttpRequest.DataCallback() {
+                    @Override
+                    public void requestSuccess(String result) throws Exception {
+                        Intent data=new Intent();
+                        if (result.isEmpty()) {
+                            setResult(FAILURE_CODE, data);
+                        }
+                        else {
+                            System.out.println(result);
+                            data.putExtra("eventID",Integer.parseInt(result));
+                            setResult(SUCCESS_CODE, data);
+                        }
+                        finish();
+                    }
 
-                finish();
+                    @Override
+                    public void requestFailure(Request request, IOException e) {
+                        setResult(FAILURE_CODE);
+                        finish();
+                    }
+                });
             }
         });
         final boolean[] timeType = {true, true, true, true, true, false};
@@ -134,27 +161,27 @@ public class AddGroupEventActivity extends AppCompatActivity {
         });
 
     }
-    private void setIconEvent(GroupEvent.EVENTTYPE selector){
+    private void setIconEvent(int selector){
         switch (selector){
-            case Default:
+            case GroupEvent.EVENTTYPE.Default:
                 iconEvent.setImageResource(R.mipmap.event_default);
                 break;
-            case discussion:
+            case GroupEvent.EVENTTYPE.discussion:
                 iconEvent.setImageResource(R.mipmap.discuss);
                 break;
-            case game:
+            case GroupEvent.EVENTTYPE.game:
                 iconEvent.setImageResource(R.mipmap.game);
                 break;
-            case eating:
+            case GroupEvent.EVENTTYPE.eating:
                 iconEvent.setImageResource(R.mipmap.eating);
                 break;
-            case sports:
+            case GroupEvent.EVENTTYPE.sports:
                 iconEvent.setImageResource(R.mipmap.sports);
                 break;
-            case travel:
+            case GroupEvent.EVENTTYPE.travel:
                 iconEvent.setImageResource(R.mipmap.travel);
                 break;
-            case lession:
+            case GroupEvent.EVENTTYPE.lesson:
                 iconEvent.setImageResource(R.mipmap.lession);
                 break;
         }
@@ -218,7 +245,7 @@ public class AddGroupEventActivity extends AppCompatActivity {
                         selectText.setText("聚餐");
                         break;
                     case 5:
-                        selector= GroupEvent.EVENTTYPE.lession;
+                        selector= GroupEvent.EVENTTYPE.lesson;
                         selectText.setText("课程");
                         break;
                 }

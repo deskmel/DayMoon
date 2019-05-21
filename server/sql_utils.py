@@ -6,6 +6,8 @@ import datetime,time
 
 QRCodeValidDuration = 100000
 
+Num2Bool=["false","true"]
+
 class Remind(object):
     '''
     需要功能完善，比如提醒时间、提醒间隔...此处先创建占位类
@@ -187,7 +189,7 @@ class DayMoonDB(object):
         :return: 当userID符合该eventID时才有权限. 若存在事件，返回dict_json，否则返回None
         '''
 
-        Num2Bool=["false","true"]
+
 
         sql = '''SELECT `userID` FROM `events` WHERE `eventID`=%d''' % eventID
         self.cur.execute(sql)
@@ -400,7 +402,7 @@ class DayMoonDB(object):
     # -----------group的创、删、进、退、查-----------#
 
     # -----------groupEvent的增、改、查、删-----------#
-    def submitGroupEventInfo(self, groupID, eventName, whetherProcess, beginTime, endTime='', description='', remind='{}', dutyUserIDs=None):
+    def submitGroupEventInfo(self, groupID, eventName, eventType, whetherProcess, location, beginTime, endTime='', description='', remind='{}', dutyUserIDs=None):
         '''
         依附于已经存在的groupID，创建小组事件
         :param groupID: int
@@ -424,11 +426,11 @@ class DayMoonDB(object):
                 if not dutyUserIDs:dutyUserIDs=members
 
             if whetherProcess:
-                sql = '''INSERT INTO `groupEvents` (`eventID`, `groupID`, `dutyUserIDs`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '%s', '1', '%s');''' % (
-                groupID, json.dumps(dutyUserIDs,ensure_ascii=False), eventName, description, beginTime, endTime, remind)
+                sql = '''INSERT INTO `groupEvents` (`eventID`, `groupID`, `dutyUserIDs`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`, `location`, `eventType`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '%s', '1', '%s' , '%s', '%d');''' % (
+                groupID, json.dumps(dutyUserIDs,ensure_ascii=False), eventName, description, beginTime, endTime, remind, location, eventType)
             else:
-                sql = '''INSERT INTO `groupEvents` (`eventID`, `groupID`, `dutyUserIDs`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '1970-01-01 00:00:00', '0', '%s');''' % (
-                    groupID, json.dumps(dutyUserIDs, ensure_ascii=False), eventName, description, beginTime,remind)
+                sql = '''INSERT INTO `groupEvents` (`eventID`, `groupID`, `dutyUserIDs`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`,`location`,`eventType`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '1970-01-01 00:00:00', '0', '%s' ,'%s', '%d');''' % (
+                    groupID, json.dumps(dutyUserIDs, ensure_ascii=False), eventName, description, beginTime,remind, location,eventType)
             self.cur.execute(sql)
             self.db.commit()
             self.cur.execute('select max(`eventID`) from `groupEvents`;')
@@ -519,9 +521,11 @@ class DayMoonDB(object):
             leader = self.cur.fetchone()[0]
             if userID!=leader:return 'NO ACCESS'
 
-        infodict = {'eventID': info[0], 'groupID': info[1], 'dutyUserIDs': realusers, 'eventName': info[3],'description':info[4],
+        infodict = {'eventID': info[0], 'groupID': info[1], 'title': info[3], 'description': info[4], 'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
+                    'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]], 'AllMember': str(realusers==[]),'MemberID':realusers,'location': info[9], 'eventType': info[10]}
+        '''infodict = {'eventID': info[0], 'groupID': info[1], 'dutyUserIDs': realusers, 'eventName': info[3],'description':info[4],
                     'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
-                    'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'whetherProcess': info[7], 'remind': json.loads(info[8])}
+                    'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'whetherProcess': info[7], 'remind': json.loads(info[8])}'''
         return json.dumps(infodict, ensure_ascii=False)
 
     def deleteGroupEventInfo(self,eventID,userID):
@@ -592,35 +596,32 @@ class DayMoonDB(object):
             allMyGroups.append(json.loads(self.getGroupInfo(groupID ,userID)))
         return json.dumps(allMyGroups,ensure_ascii=False)
 
-    def getAllMyGroupEvents(self,userID):
+    def getAllMyGroupEvents(self,groupID,userID):
         '''
         查看某人所有个人事件信息
         :param userID: int
         :return: json_dict
         '''
 
-        sql = '''SELECT `groupIDs` FROM `users` WHERE `userID`=%d''' % userID
-        self.cur.execute(sql)
-        groups = json.loads(self.cur.fetchone()[0])
-
         allMyGroupEvents=[]
-        for groupID in groups:
-            sql = '''SELECT `eventIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+        sql = '''SELECT `eventIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+        self.cur.execute(sql)
+        events = json.loads(self.cur.fetchone()[0])
+        for eventID in events:
+            sql = '''SELECT * FROM `groupEvents` WHERE `eventID`=%d''' % eventID
             self.cur.execute(sql)
-            events = json.loads(self.cur.fetchone()[0])
-            for eventID in events:
-                sql = '''SELECT * FROM `groupEvents` WHERE `eventID`=%d''' % eventID
-                self.cur.execute(sql)
-                info = self.cur.fetchone()
-                realusers = json.loads(info[2])
-                if userID in realusers:
-                    infodict = {'eventID': info[0], 'groupID': info[1], 'dutyUserIDs': realusers, 'eventName': info[3],
-                            'description': info[4],
-                            'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
-                            'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'whetherProcess': info[7],
-                            'remind': json.loads(info[8])}
-                    allMyGroupEvents.append(infodict)
+            info = self.cur.fetchone()
+            realusers = json.loads(info[2])
+            if (userID in realusers) or (realusers == []):
+                infodict = {'eventID': info[0], 'groupID': info[1], 'title': info[3], 'description': info[4],
+                           'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
+                           'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]],
+                           'AllMember': str(realusers == []), 'MemberID': realusers, 'location': info[9],
+                           'eventType': info[10]}
+                allMyGroupEvents.append(infodict)
+        print(allMyGroupEvents)
         return json.dumps(allMyGroupEvents,ensure_ascii=False)
+
     # -----------个人信息汇总-----------#
 
     def genQRCode(self, groupID):

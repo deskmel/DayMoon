@@ -33,6 +33,7 @@ public class ClientUserInfoControl {
         }
         return clientUserInfoControl;
     }
+    
     public static void setCurrentUser(int userID, Runnable success, Runnable failure) {
         getUserInfoFromServer(getInstance().currentUser, userID, success, failure);
     }

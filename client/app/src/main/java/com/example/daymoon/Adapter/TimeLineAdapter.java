@@ -108,13 +108,13 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             title.setText(event.getTitle());
             switch ( event.getEventType())
             {
-                case game:
+                case GroupEvent.EVENTTYPE.game:
                     eventimage.setImageResource(R.mipmap.game);
                     break;
-                case eating:
+                case GroupEvent.EVENTTYPE.eating:
                     eventimage.setImageResource(R.mipmap.eating);
                     break;
-                case discussion:
+                case GroupEvent.EVENTTYPE.discussion:
                     eventimage.setImageResource(R.mipmap.discuss);
                     break;
             }
