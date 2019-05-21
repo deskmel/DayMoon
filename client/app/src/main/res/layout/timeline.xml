@@ -70,8 +70,8 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginRight="10dp"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/user"/>
+            android:src="@drawable/head_icon"
+            android:layout_centerVertical="true" />
     </RelativeLayout>
 
 

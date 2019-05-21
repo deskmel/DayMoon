@@ -185,25 +185,20 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         );
         addProfile(
                 new DrawerProfile()
-                 .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.mipmap.user))
-                .setBackground(getResources().getDrawable(R.drawable.cv_bg_material))
-                .setName(getString(R.string.profile_name))
-                .setDescription(getString((R.string.profile_description)))
-                .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
-                    @Override
-                    public void onClick(DrawerProfile drawerProfile, long l) {
-                        Toast.makeText(CalendarActivity.this,"clicked profile",Toast.LENGTH_SHORT).show();
-                    }
-                })
+                        .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.mipmap.user))
+                        .setBackground(getResources().getDrawable(R.drawable.cv_bg_material))
+                        .setName(getString(R.string.profile_name))
+                        .setDescription(getString((R.string.profile_description)))
+                        .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
+                            @Override
+                            public void onClick(DrawerProfile drawerProfile, long l) {
+                                Toast.makeText(CalendarActivity.this,"clicked profile",Toast.LENGTH_SHORT).show();
+                            }
+                        })
         );
         addItem(new DrawerItem()
-                    .setImage(ContextCompat.getDrawable(this,R.drawable.group))
-                    .setTextPrimary(getString(R.string.menu_item_group))
-        );
-        addDivider();
-        addItem(new DrawerItem()
-                .setImage(ContextCompat.getDrawable(this,R.drawable.setting))
-                    .setTextPrimary(getString(R.string.menu_item_setting))
+                .setImage(ContextCompat.getDrawable(this,R.drawable.setting_new))
+                .setTextPrimary(getString(R.string.menu_item_setting))
         );
         addDivider();
         user.setOnClickListener(new View.OnClickListener() {
