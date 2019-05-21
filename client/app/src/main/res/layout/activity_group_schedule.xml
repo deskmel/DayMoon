@@ -28,6 +28,7 @@
             android:layout_marginTop="15dp"
             android:src="@mipmap/left_red"/>
         <TextView
+            android:id="@+id/group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -40,18 +41,18 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@color/topbg"
-            android:layout_toLeftOf="@+id/tools"
+            android:layout_toLeftOf="@+id/info"
             android:layout_centerInParent="true"
             android:layout_marginRight="5dp" />
         <ImageButton
-            android:id="@+id/tools"
+            android:id="@+id/info"
             android:scaleType="fitCenter"
             android:padding="2dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:background="@drawable/circle"
-            android:src="@mipmap/info_white"
+            android:background="@color/topbg"
+            android:src="@mipmap/info_list_red"
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             />
@@ -92,6 +93,7 @@
                     android:layout_height="30dp"
                     android:src="@mipmap/search"/>
                 <TextView
+                    android:id="@+id/today"
                     android:layout_width="100dp"
                     android:layout_centerInParent="true"
                     android:textStyle="bold"
@@ -101,6 +103,7 @@
                     android:textColor="@color/white"
                     android:background="@drawable/gray_corner_bg"/>
                 <ImageButton
+                    android:id="@+id/tools"
                     android:scaleType="fitCenter"
                     android:padding="5dp"
                     android:layout_alignParentRight="true"
@@ -153,31 +156,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_centerVertical="true">
-                    <TextView
-                        android:id="@+id/event_time"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="5:32"
-                        android:textSize="12dp" />
-                    <TextView
-                        android:id="@+id/event_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-
-                        android:text="2015年1月2日"
-                        android:textSize="12dp" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/addeventtext"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:textColor="@color/black"
-                    android:text="添加事件"
-                    android:textSize="15sp" />
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>

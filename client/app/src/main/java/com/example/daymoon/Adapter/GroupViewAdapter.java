@@ -11,14 +11,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
+import com.example.daymoon.GroupEventManagement.GroupEvent;
+import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
 import com.example.daymoon.GroupInfoManagement.GroupList;
+import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.HttpUtil.HttpRequestThread;
 import com.example.daymoon.Layout.CustomSwipeLayout;
 import com.example.daymoon.R;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.GregorianCalendar;
 
 import okhttp3.Request;
 
@@ -28,6 +37,7 @@ public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.View
     private GroupList groupList;
     private Context mContext;
     private OnRecyclerItemClickListener mListener;
+    private GroupEventList groupEventList;
     private ClientGroupEventControl clientGroupEventControl;
     public GroupViewAdapter() {}
     public GroupViewAdapter(GroupList groupList, Context context){
@@ -66,7 +76,30 @@ public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.View
         });
 
         holder.groupname.setText(groupList.get(position).getGroupName());
-        holder.last_event_info.setText(ClientGroupInfoControl.getLatestGroupEventDes(groupList.get(position).getGroupID()));
+
+        ClientGroupEventControl.getGroupEventListFromServer(new HttpRequest.DataCallback() {
+            @Override
+            public void requestSuccess(String result) throws Exception {
+                Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
+                        new CalendarSerializer()).create();
+                Type GroupEventRecordType = new TypeToken<GroupEventList>(){}.getType();
+                groupEventList = gson.fromJson(result, GroupEventRecordType);
+                Collections.sort(groupEventList);
+                if (groupEventList.size()==0){
+                    holder.last_event_info.setText("暂无事件");
+                }
+                else holder.last_event_info.setText(String.format("%s %s %s",groupEventList.getLast().getTitle(),groupEventList.getLast().getLocation(),groupEventList.getLast().getBeginDate()));
+            }
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                groupEventList=null;
+                holder.last_event_info.setText("暂无事件");
+            }
+        });
+
+
+
+
         new HttpRequestThread(SERVER_IP + "image/" + groupList.get(position).getImgName(), new HttpRequest.FileCallback() {
             @Override
             public void requestSuccess(Bitmap bitmap) throws Exception {
