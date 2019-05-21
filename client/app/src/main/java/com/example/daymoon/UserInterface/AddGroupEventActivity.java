@@ -1,25 +1,39 @@
 package com.example.daymoon.UserInterface;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventInfomationHolder;
 import com.example.daymoon.R;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.goodiebag.horizontalpicker.HorizontalPicker;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.nightonke.jellytogglebutton.State;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class AddGroupEventActivity extends AppCompatActivity {
+    private GroupEvent.EVENTTYPE selector= GroupEvent.EVENTTYPE.Default;
     private MaterialEditText title;
     private MaterialEditText location;
     private MaterialEditText description;
@@ -29,6 +43,7 @@ public class AddGroupEventActivity extends AppCompatActivity {
     private TextView cancel;
     private TextView complete;
     private Calendar currentTime;
+    private ImageView iconEvent;
     private GroupEventInfomationHolder groupEventInfomationHolder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +56,12 @@ public class AddGroupEventActivity extends AppCompatActivity {
         complete=findViewById(R.id.complete);
         startTime=findViewById(R.id.startdate);
         endTime=findViewById(R.id.enddate);
+        iconEvent=findViewById(R.id.icon_event);
         currentTime=Calendar.getInstance();
         groupEventInfomationHolder=new GroupEventInfomationHolder(currentTime);
         whetherAllDay=findViewById(R.id.whetherAllday);
         initView();
+        initIconSelector();
     }
     private void initView(){
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +133,104 @@ public class AddGroupEventActivity extends AppCompatActivity {
             }
         });
 
+    }
+    private void setIconEvent(GroupEvent.EVENTTYPE selector){
+        switch (selector){
+            case Default:
+                iconEvent.setImageResource(R.mipmap.event_default);
+                break;
+            case discussion:
+                iconEvent.setImageResource(R.mipmap.discuss);
+                break;
+            case game:
+                iconEvent.setImageResource(R.mipmap.game);
+                break;
+            case eating:
+                iconEvent.setImageResource(R.mipmap.eating);
+                break;
+            case sports:
+                iconEvent.setImageResource(R.mipmap.sports);
+                break;
+            case travel:
+                iconEvent.setImageResource(R.mipmap.travel);
+                break;
+            case lession:
+                iconEvent.setImageResource(R.mipmap.lession);
+                break;
+        }
+    }
+    private void initIconSelector(){
 
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.icon_select_diag, null);
+        HorizontalPicker hpImage= (HorizontalPicker) customView.findViewById(R.id.hpicker);
+        List<HorizontalPicker.PickerItem> imageItems = new ArrayList<>();
+        TextView selectText=customView.findViewById(R.id.selectortext);
+        MaterialStyledDialog dialog  = new MaterialStyledDialog.Builder(this)
+                .setCustomView(customView)
+                .setCancelable(true)
+                .setPositiveText("取消")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+
+                    }})
+                .setNeutralText("确定")
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Log.d("MaterialStyledDialogs", "Do something!");
+                        groupEventInfomationHolder.eventType=selector;
+                        setIconEvent(selector);
+                    }})
+                .build();
+        imageItems.add(new HorizontalPicker.DrawableItem(R.mipmap.game_white));
+        imageItems.add(new HorizontalPicker.DrawableItem(R.mipmap.discuss_white));
+        imageItems.add(new HorizontalPicker.DrawableItem(R.mipmap.travel_white));
+        imageItems.add(new HorizontalPicker.DrawableItem(R.mipmap.sports_white));
+        imageItems.add(new HorizontalPicker.DrawableItem(R.mipmap.eating_white));
+        imageItems.add(new HorizontalPicker.DrawableItem(R.mipmap.lession_white));
+
+        hpImage.setItems(imageItems);
+        hpImage.setChangeListener(new HorizontalPicker.OnSelectionChangeListener() {
+            @Override
+            public void onItemSelect(HorizontalPicker horizontalPicker, int i) {
+                switch (i){
+                    case 0:
+                        selector= GroupEvent.EVENTTYPE.game;
+                        selectText.setText("游戏");
+                        break;
+                    case 1:
+                        selector= GroupEvent.EVENTTYPE.discussion;
+                        selectText.setText("讨论");
+                        break;
+                    case 2:
+                        selector= GroupEvent.EVENTTYPE.travel;
+                        selectText.setText("旅游");
+                        break;
+                    case 3:
+                        selector= GroupEvent.EVENTTYPE.sports;
+                        selectText.setText("运动");
+                        break;
+                    case 4:
+                        selector= GroupEvent.EVENTTYPE.eating;
+                        selectText.setText("聚餐");
+                        break;
+                    case 5:
+                        selector= GroupEvent.EVENTTYPE.lession;
+                        selectText.setText("课程");
+                        break;
+                }
+            }
+        });
+
+
+        iconEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.show();
+            }
+        });
     }
 }

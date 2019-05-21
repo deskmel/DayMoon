@@ -269,7 +269,8 @@
                             android:layout_height="30dp"
                             android:src="@mipmap/right"/>
                         <ImageView
-                            android:src="@mipmap/user"
+                            android:id="@+id/icon_event"
+                            android:src="@mipmap/event_default"
                             android:scaleType="fitCenter"
                             android:layout_centerVertical="true"
                             android:layout_toLeftOf="@+id/event_right"

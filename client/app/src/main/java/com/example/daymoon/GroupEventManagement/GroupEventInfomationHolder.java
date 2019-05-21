@@ -17,6 +17,8 @@ public class GroupEventInfomationHolder {
     public int endDate_;
     public int endHour_;
     public int endMinute_;
+
+    public GroupEvent.EVENTTYPE eventType;
     public boolean allday;
 
     public String location;

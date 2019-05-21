@@ -40,7 +40,7 @@ public class GroupActivity extends AppCompatActivity {
     private Context mainContext = null;
     private ClientGroupInfoControl clientGroupInfoControl;
     private PopupWindow popupWindow;
-
+    private ImageButton calenderButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +63,14 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Toast.makeText(getApplicationContext(), "something goes wrong", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        calenderButton=findViewById(R.id.calendar);
+        calenderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

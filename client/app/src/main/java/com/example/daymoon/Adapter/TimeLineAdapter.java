@@ -111,8 +111,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
                 case game:
                     eventimage.setImageResource(R.mipmap.game);
                     break;
-                case meeting:
-                    eventimage.setImageResource(R.mipmap.meeting);
+                case eating:
+                    eventimage.setImageResource(R.mipmap.eating);
                     break;
                 case discussion:
                     eventimage.setImageResource(R.mipmap.discuss);

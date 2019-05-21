@@ -20,9 +20,9 @@ public class GroupEvent implements Serializable {
     private boolean AllMember;
     private int[] MemberID;
     public enum EVENTTYPE{
-        game,meeting,discussion
+        Default,game,discussion,travel,sports,eating,lession
     };
-    private EVENTTYPE eventType=EVENTTYPE.game;
+    private EVENTTYPE eventType=EVENTTYPE.Default;
     private GregorianCalendar beginTime, endTime;
 
     /**
@@ -53,6 +53,7 @@ public class GroupEvent implements Serializable {
         endTime = new GregorianCalendar(beginYear, beginMonth, beginDate, beginHour, 59);
         this.location="东川路";
     }
+
     public GroupEvent(int creatorID,int groupID,String title,String description,String location,int beginYear,int beginMonth,int beginDate,int beginHour,int beginMin,int endYear,int endMonth,int endDate,int endHour,int endMin,boolean whetherAllDay,boolean whetherAllMember,int [] MemberID){
         this.title=title;
         this.creatorID=creatorID;
@@ -67,12 +68,15 @@ public class GroupEvent implements Serializable {
 
 
     }
+
     public String getLocation(){
         return location;
     }
+
     public GregorianCalendar getBeginCalendar(){
         return this.beginTime;
     }
+
     public GregorianCalendar getEndCalendar(){
         return this.endTime;
     }
@@ -83,6 +87,7 @@ public class GroupEvent implements Serializable {
         Log.d("?",dateFormat.format(beginTime.getTime()));
         return dateFormat.format(beginTime.getTime());
     }
+
     public String getBeginHour(){
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("HH:mm", Locale.CHINA);
