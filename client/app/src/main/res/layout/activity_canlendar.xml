@@ -141,6 +141,12 @@
                     app:week_view="com.exampe.daymoon.Layout.MyWeekView"
                     app:other_month_text_color="#cccccc"
                     app:week_line_background="#e6e6e6" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#ffffff"
+                    />
             </com.haibin.calendarview.CalendarLayout>
         </LinearLayout>
         <ScrollView
