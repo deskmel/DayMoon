@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 
 import com.example.daymoon.Adapter.GroupViewAdapter;
+import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
 import com.example.daymoon.GroupInfoManagement.GroupList;
 import com.example.daymoon.R;
@@ -90,7 +91,9 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int Position) {
                 Intent intent = new Intent(GroupActivity.this,GroupScheduleActivity.class);
-                intent.putExtra("groupID", groupList.get(Position).getGroupID());
+                int groupID = groupList.get(Position).getGroupID();
+                intent.putExtra("groupID", groupID);
+                ClientGroupEventControl.setCurrentGroupID(groupID);
                 startActivityForResult(intent, 0);
             }
         });

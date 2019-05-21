@@ -19,10 +19,9 @@ public class GroupEvent implements Serializable {
     private boolean AllDay;
     private boolean AllMember;
     private int[] MemberID;
-    public enum EVENTTYPE{
-        Default,game,discussion,travel,sports,eating,lession
-    };
-    private EVENTTYPE eventType=EVENTTYPE.Default;
+    private int eventID;
+
+    private int eventType=EVENTTYPE.Default;
     private GregorianCalendar beginTime, endTime;
 
     /**
@@ -106,7 +105,7 @@ public class GroupEvent implements Serializable {
         Log.d("?",dateFormat.format(endTime.getTime()));
         return dateFormat.format(endTime.getTime());
     }
-    public EVENTTYPE getEventType() {return this.eventType;}
+    public int getEventType() {return this.eventType;}
     public String getTitle(){
         return this.title;
     }
@@ -117,4 +116,30 @@ public class GroupEvent implements Serializable {
         return this.creatorID;
     }
 
+    String getBeginTimeFormat(){
+        SimpleDateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
+        Log.d("?",dateFormat.format(beginTime.getTime()));
+        return dateFormat.format(beginTime.getTime());
+    }
+
+    String getEndTimeFormat(){
+        SimpleDateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
+        Log.d("?",dateFormat.format(endTime.getTime()));
+        return dateFormat.format(endTime.getTime());
+    }
+
+    public int getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(int eventID) {
+        this.eventID = eventID;
+    }
+
+    public class EVENTTYPE{
+        public static final int Default = 1, game = 2, discussion = 3, travel = 4, sports = 5, eating = 6, lesson =7;
+    }
 }
+
