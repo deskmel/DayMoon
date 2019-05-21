@@ -14,7 +14,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.R;
+import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
+import com.example.daymoon.UserInfoManagement.UserInformationHolder;
+
+import java.io.IOException;
+
+import okhttp3.Request;
 //import cn.edu.gdmec.android.boxuegu.utils.MD5Utils;
 
 
@@ -88,11 +95,29 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "此账户名已经存在", Toast.LENGTH_SHORT).show();
                     return;
                 }else{
-                    Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                     //把账号、密码和账号标识保存到sp里面
                     /**
                      * 保存账号和密码到SharedPreferences中
                      */
+                    UserInformationHolder userInformationHolder = new UserInformationHolder();
+                    userInformationHolder.name = userName;
+                    userInformationHolder.password = psw;
+                    ClientUserInfoControl.addUser(userInformationHolder, new HttpRequest.DataCallback() {
+                        @Override
+                        public void requestSuccess(String result) throws Exception {
+                            if (result.isEmpty()) {
+                                Toast.makeText(RegisterActivity.this, "用户名已存在", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void requestFailure(Request request, IOException e) {
+                            Toast.makeText(RegisterActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     saveRegisterInfo(userName, psw);
                     //注册成功后把账号传递到LoginActivity.java中
                     // 返回值到loginActivity显示

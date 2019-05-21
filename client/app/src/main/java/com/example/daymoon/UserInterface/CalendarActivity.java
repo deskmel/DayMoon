@@ -63,15 +63,16 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ClientEventControl.setCurrentUserID(1);//TODO 替换为由登录界面传递过来的ID
+        userId = getIntent().getIntExtra("userid",-1);
+        if (userId<0) System.out.println("no userID given");
+        ClientEventControl.setCurrentUserID(userId);//TODO 替换为由登录界面传递过来的ID
         ClientEventControl.getEventListFromServer(new Runnable() {
             @Override
             public void run() {
                 initData();
             }
         });
-        ClientGroupInfoControl.setCurrentUserID(1);
+        ClientGroupInfoControl.setCurrentUserID(userId);
         setContentView(R.layout.activity_canlendar);//绑定界面
         calendarView = findViewById(R.id.calendarView);//绑定calendar
         calendarLayout=findViewById(R.id.calendarLayout);

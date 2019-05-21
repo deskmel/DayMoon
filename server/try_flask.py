@@ -18,25 +18,26 @@ def index():
 
 @app.route('/signup',methods=['GET', 'POST'])
 def signup():
-    res=None
+    res=""
     if request.method == 'POST':
         name=request.form.get('name')
         password = request.form.get('password')
         mail = request.form.get('mail')
         phoneNumber = request.form.get('phoneNumber')
         userID=db.submitUserInfo(name,password,mail,phoneNumber)
-        res='你的userID是:  '+str(userID)
-    return render_template('signup.html',res=res)
+        if userID:
+            return str(userID)
+    return res
 
 @app.route('/login',methods=['GET', 'POST'])
 def login():
-    res=None
     if request.method == 'POST':
         logstr=request.form.get('logstr')
         password = request.form.get('password')
         isValid=db.isValidLogin(logstr,password)
-        res='登录结果:  '+str(isValid)
-    return render_template('login.html',res=res)
+        if isValid:
+            return str(isValid)
+    return ""
 
 @app.route('/edituser',methods=['GET', 'POST'])
 def edituser():

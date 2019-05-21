@@ -56,28 +56,33 @@ public class ClientUserInfoControl {
         }).start();
     }
 
-    public static void addUser(UserInformationHolder userInformationHolder, Runnable success, Runnable failure){
+    public static void addUser(UserInformationHolder userInformationHolder, HttpRequest.DataCallback dataCallback){
         Map<String,String> params = new HashMap<>();
-        params.put("name", String.valueOf(userInformationHolder.name));
-        params.put("email", String.valueOf(userInformationHolder.email));
-        params.put("description", String.valueOf(userInformationHolder.description));
-        params.put("phoneNumber", String.valueOf(userInformationHolder.phoneNumber));
+        params.put("name", userInformationHolder.name);
+        //params.put("email", String.valueOf(userInformationHolder.email));
+        //params.put("description", String.valueOf(userInformationHolder.description));
+        //params.put("phoneNumber", String.valueOf(userInformationHolder.phoneNumber));
         try {
             params.put("password", String.valueOf(MD5Tool.encode(userInformationHolder.password)));
         }catch (RuntimeException e){
             return;
         }
-        new HttpRequestThread(SERVER_IP+"adduser",params, new HttpRequest.DataCallback(){
-            @Override
-            public void requestSuccess(String result) {
-                //TODO 服务器不同返回值进行不同操作
-                success.run();
-            }
-            @Override
-            public void requestFailure(Request request, IOException e) {
-                Log.e("shit", "oops! Something goes wrong");
-                failure.run();
-            }
-        }).start();
+        params.put("mail", userInformationHolder.name);
+        params.put("phoneNumber",userInformationHolder.name);
+        System.out.println(userInformationHolder.name);
+        System.out.println(String.valueOf(MD5Tool.encode(userInformationHolder.password)));
+        new HttpRequestThread(SERVER_IP+"signup",params, dataCallback).start();
+    }
+
+    public static void login(UserInformationHolder userInformationHolder, HttpRequest.DataCallback dataCallback){
+        Map<String,String> params = new HashMap<>();
+        params.put("logstr", userInformationHolder.name);
+        try {
+            params.put("password", String.valueOf(MD5Tool.encode(userInformationHolder.password)));
+            System.out.println(String.valueOf(MD5Tool.encode(userInformationHolder.password)));
+        }catch (RuntimeException e){
+            return;
+        }
+        new HttpRequestThread(SERVER_IP+"login", params, dataCallback).start();
     }
 }

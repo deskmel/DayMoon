@@ -20,7 +20,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.R;
+import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
+import com.example.daymoon.UserInfoManagement.UserInformationHolder;
+
+import java.io.IOException;
+
+import okhttp3.Request;
+
 //import cn.edu.gdmec.android.boxuegu.R;
 //import cn.edu.gdmec.android.boxuegu.utils.MD5Utils;
 // 加密算法？？？？
@@ -87,37 +95,46 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //开始登录，获取用户名和密码 getText().toString().trim();
-                userName=et_user_name.getText().toString().trim();
-                psw=et_psw.getText().toString().trim();
-                if((true)){
-                    //一致登录成功
-                    Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                    //保存登录状态，在界面保存登录的用户名 定义个方法 saveLoginStatus boolean 状态 , userName 用户名;
-                    saveLoginStatus(true, userName);
-                    //登录成功后关闭此页面进入主页
-                    Intent data=new Intent();
-                    //datad.putExtra( ); name , value ;
-                    data.putExtra("isLogin",true);
-                    data.putExtra("userName",userName);
-                    //RESULT_OK为Activity系统常量，状态码为-1
-                    // 表示此页面下的内容操作成功将data返回到上一页面，如果是用back返回过去的则不存在用setResult传递data值
-                    setResult(RESULT_OK,data);
-                    //销毁登录界面
-                    LoginActivity.this.finish();
-                    //跳转到主界面，登录成功的状态传递到 MainActivity 中
-                    Intent intent = new Intent();
-                    intent.setClass(LoginActivity.this,CalendarActivity.class);
-                    startActivity(intent);
-                    //startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    return;
-                }
-                else if((spPsw!=null&&!TextUtils.isEmpty(spPsw))){
+                if((spPsw!=null&&!TextUtils.isEmpty(spPsw))){
                     Toast.makeText(LoginActivity.this, "输入的用户名和密码不一致", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                else{
-                    Toast.makeText(LoginActivity.this, "此用户名不存在", Toast.LENGTH_SHORT).show();
-                }
+                UserInformationHolder userInformationHolder = new UserInformationHolder();
+                userInformationHolder.name = et_user_name.getText().toString().trim();
+                userInformationHolder.password = et_psw.getText().toString().trim();
+                ClientUserInfoControl.login(userInformationHolder, new HttpRequest.DataCallback() {
+                    @Override
+                    public void requestSuccess(String result) throws Exception {
+                        if (result.isEmpty()){
+                            Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                            //保存登录状态，在界面保存登录的用户名 定义个方法 saveLoginStatus boolean 状态 , userName 用户名;
+                            saveLoginStatus(true, userName);
+                            //登录成功后关闭此页面进入主页
+                            Intent data=new Intent();
+                            //datad.putExtra( ); name , value ;
+                            data.putExtra("isLogin",true);
+                            data.putExtra("userName",userName);
+                            //RESULT_OK为Activity系统常量，状态码为-1
+                            // 表示此页面下的内容操作成功将data返回到上一页面，如果是用back返回过去的则不存在用setResult传递data值
+                            setResult(RESULT_OK,data);
+                            //销毁登录界面
+                            LoginActivity.this.finish();
+                            //跳转到主界面，登录成功的状态传递到 MainActivity 中
+                            Intent intent = new Intent();
+                            intent.putExtra("userid", Integer.parseInt(result));
+                            intent.setClass(LoginActivity.this,CalendarActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void requestFailure(Request request, IOException e) {
+                        Toast.makeText(LoginActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }

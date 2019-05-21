@@ -63,7 +63,8 @@ class DayMoonDB(object):
             return id
         except Exception as err:
             self.db.rollback()
-            return str(err)
+            print(str(err))
+            return False
 
     def editUserInfo(self,userID,name='',password='',mail='',phoneNumber=''):
         '''
@@ -556,6 +557,7 @@ class DayMoonDB(object):
             return True
         except Exception as err:
             self.db.rollback()
+            print(str(err))
             return False
     # -----------groupEvent的增、改、查、删-----------#
 
