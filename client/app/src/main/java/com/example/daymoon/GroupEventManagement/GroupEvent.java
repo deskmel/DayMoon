@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class GroupEvent implements Serializable,Comparable<GroupEvent> {
+public class GroupEvent extends Event implements Serializable {
     private String title;
     private String description;
     private String location;
@@ -45,6 +45,8 @@ public class GroupEvent implements Serializable,Comparable<GroupEvent> {
      * @param beginMin
      */
     public GroupEvent(int creatorID,int groupID,String title,String description,int beginYear,int beginMonth,int beginDate,int beginHour,int beginMin){
+        super(title, description,beginYear, beginMonth,beginDate, beginHour, beginMin,
+                beginYear, beginMonth, beginDate, beginHour, beginMin, false);
         this.title=title;
         this.creatorID=creatorID;
         this.groupID=groupID;
@@ -55,6 +57,8 @@ public class GroupEvent implements Serializable,Comparable<GroupEvent> {
     }
 
     public GroupEvent(int creatorID,int groupID,String title,String description,String location,int beginYear,int beginMonth,int beginDate,int beginHour,int beginMin,int endYear,int endMonth,int endDate,int endHour,int endMin,boolean whetherAllDay,boolean whetherAllMember,int [] MemberID){
+        super(title, description,beginYear, beginMonth,beginDate, beginHour, beginMin,
+                endYear, endMonth, endDate, endHour, endMin, false);
         this.title=title;
         this.creatorID=creatorID;
         this.groupID=groupID;

@@ -2,6 +2,8 @@ package com.example.daymoon.EventManagement;
 
 import android.util.Log;
 
+import com.example.daymoon.GroupEventManagement.GroupEvent;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,6 +18,15 @@ public class Event implements Comparable<Event>, Serializable {
     private GregorianCalendar beginTime, endTime;
     boolean whetherProcess;
     // Reminder reminder;
+    public Event(String name, String des,int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
+                 int endYear, int endMonth, int endDate, int endHour, int endMin, boolean wProcess) {
+            description = des;
+            beginTime = new GregorianCalendar(beginYear, beginMonth - 1, beginDate, beginHour, beginMin);
+            endTime = new GregorianCalendar(endYear, endMonth - 1, endDate, endHour, endMin);
+            whetherProcess = wProcess;
+            //需要修改
+            eventName = name;
+    }
 
     public Event(String name, String des, int eID, int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
                  int endYear, int endMonth, int endDate, int endHour, int endMin, boolean wProcess) throws Exception{
@@ -56,7 +67,10 @@ public class Event implements Comparable<Event>, Serializable {
         }
 
     }
-
+    public int compareTo(Event event)
+    {
+        return this.beginTime.compareTo(event.getBeginTime());
+    }
 
 
     // 检查event信息合法性: 日期和时间的格式，字符串<=100个字
@@ -200,6 +214,19 @@ public class Event implements Comparable<Event>, Serializable {
         Log.d("EndMinute",EndMinute);
         return String.format("%s - %s",BeginMinute,EndMinute);
     }
+    public String getBeginHour_str(){
+        SimpleDateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("HH:mm", Locale.CHINA);
+        String BeginMinute = dateFormat.format(beginTime.getTime());
+        return String.format("%s",BeginMinute);
+    }
+    public String getEndHour_str(){
+        SimpleDateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("HH:mm", Locale.CHINA);
+        String EndMinute = dateFormat.format(endTime.getTime());
+        Log.d("EndMinute",EndMinute);
+        return String.format("%s",EndMinute);
+    }
     public int getEventID(){
         return eventID;
     }
@@ -240,17 +267,6 @@ public class Event implements Comparable<Event>, Serializable {
     public void setWhetherProcess(boolean whetherProcess){
         this.whetherProcess = whetherProcess;
     }
-
-
-
-    // 重载比较函数
-    @Override
-    public int compareTo(Event otherEvent) {
-        return Integer.valueOf(this.getEventID()).compareTo(otherEvent.getEventID());
-    }
-
-
-
     // 测试
     public static void main(String[] args){
 

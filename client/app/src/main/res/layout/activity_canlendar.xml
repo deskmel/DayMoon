@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="#e8eaf6"
     tools:openDrawer="start">
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,6 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@color/blue_top"
             >
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -27,13 +29,13 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentLeft="true"
-                    android:background="@color/topbg"
-                    android:src="@mipmap/user_red"/>
+                    android:background="@color/blue_top"
+                    android:src="@mipmap/user_white"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:textColor="@color/red"
+                    android:textColor="@color/white"
                     android:gravity="center"
                     android:text="日历"/>
                 <ImageButton
@@ -45,18 +47,19 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_toLeftOf="@+id/group"
-                    android:background="@drawable/red_background"
-                    android:src="@mipmap/calendar_white"/>
+                    android:background="@drawable/white_background"
+                    android:src="@mipmap/calendar_blue"/>
                 <ImageButton
                     android:id="@+id/group"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
+                    android:padding="2dp"
                     android:scaleType="fitCenter"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
-                    android:background="@color/topbg"
-                    android:src="@mipmap/group_red"/>
+                    android:background="@color/blue_top"
+                    android:src="@mipmap/group_white"/>
             </RelativeLayout>
         </LinearLayout>
         <LinearLayout

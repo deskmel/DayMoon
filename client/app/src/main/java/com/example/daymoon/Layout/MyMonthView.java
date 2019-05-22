@@ -70,11 +70,9 @@ public class MyMonthView extends MonthView {
             paint.setColor(ContextCompat.getColor(context, R.color.red));
         }
         else{
-            paint.setColor(ContextCompat.getColor(context, R.color.black));
+            paint.setColor(ContextCompat.getColor(context, R.color.blue_top));
         }
-
         canvas.drawCircle(x+mItemWidth/2,y+mItemHeight/2+10,mItemWidth/3,paint);
-
         return false;
     }
 
@@ -102,6 +100,7 @@ public class MyMonthView extends MonthView {
                 // 不可完成的，绘制圆
                 paint1.setStrokeWidth(0);
                 canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, mCurMonthTextPaint);
+                paint1.setColor(ContextCompat.getColor(context, R.color.blue_top));
                 paint1.setStyle(Paint.Style.FILL);
                 canvas.drawCircle(cx , cy + 45, mItemWidth / 15, paint1);
             } else if ("2".equals(calendar.getScheme())) {

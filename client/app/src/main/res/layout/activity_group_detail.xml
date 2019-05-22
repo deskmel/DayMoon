@@ -187,6 +187,7 @@
                     android:layout_marginRight="10dp"/>
                 <TextView
                     android:layout_toLeftOf="@+id/groupnameright"
+                    android:id="@+id/group_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
@@ -266,6 +267,7 @@
                     android:layout_marginLeft="10dp"
                     android:background="@color/bordergray"/>
                 <TextView
+                    android:id="@+id/group_description"
                     android:layout_width="match_parent"
                     android:maxLines="6"
                     android:layout_marginTop="5dp"

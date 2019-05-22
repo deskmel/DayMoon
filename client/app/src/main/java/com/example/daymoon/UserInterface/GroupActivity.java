@@ -93,6 +93,7 @@ public class GroupActivity extends AppCompatActivity {
                 Intent intent = new Intent(GroupActivity.this,GroupScheduleActivity.class);
                 int groupID = groupList.get(Position).getGroupID();
                 intent.putExtra("groupID", groupID);
+                intent.putExtra("group",groupList.get(Position));
                 ClientGroupEventControl.setCurrentGroupID(groupID);
                 startActivityForResult(intent, 0);
             }

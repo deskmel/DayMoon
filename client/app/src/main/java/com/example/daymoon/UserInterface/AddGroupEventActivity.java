@@ -201,7 +201,6 @@ public class AddGroupEventActivity extends AppCompatActivity {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-
                     }})
                 .setNeutralText("确定")
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {

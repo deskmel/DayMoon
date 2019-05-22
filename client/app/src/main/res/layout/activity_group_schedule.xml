@@ -12,7 +12,7 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/menu_bg"
+    android:background="@color/blue_top"
     android:id="@+id/menu">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,16 +23,16 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_alignParentLeft="true"
-            android:background="@color/topbg"
+            android:background="@color/blue_top"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="15dp"
-            android:src="@mipmap/left_red"/>
+            android:src="@mipmap/left_white"/>
         <TextView
             android:id="@+id/group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textColor="@color/red"
+            android:textColor="@color/white"
             android:textSize="16dp"
             android:text="小组"/>
 
@@ -40,7 +40,7 @@
             android:scaleType="fitCenter"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@color/topbg"
+            android:background="@color/blue_top"
             android:layout_toLeftOf="@+id/info"
             android:layout_centerInParent="true"
             android:layout_marginRight="5dp" />
@@ -51,8 +51,8 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:background="@color/topbg"
-            android:src="@mipmap/info_list_red"
+            android:background="@color/blue_top"
+            android:src="@mipmap/info_list_white"
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             />
@@ -87,7 +87,7 @@
                     android:scaleType="fitCenter"
                     android:padding="5dp"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/gray_background"
+                    android:background="@drawable/blue_background"
                     android:layout_marginLeft="10dp"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -101,14 +101,14 @@
                     android:text="2019/9/5"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:background="@drawable/gray_corner_bg"/>
+                    android:background="@drawable/blue_corner_bg"/>
                 <ImageButton
                     android:id="@+id/tools"
                     android:scaleType="fitCenter"
                     android:padding="5dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/gray_background"
+                    android:background="@drawable/blue_background"
                     android:layout_marginRight="10dp"
                     android:layout_width="30dp"
                     android:layout_height="30dp"

@@ -22,6 +22,7 @@ public class GroupEventDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_event_detail);
         event =(GroupEvent) getIntent().getSerializableExtra("groupevent");
+        initView();
 
     }
     private void initView(){
@@ -36,6 +37,5 @@ public class GroupEventDetailActivity extends AppCompatActivity {
         description.setText(event.getLocation());
         starttime.setText(String.format("%s %s %s","开始",event.getBeginDate(),event.getBeginHour()));
         endtime.setText(String.format("%s %s %s","开始",event.getEndDate(),event.getEndHour()));
-
     }
 }
