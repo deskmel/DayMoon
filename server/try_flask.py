@@ -82,13 +82,13 @@ def getgroupevent():
 
 @app.route('/getallmygroupevents',methods=['GET', 'POST'])
 def getallmygroupevents():
-    res='[]'
+    res=[]
     if request.method == 'POST':
         userID = int(request.form.get('userID'))
         groupID = int(request.form.get('groupID'))
         print(userID,groupID)
         res = db.getAllMyGroupEvents(groupID,userID)
-    return res
+    return json.dumps(res,ensure_ascii=False)
 
 @app.route('/getallmygroups',methods=['GET', 'POST'])
 def getallmygroups():

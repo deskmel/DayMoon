@@ -34,6 +34,9 @@ public class ClientGroupInfoControl {
     private static GroupEventList groupEventList;
     private static ClientGroupInfoControl clientGroupInfoControl;
 
+    public static int getCurrentUserID(){
+        return getInstance().currentUserID;
+    }
     private static ClientGroupInfoControl getInstance()
     {
         if (clientGroupInfoControl==null) {
@@ -58,7 +61,8 @@ public class ClientGroupInfoControl {
         new HttpRequestThread(SERVER_IP+"getallmygroups", params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
-                Gson gson = new GsonBuilder().create();
+                Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
+                        new CalendarSerializer()).create();
                 Type GroupRecordType = new TypeToken<GroupList>(){}.getType();
                 getInstance().groupList = gson.fromJson(result, GroupRecordType);
                 success.run();

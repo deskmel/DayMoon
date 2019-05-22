@@ -76,25 +76,12 @@ public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.View
         });
 
         holder.groupname.setText(groupList.get(position).getGroupName());
-        ClientGroupEventControl.getGroupEventListFromServer(groupList.get(position).getGroupID(),new HttpRequest.DataCallback() {
-            @Override
-            public void requestSuccess(String result) throws Exception {
-                Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
-                        new CalendarSerializer()).create();
-                Type GroupEventRecordType = new TypeToken<GroupEventList>(){}.getType();
-                groupEventList = gson.fromJson(result, GroupEventRecordType);
-                Collections.sort(groupEventList);
-                if (groupEventList.size()==0){
-                    holder.last_event_info.setText("暂无事件");
-                }
-                else holder.last_event_info.setText(String.format("%s %s %s",groupEventList.getLast().getTitle(),groupEventList.getLast().getLocation(),groupEventList.getLast().getBeginDate()));
-            }
-            @Override
-            public void requestFailure(Request request, IOException e) {
-                groupEventList=null;
-                holder.last_event_info.setText("暂无事件");
-            }
-        });
+        Collections.sort(groupList.get(position).getEventList());
+        if (groupList.get(position).getEventList().size()==0){
+            holder.last_event_info.setText("暂无事件");
+        }
+        else holder.last_event_info.setText(String.format("%s %s %s",groupList.get(position).getEventList().getLast().getTitle(),groupList.get(position).getEventList().getLast().getLocation(),groupList.get(position).getEventList().getLast().getBeginDate()));
+
 
 
 

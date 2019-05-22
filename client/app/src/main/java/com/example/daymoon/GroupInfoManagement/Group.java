@@ -7,6 +7,7 @@ import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.UserInfoManagement.User;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Group implements Serializable {
@@ -17,6 +18,7 @@ public class Group implements Serializable {
     private int[] memberIDs, eventIDs; //临时使用一下
     private List<User> groupMember;
     private String imgName;
+    private LinkedList<GroupEvent> eventList;
 
     public Group(String groupName,String groupDescription)
     {
@@ -48,4 +50,7 @@ public class Group implements Serializable {
         return groupMember;
     }
 
+    public LinkedList<GroupEvent> getEventList() {
+        return eventList;
+    }
 }

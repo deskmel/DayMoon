@@ -397,7 +397,8 @@ class DayMoonDB(object):
         if userID not in members:return 'NO ACCESS'
 
         groupID,groupName,description,eventIDs,leaderID,imgName=info[0],info[1],info[2],json.loads(info[4]),info[5],info[6]
-        infoDict={'groupID':groupID,'groupName':groupName,'description':description,'memberIDs':members,'eventIDs':eventIDs,'leaderID':leaderID,'imgName':imgName}
+        infoDict={'groupID':groupID,'groupName':groupName,'description':description,'memberIDs':members,'eventIDs':eventIDs,'leaderID':leaderID,'imgName':imgName,'eventList':self.getAllMyGroupEvents(groupID,userID)}
+        print(infoDict)
         return json.dumps(infoDict,ensure_ascii=False)
     # -----------group的创、删、进、退、查-----------#
 
@@ -594,6 +595,7 @@ class DayMoonDB(object):
         allMyGroups=[]
         for groupID in groups:
             allMyGroups.append(json.loads(self.getGroupInfo(groupID ,userID)))
+
         return json.dumps(allMyGroups,ensure_ascii=False)
 
     def getAllMyGroupEvents(self,groupID,userID):
@@ -620,8 +622,7 @@ class DayMoonDB(object):
                            'AllMember': str(realusers == []), 'MemberID': realusers, 'location': info[9],
                            'eventType': info[10]}
                 allMyGroupEvents.append(infodict)
-        print(allMyGroupEvents)
-        return json.dumps(allMyGroupEvents,ensure_ascii=False)
+        return allMyGroupEvents
 
     # -----------个人信息汇总-----------#
 
