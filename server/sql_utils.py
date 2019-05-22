@@ -522,7 +522,7 @@ class DayMoonDB(object):
             leader = self.cur.fetchone()[0]
             if userID!=leader:return 'NO ACCESS'
 
-        infodict = {'eventID': info[0], 'groupID': info[1], 'title': info[3], 'description': info[4], 'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
+        infodict = {'eventID': info[0], 'groupID': info[1], 'eventName': info[3], 'description': info[4], 'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
                     'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]], 'AllMember': str(realusers==[]),'MemberID':realusers,'location': info[9], 'eventType': info[10]}
         '''infodict = {'eventID': info[0], 'groupID': info[1], 'dutyUserIDs': realusers, 'eventName': info[3],'description':info[4],
                     'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
@@ -616,13 +616,37 @@ class DayMoonDB(object):
             info = self.cur.fetchone()
             realusers = json.loads(info[2])
             if (userID in realusers) or (realusers == []):
-                infodict = {'eventID': info[0], 'groupID': info[1], 'title': info[3], 'description': info[4],
+                infodict = {'eventID': info[0], 'groupID': info[1], 'eventName': info[3], 'description': info[4],
                            'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
                            'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]],
                            'AllMember': str(realusers == []), 'MemberID': realusers, 'location': info[9],
                            'eventType': info[10]}
                 allMyGroupEvents.append(infodict)
         return allMyGroupEvents
+
+    def getAllMyGroupEventlists(self,userID):
+        sql = '''SELECT `groupIDs` FROM `users` WHERE `userID`=%d''' % userID
+        self.cur.execute(sql)
+        groups = json.loads(self.cur.fetchone()[0])
+
+        allMyGroupEvents = []
+        for groupID in groups:
+            sql = '''SELECT `eventIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+            self.cur.execute(sql)
+            events = json.loads(self.cur.fetchone()[0])
+            for eventID in events:
+                sql = '''SELECT * FROM `groupEvents` WHERE `eventID`=%d''' % eventID
+                self.cur.execute(sql)
+                info = self.cur.fetchone()
+                realusers = json.loads(info[2])
+                if userID in realusers:
+                    infodict = {'eventID': info[0], 'groupID': info[1], 'eventName': info[3], 'description': info[4],
+                                'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
+                                'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]],
+                                'AllMember': str(realusers == []), 'MemberID': realusers, 'location': info[9],
+                                'eventType': info[10]}
+                    allMyGroupEvents.append(infodict)
+        return json.dumps(allMyGroupEvents, ensure_ascii=False)
 
     # -----------个人信息汇总-----------#
 

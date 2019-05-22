@@ -11,7 +11,6 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class GroupEvent extends Event implements Serializable {
-    private String title;
     private String location;
     private int creatorID;
     private int groupID;
@@ -44,7 +43,6 @@ public class GroupEvent extends Event implements Serializable {
     public GroupEvent(int creatorID,int groupID,String title,String description,int beginYear,int beginMonth,int beginDate,int beginHour,int beginMin){
         super(title, description,beginYear, beginMonth,beginDate, beginHour, beginMin,
                 beginYear, beginMonth, beginDate, beginHour, beginMin, false);
-        this.title=title;
         this.creatorID=creatorID;
         this.groupID=groupID;
         this.description=description;
@@ -56,7 +54,6 @@ public class GroupEvent extends Event implements Serializable {
     public GroupEvent(int creatorID,int groupID,String title,String description,String location,int beginYear,int beginMonth,int beginDate,int beginHour,int beginMin,int endYear,int endMonth,int endDate,int endHour,int endMin,boolean whetherAllDay,boolean whetherAllMember,int [] MemberID){
         super(title, description,beginYear, beginMonth,beginDate, beginHour, beginMin,
                 endYear, endMonth, endDate, endHour, endMin, false);
-        this.title=title;
         this.creatorID=creatorID;
         this.groupID=groupID;
         this.description=description;
@@ -112,7 +109,7 @@ public class GroupEvent extends Event implements Serializable {
     }
     public int getEventType() {return this.eventType;}
     public String getTitle(){
-        return this.title;
+        return this.eventName;
     }
     public String getDescription(){
         return this.description;

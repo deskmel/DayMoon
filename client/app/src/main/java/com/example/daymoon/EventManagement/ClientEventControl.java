@@ -70,6 +70,26 @@ public class ClientEventControl {//施工
         }).start();
     }
 
+    public static void getGroupEventListFromServer(Runnable callback){
+        Map<String,String> params = new HashMap<>();
+        params.put("userID",String.valueOf(getInstance().currentUserID));
+        new HttpRequestThread(SERVER_IP+"getallmygroupeventlists",params, new HttpRequest.DataCallback(){
+            @Override
+            public void requestSuccess(String result) {
+                Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
+                        new CalendarSerializer()).create();
+                System.out.println(result);
+                Type GroupEventRecordType = new TypeToken<GroupEventList>(){}.getType();
+                getInstance().groupEventList = gson.fromJson(result, GroupEventRecordType);
+                callback.run();
+            }
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                Log.e("shit", "oops! Something goes wrong");
+            }
+        }).start();
+    }
+
 
     // 增加一个event
     public static void addEvent(EventInformationHolder eventInformationHolder, Context context, Runnable success, Runnable failure){
