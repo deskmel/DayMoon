@@ -62,19 +62,7 @@ public class GroupActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
-        ClientGroupInfoControl.getGroupListFromServer(new Runnable() {
-            @Override
-            public void run() {
-                groupList = ClientGroupInfoControl.getGroupList();
-                flushGroupList();
-            }
-        }, new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), "something goes wrong", Toast.LENGTH_LONG).show();
-            }
-        });
-
+        flushlist();
         calenderButton=findViewById(R.id.calendar);
         calenderButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +84,20 @@ public class GroupActivity extends AppCompatActivity {
         today.setText(timeformat.format(c.getTime()));
         refresh();
 
+    }
+    private void flushlist(){
+        ClientGroupInfoControl.getGroupListFromServer(new Runnable() {
+            @Override
+            public void run() {
+                groupList = ClientGroupInfoControl.getGroupList();
+                flushGroupList();
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), "something goes wrong", Toast.LENGTH_LONG).show();
+            }
+        });
     }
     private void flushGroupList()
     {
@@ -121,7 +123,7 @@ public class GroupActivity extends AppCompatActivity {
                 mPullToRefreshView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        flushGroupList();
+                        flushlist();
                         mPullToRefreshView.setRefreshing(false);
                     }
                 }, 500);
