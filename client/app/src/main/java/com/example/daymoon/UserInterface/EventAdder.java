@@ -19,7 +19,10 @@ import com.nightonke.jellytogglebutton.State;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class EventAdder extends AppCompatActivity {
 
@@ -56,7 +59,8 @@ public class EventAdder extends AppCompatActivity {
         eventInformationHolder = new EventInformationHolder(bundle.getInt("selectYear"),bundle.getInt("selectMonth"),bundle.getInt("selectDay"));
         UIControl=new TestUserInterfaceControl();
 
-
+        final SimpleDateFormat dateformat=new SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA);
+        final SimpleDateFormat Hourformat=new SimpleDateFormat("HH:mm", Locale.CHINA);
         final boolean[] dateType = {true, true, true, false, false, false};
         final boolean[] timeType = {false, false, false, true, true, false};
         //开始日期选择工具
@@ -72,7 +76,8 @@ public class EventAdder extends AppCompatActivity {
                         int month = c.get(java.util.Calendar.MONTH)+1;
                         int datee = c.get(java.util.Calendar.DATE);
                         //滚动到指定日期
-                        startDate.setText(String.format("%d-%d-%d",year,month,datee));
+
+                        startDate.setText(dateformat.format(c.getTime()));
                         eventInformationHolder.Year_ = year;
                         eventInformationHolder.Month_ = month;
                         eventInformationHolder.Date_ = datee;
@@ -95,7 +100,7 @@ public class EventAdder extends AppCompatActivity {
                         //滚动到指定日期
                         eventInformationHolder.startHour_=hour;
                         eventInformationHolder.startMinute_=minute;
-                        startTime.setText(String.format("%d-%d",hour,minute));
+                        startTime.setText(Hourformat.format(c.getTime()));
                     }
                 }).setType(timeType).build();
                 pvTime.show();
@@ -115,7 +120,7 @@ public class EventAdder extends AppCompatActivity {
                         //滚动到指定日期
                         eventInformationHolder.endHour_=hour;
                         eventInformationHolder.endMinute_=minute;
-                        endTime.setText(String.format("%d-%d",hour,minute));
+                        endTime.setText(Hourformat.format(c.getTime()));
                     }
                 }).setType(timeType).build();
                 pvTime.show();

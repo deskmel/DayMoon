@@ -19,4 +19,5 @@
     <color name="blue_dark">#003c8f</color>
     <color name="blue_light">#5e92f3</color>
     <color name="blue_green">#b2ebf2</color>
+    <color name="blue_background">#e8eaf6</color>
 </resources>
