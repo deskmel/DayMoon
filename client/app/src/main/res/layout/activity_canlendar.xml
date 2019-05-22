@@ -84,9 +84,9 @@
                     android:layout_height="30dp">
                     <Button
                         android:id="@+id/left"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:background="@mipmap/left"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:background="@mipmap/left_blue"
                         android:layout_alignParentLeft="true"
                         android:layout_centerInParent="true"
                         android:gravity="left"
@@ -99,23 +99,23 @@
                             android:layout_gravity="center"
                             android:gravity="center_vertical"
                             android:layout_centerInParent="true"
-                            android:textColor="@color/green"
+                            android:textColor="@color/blue_light"
                             android:textSize="13sp" />
                     <Button
                         android:id="@+id/addbutton"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginRight="10dp"
-                        android:background="@mipmap/add_button"
+                        android:background="@mipmap/add_blue"
                         android:layout_toLeftOf="@+id/right"
                         android:layout_centerInParent="true"
                         android:layout_gravity="right"
                         android:textAllCaps="false" />
                     <Button
                         android:id="@+id/right"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:background="@mipmap/right"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:background="@mipmap/right_blue"
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
                         android:layout_gravity="right"

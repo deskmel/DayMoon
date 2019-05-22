@@ -169,12 +169,6 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
             }
         });
 
-
-
-
-        //绑定more操作
-
-
         //侧滑菜单实现
         initMenu();
     }
@@ -230,8 +224,14 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         flushListView();
+        setSchemeDate();
     }
 
+
+    private void setSchemeDate(){
+        map =ClientEventControl.getDatesHasEvent();
+        calendarView.setSchemeDate(map);
+    }
     private void initData() {
         map =ClientEventControl.getDatesHasEvent();
         calendarView.setSchemeDate(map);

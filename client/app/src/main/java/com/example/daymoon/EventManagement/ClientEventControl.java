@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.HttpUtil.HttpRequestThread;
@@ -29,7 +30,7 @@ public class ClientEventControl {//施工
     private int currentUserID, currentEventID; // 下一个event的ID，即当前event总数+1，这样可以保证eventID不重复
 
     private EventList eventList;
-
+    private GroupEventList groupEventList;
     private static ClientEventControl clientEventControl;
 
     public static void setCurrentUserID(int currentUserID){
@@ -205,7 +206,6 @@ public class ClientEventControl {//施工
             if (event.getBeginTime().get(GregorianCalendar.YEAR) == year
                     && event.getBeginTime().get(GregorianCalendar.MONTH ) + 1 == month
                     && event.getBeginTime().get(GregorianCalendar.DATE) == day){
-
                 resultList.add(event);
             }
         }

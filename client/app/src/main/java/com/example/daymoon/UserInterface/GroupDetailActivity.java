@@ -42,7 +42,7 @@ public class GroupDetailActivity extends AppCompatActivity {
         groupDescription=findViewById(R.id.group_description);
         groupMemberNumber=findViewById(R.id.how_many_group_member);
         groupname.setText(group.getGroupName());
-        groupname.setText(group.getGroupDescription());
-        groupMemberNumber.setText(group.getGroupMember().size());
+        groupDescription.setText(group.getGroupDescription());
+        //groupMemberNumber.setText(group.getGroupMember().size());
     }
 }

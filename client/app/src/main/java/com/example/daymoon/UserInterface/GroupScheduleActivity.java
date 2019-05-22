@@ -20,6 +20,7 @@ import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
 import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventList;
+import com.example.daymoon.GroupInfoManagement.Group;
 import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.R;
@@ -39,6 +40,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
     private ImageButton tools;
     private ImageButton info;
     private ImageButton back;
+    private Group group;
     private int groupID;
     private RecyclerView recyclerView;
     private TimeLineAdapter timeLineAdapter=null;
@@ -51,7 +53,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         groupID = getIntent().getIntExtra("groupID",-1);
-
+        group = (Group) getIntent().getSerializableExtra("group");
         setContentView(R.layout.activity_group_schedule);
         info=findViewById(R.id.info);
         back=findViewById(R.id.back);
@@ -84,6 +86,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GroupScheduleActivity.this,GroupDetailActivity.class);
+                intent.putExtra("group",group);
                 startActivityForResult(intent,0);
             }
         });

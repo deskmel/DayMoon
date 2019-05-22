@@ -32,7 +32,7 @@ import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 public class GroupActivity extends AppCompatActivity {
     private final int REQUEST_QRCODE = 1;
-
+    private final int REQUEST_CREATEGROUP = 2;
     private int userId;
     private RecyclerView recyclerView;
     private GroupViewAdapter adapter =null;
@@ -115,7 +115,7 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GroupActivity.this,CreateGroupActivity.class);
-                startActivityForResult(intent,0);
+                startActivityForResult(intent,REQUEST_CREATEGROUP);
             }
         });
         vPopupWindow.findViewById(R.id.joingroup).setOnClickListener(new View.OnClickListener() {
@@ -162,7 +162,7 @@ public class GroupActivity extends AppCompatActivity {
                     ClientGroupInfoControl.joinGroupByQRCode(result, new Runnable() {
                         @Override
                         public void run() {
-
+                            flushGroupList();
                         }
                     }, new Runnable() {
                         @Override
@@ -174,6 +174,9 @@ public class GroupActivity extends AppCompatActivity {
                     Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }
             }
+        }
+        else if (requestCode==REQUEST_CREATEGROUP){
+            flushGroupList();
         }
     }
 }
