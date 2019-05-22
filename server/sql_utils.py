@@ -609,6 +609,7 @@ class DayMoonDB(object):
         events = json.loads(self.cur.fetchone()[0])
         for eventID in events:
             sql = '''SELECT * FROM `groupEvents` WHERE `eventID`=%d''' % eventID
+            print(sql)
             self.cur.execute(sql)
             info = self.cur.fetchone()
             realusers = json.loads(info[2])

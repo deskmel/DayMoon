@@ -13,9 +13,10 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class Event implements Comparable<Event>, Serializable {
-    private String description, eventName;
-    private int eventID;
-    private GregorianCalendar beginTime, endTime;
+    private String eventName;
+    protected String description;
+    protected int eventID;
+    protected GregorianCalendar beginTime, endTime;
     boolean whetherProcess;
     // Reminder reminder;
     public Event(String name, String des,int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,

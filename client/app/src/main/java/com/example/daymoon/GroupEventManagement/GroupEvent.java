@@ -12,17 +12,14 @@ import java.util.Locale;
 
 public class GroupEvent extends Event implements Serializable {
     private String title;
-    private String description;
     private String location;
     private int creatorID;
     private int groupID;
     private boolean AllDay;
     private boolean AllMember;
     private int[] MemberID;
-    private int eventID;
 
     private int eventType=EVENTTYPE.Default;
-    private GregorianCalendar beginTime, endTime;
 
 
     /**

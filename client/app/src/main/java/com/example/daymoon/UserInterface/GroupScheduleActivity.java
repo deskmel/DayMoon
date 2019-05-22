@@ -104,7 +104,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
 
     private void initData(){
         groupEventList=new GroupEventList();
-        ClientGroupEventControl.getGroupEventListFromServer(new HttpRequest.DataCallback() {
+        ClientGroupEventControl.getGroupEventListFromServer(groupID, new HttpRequest.DataCallback() {
             @Override
             public void requestSuccess(String result) throws Exception {
                 Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,

@@ -86,6 +86,7 @@ def getallmygroupevents():
     if request.method == 'POST':
         userID = int(request.form.get('userID'))
         groupID = int(request.form.get('groupID'))
+        print(userID,groupID)
         res = db.getAllMyGroupEvents(groupID,userID)
     return res
 
@@ -94,6 +95,7 @@ def getallmygroups():
     res=None
     if request.method == 'POST':
         userID=int(request.form.get('userID'))
+        print(userID)
         res=db.getAllMyGroups(userID)
     return res
 
@@ -129,7 +131,7 @@ def submitgroupevent():
         endTime = request.form.get('endTime')
         description = request.form.get('description')
         remind=rem.str()
-
+        print([groupID,eventName,eventType,whetherProcess,location,beginTime,endTime,description])
         res=db.submitGroupEventInfo(groupID,eventName,eventType,whetherProcess,location,beginTime,endTime,description)
     print(str(res))
     return str(res)

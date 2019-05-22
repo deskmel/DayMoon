@@ -76,8 +76,7 @@ public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.View
         });
 
         holder.groupname.setText(groupList.get(position).getGroupName());
-
-        ClientGroupEventControl.getGroupEventListFromServer(new HttpRequest.DataCallback() {
+        ClientGroupEventControl.getGroupEventListFromServer(groupList.get(position).getGroupID(),new HttpRequest.DataCallback() {
             @Override
             public void requestSuccess(String result) throws Exception {
                 Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,

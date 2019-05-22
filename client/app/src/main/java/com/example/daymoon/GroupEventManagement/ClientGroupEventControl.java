@@ -44,10 +44,12 @@ public class ClientGroupEventControl {
         getInstance().currentUserID = userID;
     }
 
-    public static void getGroupEventListFromServer(HttpRequest.DataCallback dataCallback){
+    public static void getGroupEventListFromServer(int groupID, HttpRequest.DataCallback dataCallback){
         Map<String, String> params = new HashMap<>();
         params.put("userID", String.valueOf(getInstance().currentUserID));
-        params.put("groupID", String.valueOf(getInstance().GroupID));
+        params.put("groupID", String.valueOf(groupID));
+        System.out.println(getInstance().currentUserID);
+        System.out.println(groupID);
         new HttpRequestThread(SERVER_IP+"getallmygroupevents", params, dataCallback).start();
     }
 
@@ -74,7 +76,7 @@ public class ClientGroupEventControl {
         new HttpRequestThread(SERVER_IP+"getgroupevent", params, dataCallback).start();
     }
 
-    public String getLatestGroupEventDes(int groupId){
+    /*public String getLatestGroupEventDes(int groupId){
         groupEventList=new GroupEventList();
         ClientGroupEventControl.getGroupEventListFromServer(new HttpRequest.DataCallback() {
             @Override
@@ -96,5 +98,5 @@ public class ClientGroupEventControl {
             Collections.sort(groupEventList);
             return String.format("%s %s %s",groupEventList.getLast().getTitle(),groupEventList.getLast().getLocation(),groupEventList.getLast().getBeginDate());
         }
-    }
+    }*/
 }

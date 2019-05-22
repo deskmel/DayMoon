@@ -92,7 +92,7 @@ public class ClientGroupInfoControl {
         }).start();
     }
 
-    public static String getLatestGroupEventDes(int groupId){
+    /*public static String getLatestGroupEventDes(int groupId){
         groupEventList=new GroupEventList();
         ClientGroupEventControl.getGroupEventListFromServer(new HttpRequest.DataCallback() {
             @Override
@@ -114,7 +114,7 @@ public class ClientGroupInfoControl {
             Collections.sort(groupEventList);
             return String.format("%s %s %s",groupEventList.getLast().getTitle(),groupEventList.getLast().getLocation(),groupEventList.getLast().getBeginDate());
         }
-    }
+    }*/
 
     public static void generateQRCode(int groupID, HttpRequest.DataCallback dataCallback){
         Map<String, String> params = new HashMap<>();
