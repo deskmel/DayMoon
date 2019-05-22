@@ -20,7 +20,6 @@ public class GroupDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        groupID = getIntent().getIntExtra("groupID", 2);
         group=(Group) getIntent().getSerializableExtra("group");
         System.out.println(groupID);
         setContentView(R.layout.activity_group_detail);
@@ -30,13 +29,13 @@ public class GroupDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GroupDetailActivity.this,QRCodeActivity.class);
-                intent.putExtra("groupID",groupID);
+                intent.putExtra("groupID",group.getGroupID());
                 startActivity(intent);
             }
         });
-
-
     }
+
+    
     private void initView(){
         groupname=findViewById(R.id.group_name);
         groupDescription=findViewById(R.id.group_description);

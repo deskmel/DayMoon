@@ -88,8 +88,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sql_utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1912">
-              <caret line="523" lean-forward="true" selection-start-line="523" selection-end-line="523" />
+            <state relative-caret-position="293">
+              <caret line="646" column="54" lean-forward="true" selection-start-line="646" selection-start-column="54" selection-end-line="646" selection-end-column="54" />
               <folding>
                 <element signature="e#24#38#0" expanded="true" />
                 <marker date="1558526210976" expanded="true" signature="25742:27031" ph="..." />
@@ -136,7 +136,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="377" />
     <option name="y" value="7" />
     <option name="width" value="1555" />
@@ -257,7 +257,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19839142" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -357,8 +356,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sql_utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1912">
-          <caret line="523" lean-forward="true" selection-start-line="523" selection-end-line="523" />
+        <state relative-caret-position="293">
+          <caret line="646" column="54" lean-forward="true" selection-start-line="646" selection-start-column="54" selection-end-line="646" selection-end-column="54" />
           <folding>
             <element signature="e#24#38#0" expanded="true" />
             <marker date="1558526210976" expanded="true" signature="25742:27031" ph="..." />
