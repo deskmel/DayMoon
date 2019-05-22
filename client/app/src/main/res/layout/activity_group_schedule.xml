@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue_background"
     tools:context=".UserInterface.GroupScheduleActivity">
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,6 +68,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/dashline"/>
+        <com.yalantis.phoenix.PullToRefreshView
+            android:id="@+id/pull_to_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -162,6 +167,7 @@
         </RelativeLayout>
     </LinearLayout>
     </ScrollView>
+        </com.yalantis.phoenix.PullToRefreshView>
     </RelativeLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

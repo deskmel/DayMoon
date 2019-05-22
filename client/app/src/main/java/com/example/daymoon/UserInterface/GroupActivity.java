@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -29,6 +30,11 @@ import com.example.daymoon.Tool.PermissionUtil;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
+import com.yalantis.phoenix.PullToRefreshView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class GroupActivity extends AppCompatActivity {
     private final int REQUEST_QRCODE = 1;
@@ -42,6 +48,8 @@ public class GroupActivity extends AppCompatActivity {
     private ClientGroupInfoControl clientGroupInfoControl;
     private PopupWindow popupWindow;
     private ImageButton calenderButton;
+    private TextView today;
+    private PullToRefreshView mPullToRefreshView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +90,12 @@ public class GroupActivity extends AppCompatActivity {
                 showPopUpMenu();
             }
         });
+        final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
+        Calendar c=Calendar.getInstance();
+        today=findViewById(R.id.today);
+        today.setText(timeformat.format(c.getTime()));
+        refresh();
+
     }
     private void flushGroupList()
     {
@@ -96,6 +110,21 @@ public class GroupActivity extends AppCompatActivity {
                 intent.putExtra("group",groupList.get(Position));
                 ClientGroupEventControl.setCurrentGroupID(groupID);
                 startActivityForResult(intent, 0);
+            }
+        });
+    }
+    private void refresh(){
+        mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
+        mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPullToRefreshView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        flushGroupList();
+                        mPullToRefreshView.setRefreshing(false);
+                    }
+                }, 500);
             }
         });
     }

@@ -54,4 +54,5 @@ dependencies {
     implementation 'com.github.GoodieBag:HorizontalPicker:v1.0'
     implementation 'com.github.javiersantos:MaterialStyledDialogs:2.1'
     implementation 'com.github.vipulasri:timelineview:1.1.0'
+    implementation 'com.yalantis:phoenix:1.2.3'
 }

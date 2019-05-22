@@ -28,11 +28,15 @@ import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.yalantis.phoenix.PullToRefreshView;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import okhttp3.Request;
 
@@ -49,6 +53,9 @@ public class GroupScheduleActivity extends AppCompatActivity {
     private static int SUCCESS_CODE = 1;
     private static int FAILURE_CODE = 0;
     private ImageView eventaddbutton;
+    private TextView today;
+    private TextView groupName;
+    private PullToRefreshView mPullToRefreshView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,12 +66,18 @@ public class GroupScheduleActivity extends AppCompatActivity {
         back=findViewById(R.id.back);
         recyclerView=findViewById(R.id.event_list);
         eventaddbutton=findViewById(R.id.add_event_image);
+        groupName=findViewById(R.id.group_name);
+        groupName.setText(group.getGroupName());
         initButton();
         initData();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         initaddeventbutton();
-
+        final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
+        Calendar c=Calendar.getInstance();
+        today=findViewById(R.id.today);
+        today.setText(timeformat.format(c.getTime()));
+        refresh();
 
 
     }
@@ -77,6 +90,21 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 Intent intent=new Intent(GroupScheduleActivity.this,GroupEventDetailActivity.class);
                 intent.putExtra("groupevent",groupEventList.get(Position));
                 startActivityForResult(intent,0);
+            }
+        });
+    }
+    private void refresh(){
+        mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
+        mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPullToRefreshView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        flushList();
+                        mPullToRefreshView.setRefreshing(false);
+                    }
+                }, 500);
             }
         });
     }
@@ -106,6 +134,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
     }
 
     private void initData(){
+
         groupEventList=new GroupEventList();
         ClientGroupEventControl.getGroupEventListFromServer(groupID, new HttpRequest.DataCallback() {
             @Override
