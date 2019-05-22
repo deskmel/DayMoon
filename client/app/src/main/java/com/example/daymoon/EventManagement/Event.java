@@ -13,7 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class Event implements Comparable<Event>, Serializable {
-    private String eventName;
+    protected String eventName;
     protected String description;
     protected int eventID;
     protected GregorianCalendar beginTime, endTime;

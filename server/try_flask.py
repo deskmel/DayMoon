@@ -80,7 +80,7 @@ def getgroupevent():
         res=db.getGroupEventInfo(eventID,userID)
     return res
 
-@app.route('/getallmygroupevents',methods=['GET', 'POST'])
+@app.route('/getallmygroupevents',methods=['GET', 'POST'])#某一小组 所有事件
 def getallmygroupevents():
     res=[]
     if request.method == 'POST':
@@ -89,6 +89,15 @@ def getallmygroupevents():
         print(userID,groupID)
         res = db.getAllMyGroupEvents(groupID,userID)
     return json.dumps(res,ensure_ascii=False)
+
+@app.route('/getallmygroupeventlists',methods=['GET', 'POST'])#所有小组所有事件
+def getallmygroupeventlists():
+    res=[]
+    if request.method == 'POST':
+        userID = int(request.form.get('userID'))
+        res = db.getAllMyGroupEventlists(userID)
+    return json.dumps(res,ensure_ascii=False)
+
 
 @app.route('/getallmygroups',methods=['GET', 'POST'])
 def getallmygroups():
