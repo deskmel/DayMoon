@@ -1,24 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dfb9ab52-ac06-400b-bea2-7d08df6bf3de" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/static/uploads/29e69370-a263-4dca-b707-f22881e6e8e6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/3cff58d2-ce22-4fa0-a11e-142d373bfc81.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/63dd1848-42c7-4e51-99bd-a2dbf070e907.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/91ca969a-d9eb-4c28-be59-d97e4cbb7d87.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/9ceb07dd-921e-4aae-a340-7a7c29969e8b.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/ad80cf13-4221-4514-966e-ed1952269e08.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/b5148cf5-4357-49ab-bd5c-28784c27abb4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/c2b91f1d-39b0-4e44-8592-e03e4551afbd.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/c5e07db8-5168-4597-b8ea-a071f7e92f8f.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/f886c16e-ae42-462f-b111-77d37b229e42.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Train.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/Define/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/Define/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/GroupDetailActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/GroupDetailActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/sql_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/try_flask.py" beforeDir="false" afterPath="$PROJECT_DIR$/try_flask.py" afterDir="false" />
-    </list>
+    <list default="true" id="dfb9ab52-ac06-400b-bea2-7d08df6bf3de" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +77,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/try_flask.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2440">
+            <state relative-caret-position="2604">
               <caret line="124" column="36" selection-start-line="124" selection-start-column="36" selection-end-line="124" selection-end-column="36" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
@@ -107,11 +90,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sql_utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="23" column="74" selection-start-line="23" selection-start-column="74" selection-end-line="23" selection-end-column="74" />
+            <state relative-caret-position="483">
+              <caret line="23" column="76" selection-start-line="23" selection-start-column="76" selection-end-line="23" selection-end-column="76" />
               <folding>
                 <element signature="e#24#38#0" expanded="true" />
-                <marker date="1559118573824" expanded="true" signature="25763:27052" ph="..." />
+                <marker date="1559119421805" expanded="true" signature="25762:27051" ph="..." />
               </folding>
             </state>
           </provider>
@@ -373,7 +356,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/try_flask.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2440">
+        <state relative-caret-position="2604">
           <caret line="124" column="36" selection-start-line="124" selection-start-column="36" selection-end-line="124" selection-end-column="36" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
@@ -384,11 +367,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sql_utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="23" column="74" selection-start-line="23" selection-start-column="74" selection-end-line="23" selection-end-column="74" />
+        <state relative-caret-position="483">
+          <caret line="23" column="76" selection-start-line="23" selection-start-column="76" selection-end-line="23" selection-end-column="76" />
           <folding>
             <element signature="e#24#38#0" expanded="true" />
-            <marker date="1559118573824" expanded="true" signature="25763:27052" ph="..." />
+            <marker date="1559119421805" expanded="true" signature="25762:27051" ph="..." />
           </folding>
         </state>
       </provider>

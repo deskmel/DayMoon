@@ -21,7 +21,7 @@ class Remind(object):
 
 class DayMoonDB(object):
     def __init__(self,host='localhost',user="root", db="DayMoon"):
-        self.db = pymysql.connect(host=host, user=user, password="7UdiP3X8",pdb=db,charset="utf8",use_unicode=True)
+        self.db = pymysql.connect(host=host, user=user, password="7UdiP3X8",db=db,charset="utf8",use_unicode=True)
         self.cur=self.db.cursor()
 
     def isValidLogin(self,logstr,password):
