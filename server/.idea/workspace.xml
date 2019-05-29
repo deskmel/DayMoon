@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dfb9ab52-ac06-400b-bea2-7d08df6bf3de" name="Default Changelist" comment="" />
+    <list default="true" id="dfb9ab52-ac06-400b-bea2-7d08df6bf3de" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/static/uploads/29e69370-a263-4dca-b707-f22881e6e8e6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/3cff58d2-ce22-4fa0-a11e-142d373bfc81.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/63dd1848-42c7-4e51-99bd-a2dbf070e907.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/91ca969a-d9eb-4c28-be59-d97e4cbb7d87.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/9ceb07dd-921e-4aae-a340-7a7c29969e8b.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/ad80cf13-4221-4514-966e-ed1952269e08.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/b5148cf5-4357-49ab-bd5c-28784c27abb4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/c2b91f1d-39b0-4e44-8592-e03e4551afbd.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/c5e07db8-5168-4597-b8ea-a071f7e92f8f.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/f886c16e-ae42-462f-b111-77d37b229e42.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Train.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/Define/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/Define/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/GroupDetailActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/GroupDetailActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/sql_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/try_flask.py" beforeDir="false" afterPath="$PROJECT_DIR$/try_flask.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -9,7 +26,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/server$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1558531743350" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/server$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1558763285307" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/server$server.coverage" NAME="server Coverage Results" MODIFIED="1557726504298" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
   <component name="DatabaseView">
@@ -30,15 +47,17 @@
     <session id="1703084519">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="5" />
+          <entry key="project.closed" value="8" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.10" value="3" />
           <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.20" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.open.time.8" value="2" />
-          <entry key="project.opened" value="10" />
+          <entry key="project.open.time.8" value="3" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -57,14 +76,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="4224" />
+          <entry key="py" value="4320" />
           <entry key="txt" value="20" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="20" />
-          <entry key="Python" value="4221" />
+          <entry key="Python" value="4317" />
           <entry key="SQL" value="3" />
         </counts>
       </usages-collector>
@@ -75,11 +94,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/try_flask.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="97" column="48" lean-forward="true" selection-start-line="97" selection-start-column="48" selection-end-line="97" selection-end-column="48" />
+            <state relative-caret-position="2440">
+              <caret line="124" column="36" selection-start-line="124" selection-start-column="36" selection-end-line="124" selection-end-column="36" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
-                <marker date="1558524210536" expanded="true" signature="2424:2992" ph="..." />
+                <marker date="1558578274118" expanded="true" signature="2424:2992" ph="..." />
               </folding>
             </state>
           </provider>
@@ -88,11 +107,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sql_utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="293">
-              <caret line="646" column="54" lean-forward="true" selection-start-line="646" selection-start-column="54" selection-end-line="646" selection-end-column="54" />
+            <state relative-caret-position="105">
+              <caret line="23" column="74" selection-start-line="23" selection-start-column="74" selection-end-line="23" selection-end-column="74" />
               <folding>
                 <element signature="e#24#38#0" expanded="true" />
-                <marker date="1558526210976" expanded="true" signature="25742:27031" ph="..." />
+                <marker date="1559118573824" expanded="true" signature="25763:27052" ph="..." />
               </folding>
             </state>
           </provider>
@@ -117,6 +136,7 @@
       <find>infodict</find>
       <find>submitGroupEventInfo</find>
       <find>getAllMyGroupEvents</find>
+      <find>title</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -137,8 +157,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="377" />
-    <option name="y" value="7" />
+    <option name="x" value="-10" />
+    <option name="y" value="-10" />
     <option name="width" value="1555" />
     <option name="height" value="870" />
   </component>
@@ -257,13 +277,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19839142" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3531915" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3531915" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39858156" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -343,24 +364,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://D:/Anaconda/Lib/site-packages/pymysql/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-185">
+          <caret line="103" selection-start-line="103" selection-end-line="103" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/try_flask.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="97" column="48" lean-forward="true" selection-start-line="97" selection-start-column="48" selection-end-line="97" selection-end-column="48" />
+        <state relative-caret-position="2440">
+          <caret line="124" column="36" selection-start-line="124" selection-start-column="36" selection-end-line="124" selection-end-column="36" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
-            <marker date="1558524210536" expanded="true" signature="2424:2992" ph="..." />
+            <marker date="1558578274118" expanded="true" signature="2424:2992" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sql_utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="646" column="54" lean-forward="true" selection-start-line="646" selection-start-column="54" selection-end-line="646" selection-end-column="54" />
+        <state relative-caret-position="105">
+          <caret line="23" column="74" selection-start-line="23" selection-start-column="74" selection-end-line="23" selection-end-column="74" />
           <folding>
             <element signature="e#24#38#0" expanded="true" />
-            <marker date="1558526210976" expanded="true" signature="25742:27031" ph="..." />
+            <marker date="1559118573824" expanded="true" signature="25763:27052" ph="..." />
           </folding>
         </state>
       </provider>

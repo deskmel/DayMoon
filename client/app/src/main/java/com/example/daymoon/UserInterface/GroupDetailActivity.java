@@ -35,7 +35,7 @@ public class GroupDetailActivity extends AppCompatActivity {
         });
     }
 
-    
+
     private void initView(){
         groupname=findViewById(R.id.group_name);
         groupDescription=findViewById(R.id.group_description);

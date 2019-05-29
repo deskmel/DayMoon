@@ -122,7 +122,7 @@ def submitevent():
         endTime = request.form.get('endTime')
         description = request.form.get('description')
         remind=rem.str()
-
+        print(description, eventName)
         res=db.submitEventInfo(userID,eventName,whetherProcess,beginTime,endTime,description,remind)
     return str(res)
 
