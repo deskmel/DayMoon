@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.daymoon"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -55,4 +55,5 @@ dependencies {
     implementation 'com.github.javiersantos:MaterialStyledDialogs:2.1'
     implementation 'com.github.vipulasri:timelineview:1.1.0'
     implementation 'com.yalantis:phoenix:1.2.3'
+    implementation 'com.github.alamkanak:android-week-view:1.2.6'
 }

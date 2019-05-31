@@ -53,7 +53,7 @@
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:background="@color/blue_top"
-            android:src="@mipmap/info_list_white"
+            android:src="@drawable/ic_clear_all_black_24dp"
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             />
@@ -108,6 +108,16 @@
                     android:textColor="@color/white"
                     android:background="@drawable/blue_corner_bg"/>
                 <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="2dp"
+                    android:scaleType="fitCenter"
+                    android:layout_toLeftOf="@+id/tools"
+                    android:layout_marginRight="15dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_subject_black_24dp"
+                    android:background="@drawable/blue_background"/>
+                <ImageButton
                     android:id="@+id/tools"
                     android:scaleType="fitCenter"
                     android:padding="5dp"
@@ -154,7 +164,7 @@
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:src="@mipmap/addprofilephoto" />
+                    android:src="@drawable/ic_add_circle_outline_black_24dp" />
                 <LinearLayout
                     android:id="@+id/addeventtime"
                     android:layout_width="match_parent"

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:hardwareAccelerated="false"
     package="com.example.daymoon">
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -35,15 +34,18 @@
         <activity
             android:name=".UserInterface.LoginActivity"
             android:label="DayMoon">
+
+
+        </activity>
+        <activity
+            android:name=".UserInterface.CalendarActivity"
+            android:label="DayMoon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".UserInterface.CalendarActivity"
-            android:label="DayMoon">
+
         </activity>
         <activity
             android:name=".UserInterface.RegisterActivity"
