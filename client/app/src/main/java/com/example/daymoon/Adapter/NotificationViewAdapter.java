@@ -21,9 +21,11 @@ public class NotificationViewAdapter extends RecyclerView.Adapter<NotificationVi
     private NotificationList notificationList;
     private Context context;
     private NotificationViewAdapter.OnRecyclerItemClickListener mListener;
-    public NotificationViewAdapter(NotificationList notifications, Context context){
+    private int choice=0;
+    public NotificationViewAdapter(NotificationList notifications, Context context,int choice){
         this.notificationList = notifications;
         this.context=context;
+        this.choice=choice;
     }
 
     public interface OnRecyclerItemClickListener {
@@ -42,7 +44,9 @@ public class NotificationViewAdapter extends RecyclerView.Adapter<NotificationVi
 
     @Override
     public NotificationViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.notification_card,parent,false);
+        View view;
+        if (choice==0) view = LayoutInflater.from(context).inflate(R.layout.notification_card,parent,false);
+        else view = LayoutInflater.from(context).inflate(R.layout.notification_card_material,parent,false);
         return new NotificationViewAdapter.ViewHolder(view);
     }
 

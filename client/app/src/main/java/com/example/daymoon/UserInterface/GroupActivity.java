@@ -193,7 +193,7 @@ public class GroupActivity extends AppCompatActivity {
         Notification notification = new Notification("瞎几把搞","sg",Calendar.getInstance().getTime(),"游山玩水");
         NotificationList notificationList= new NotificationList();
         notificationList.add(notification);
-        NotificationViewAdapter notificationViewAdapter = new NotificationViewAdapter(notificationList,mainContext);
+        NotificationViewAdapter notificationViewAdapter = new NotificationViewAdapter(notificationList,mainContext,0);
         notificationRecyclerView.setAdapter(notificationViewAdapter);
 
     }
