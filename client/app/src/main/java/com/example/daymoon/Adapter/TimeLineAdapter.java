@@ -1,7 +1,9 @@
 package com.example.daymoon.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -91,6 +93,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         View horiLine;
         RelativeLayout relativeLayout;
         LinearLayout time;
+        View  bottomline;
         public ViewHolder(View itemView) {
             super(itemView);
             relativeLayout=itemView.findViewById(R.id.rl_title);
@@ -102,6 +105,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             vLine=itemView.findViewById(R.id.v_line);
             horiLine=itemView.findViewById(R.id.line4);
             time=itemView.findViewById(R.id.time);
+            bottomline = itemView.findViewById(R.id.v_line_bottom);
 
         }
         public void setPosition(int position){
@@ -138,10 +142,10 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
 
             if(position%2==0){
                 RelativeLayout.LayoutParams ll =(RelativeLayout.LayoutParams) time.getLayoutParams();
-                ll.addRule(RelativeLayout.LEFT_OF,R.id.event_image);
+                ll.addRule(RelativeLayout.LEFT_OF,R.id.center_image);
                 time.setLayoutParams(ll);
                 ll = (RelativeLayout.LayoutParams) horiLine.getLayoutParams();
-                ll.addRule(RelativeLayout.RIGHT_OF,R.id.event_image);
+                ll.addRule(RelativeLayout.RIGHT_OF,R.id.center_image);
                 horiLine.setLayoutParams(ll);
                 ll = (RelativeLayout.LayoutParams) title.getLayoutParams();
                 ll.addRule(RelativeLayout.RIGHT_OF,R.id.line4);
@@ -152,10 +156,10 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             }
             else{
                 RelativeLayout.LayoutParams ll =(RelativeLayout.LayoutParams) time.getLayoutParams();
-                ll.addRule(RelativeLayout.RIGHT_OF,R.id.event_image);
+                ll.addRule(RelativeLayout.RIGHT_OF,R.id.center_image);
                 time.setLayoutParams(ll);
                 ll = (RelativeLayout.LayoutParams) horiLine.getLayoutParams();
-                ll.addRule(RelativeLayout.LEFT_OF,R.id.event_image);
+                ll.addRule(RelativeLayout.LEFT_OF,R.id.center_image);
                 horiLine.setLayoutParams(ll);
                 ll = (RelativeLayout.LayoutParams) title.getLayoutParams();
                 ll.addRule(RelativeLayout.LEFT_OF,R.id.line4);
@@ -165,6 +169,12 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
                 groupcreatorimage.setLayoutParams(ll);
 
             }
+            if (position==groupEventList.size()-1){
+                bottomline.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                bottomline.setBackground(ContextCompat.getDrawable(mContext,R.drawable.dashline));
+
+            }
+
         }
         public int dip2px(Context context, float dpValue) {
             float scale = context.getResources().getDisplayMetrics().density;

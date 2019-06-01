@@ -4,29 +4,39 @@
     android:layout_height="wrap_content">
 
 
-    <View
-        android:id="@+id/v_line"
-        android:layout_width="1dp"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:background="#666666" />
+
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:layout_height="wrap_content">
 
-
-        <ImageView
-            android:background="@color/white"
-            android:id="@+id/event_image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:padding="2dp"
+        <LinearLayout
+            android:id="@+id/center_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:src="@mipmap/event_default" />
+            android:orientation="vertical">
+            <View
+                android:id="@+id/v_line_top"
+                android:layout_width="1dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:background="#666666" />
+            <ImageView
+                android:background="@color/white"
+                android:id="@+id/event_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="2dp"
+                android:src="@mipmap/event_default" />
+            <View
+                android:id="@+id/v_line_bottom"
+                android:layout_width="1dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:background="#666666" />
+        </LinearLayout>
         <View
             android:id="@+id/line4"
             android:paddingLeft="2dp"
@@ -64,6 +74,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:textColor="@color/black"
+            android:layout_centerVertical="true"
             android:text="您发布的帖子标题已被取消置顶"
             android:gravity="center_horizontal"
             android:textSize="15sp" />

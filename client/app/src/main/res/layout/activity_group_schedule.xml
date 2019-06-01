@@ -89,6 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp">
                 <ImageButton
+                    android:id="@+id/notification"
                     android:scaleType="fitCenter"
                     android:padding="5dp"
                     android:layout_centerVertical="true"
@@ -96,7 +97,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@mipmap/search"/>
+                    android:src="@drawable/ic_notifications_black_24dp"/>
                 <TextView
                     android:id="@+id/today"
                     android:layout_width="100dp"
@@ -145,39 +146,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
-            <View
-                android:id="@+id/v_line"
-                android:layout_width="1dp"
-                android:layout_height="40dp"
-                android:layout_centerHorizontal="true"
-                android:background="#666666" />
-            <RelativeLayout
-                android:id="@+id/rl_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp">
-                <ImageView
-                    android:background="@color/white"
-                    android:id="@+id/add_event_image"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_add_circle_outline_black_24dp" />
-                <LinearLayout
-                    android:id="@+id/addeventtime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_centerVertical="true">
-                </LinearLayout>
-
-            </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
     </ScrollView>
         </com.yalantis.phoenix.PullToRefreshView>
+        <TextView
+            android:id="@+id/noneevent"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:background="@color/white"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/add_blue"
+            android:id="@+id/add_event_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            />
     </RelativeLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

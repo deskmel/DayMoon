@@ -76,10 +76,9 @@
                     android:src="@mipmap/group_white"/>
             </RelativeLayout>
         </LinearLayout>
-        <android.support.v4.view.ViewPager
+        <com.example.daymoon.Layout.ViewPagerSlide
             android:id="@+id/viewpapers"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
-
 </android.support.v4.widget.DrawerLayout>

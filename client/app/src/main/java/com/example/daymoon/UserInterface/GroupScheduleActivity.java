@@ -23,6 +23,7 @@ import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.GroupInfoManagement.Group;
 import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
+import com.example.daymoon.Layout.ViewPagerSlide;
 import com.example.daymoon.R;
 import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
 import com.google.gson.Gson;
@@ -56,6 +57,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
     private TextView today;
     private TextView groupName;
     private PullToRefreshView mPullToRefreshView;
+    private ImageButton notification;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,9 +67,10 @@ public class GroupScheduleActivity extends AppCompatActivity {
         info=findViewById(R.id.info);
         back=findViewById(R.id.back);
         recyclerView=findViewById(R.id.event_list);
-        eventaddbutton=findViewById(R.id.add_event_image);
+        eventaddbutton=findViewById(R.id.add_event_button);
         groupName=findViewById(R.id.group_name);
         groupName.setText(group.getGroupName());
+        notification=findViewById(R.id.notification);
         initButton();
         initData();
 
@@ -78,8 +81,6 @@ public class GroupScheduleActivity extends AppCompatActivity {
         today=findViewById(R.id.today);
         today.setText(timeformat.format(c.getTime()));
         refresh();
-
-
     }
     private void flushList(){
         timeLineAdapter=new TimeLineAdapter(groupEventList,this);
@@ -110,6 +111,11 @@ public class GroupScheduleActivity extends AppCompatActivity {
     }
     private void initButton()
     {
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +149,11 @@ public class GroupScheduleActivity extends AppCompatActivity {
                         new CalendarSerializer()).create();
                 Type GroupEventRecordType = new TypeToken<GroupEventList>(){}.getType();
                 groupEventList = gson.fromJson(result, GroupEventRecordType);
+                TextView noneEvent = findViewById(R.id.noneevent);
                 flushList();
+                if (groupEventList.size()==0)
+                    noneEvent.setText("~这个小组的事件空空如也~");
+                else noneEvent.setText("");
             }
             @Override
             public void requestFailure(Request request, IOException e) {

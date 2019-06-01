@@ -62,46 +62,69 @@
         android:id="@+id/pull_to_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/calendar_bg"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:background="@color/blue_background"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:orientation="vertical">
                 <RelativeLayout
+                    android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
+                    <ViewFlipper
+                        android:id="@+id/flipper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp">
                     <ImageButton
-                        android:id="@+id/search"
+                        android:id="@+id/notification"
                         android:scaleType="fitCenter"
                         android:padding="5dp"
-                        android:layout_centerVertical="true"
                         android:background="@drawable/blue_background"
-                        android:layout_marginLeft="10dp"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@mipmap/search"/>
-                    <TextView
-                        android:id="@+id/today"
-                        android:layout_width="100dp"
-                        android:layout_centerInParent="true"
-                        android:textStyle="bold"
-                        android:layout_height="30dp"
-                        android:text="2019/9/5"
-                        android:gravity="center"
-                        android:textColor="@color/white"
-                        android:background="@drawable/blue_corner_bg"/>
+                        android:src="@drawable/ic_notifications_black_24dp"/>
+                        <ImageButton
+                            android:id="@+id/groupback"
+                            android:scaleType="fitCenter"
+                            android:padding="5dp"
+                            android:background="@drawable/blue_background"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_group_black_24dp"/>
+                    </ViewFlipper>
+                    <ViewFlipper
+                        android:id="@+id/flipper1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true">
+                        <TextView
+                            android:id="@+id/today"
+                            android:layout_width="100dp"
+                            android:textStyle="bold"
+                            android:layout_height="30dp"
+                            android:text="2019/9/5"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:background="@drawable/blue_corner_bg"/>
+                        <TextView
+                            android:id="@+id/notices"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:text="公告"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:background="@drawable/blue_corner_bg"/>
+                    </ViewFlipper>
+
 
                     <ImageButton
                         android:id="@+id/more"
@@ -121,14 +144,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:background="@color/bordergray"/>
-            <android.support.v7.widget.RecyclerView
-                android:padding="0.5dp"
-                android:id="@+id/group_list"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-            </android.support.v7.widget.RecyclerView>
+
+            <com.example.daymoon.Layout.ViewPagerSlide
+                android:id="@+id/viewpage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
         </LinearLayout>
-    </ScrollView>
+
     </com.yalantis.phoenix.PullToRefreshView>
 
 </LinearLayout>
