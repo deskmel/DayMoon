@@ -56,4 +56,5 @@ dependencies {
     implementation 'com.github.vipulasri:timelineview:1.1.0'
     implementation 'com.yalantis:phoenix:1.2.3'
     implementation 'com.github.alamkanak:android-week-view:1.2.6'
+    implementation 'com.readystatesoftware.systembartint:systembartint:1.0.3'
 }

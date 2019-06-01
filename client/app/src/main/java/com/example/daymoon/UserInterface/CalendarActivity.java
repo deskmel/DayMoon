@@ -38,6 +38,7 @@ import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
 import com.example.daymoon.Layout.ViewPagerSlide;
 import com.example.daymoon.R;
+import com.example.daymoon.Tool.StatusBarUtil;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
@@ -106,8 +107,14 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         ClientGroupInfoControl.setCurrentUserID(userId);
         ClientGroupEventControl.setCurrentUserID(userId);
         setContentView(R.layout.activity_canlendar);//绑定界面
+        if (!StatusBarUtil.setStatusBarDarkTheme(this, true)) {
+            //如果不支持设置深色风格 为了兼容总不能让状态栏白白的看不清, 于是设置一个状态栏颜色为半透明,
+            //这样半透明+白=灰, 状态栏的文字能看得清
+            StatusBarUtil.setStatusBarColor(this,0x55000000);
+        }
         mainContext = CalendarActivity.this;
         user=findViewById(R.id.user);
+
         calendarButton=findViewById(R.id.calendarButton);
         toTimeLinePageButton = findViewById(R.id.timelineButton);
         group=findViewById(R.id.group);

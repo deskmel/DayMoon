@@ -13,7 +13,7 @@
     <LinearLayout
         android:id="@+id/menu"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:background="@color/blue_top">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,18 +22,43 @@
                 android:id="@+id/user"
                 android:scaleType="fitCenter"
                 android:layout_marginLeft="10dp"
+                android:padding="3dp"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:background="@color/blue_top"
-                android:src="@mipmap/user_white"/>
+                android:src="@mipmap/user"/>
+            <ViewFlipper
+                android:id="@+id/flipper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/user"
+                android:layout_marginLeft="10dp">
+                <ImageButton
+                    android:id="@+id/notification"
+                    android:scaleType="fitCenter"
+                    android:padding="5dp"
+                    android:background="@color/white"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_notifications_black_24dp"/>
+                <ImageButton
+                    android:id="@+id/groupback"
+                    android:scaleType="fitCenter"
+                    android:padding="5dp"
+                    android:background="@color/white"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_group_black_24dp"/>
+            </ViewFlipper>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:textSize="16dp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:text="@string/menu_item_group"/>
             <ImageButton
                 android:id="@+id/calendar"
@@ -43,20 +68,25 @@
                 android:scaleType="fitCenter"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_toLeftOf="@+id/group"
+                android:layout_toLeftOf="@+id/more"
                 android:background="@color/blue_top"
-                android:src="@mipmap/calendar_white"/>
+                android:src="@mipmap/calendar"/>
             <ImageButton
-                android:id="@+id/group"
+                android:id="@+id/more"
                 android:scaleType="fitCenter"
-                android:layout_marginRight="10dp"
+                android:padding="2dp"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_width="29dp"
-                android:layout_height="29dp"
-                android:src="@mipmap/group_blue"
-                android:background="@drawable/white_background"
-                android:layout_alignParentRight="true"/>
+                android:background="@color/white"
+                android:layout_marginRight="10dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_business_center_black_24dp"/>
         </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/bordergray"/>
     </LinearLayout>
     <com.yalantis.phoenix.PullToRefreshView
         android:id="@+id/pull_to_refresh"
@@ -72,78 +102,43 @@
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="30dp"
                 android:orientation="vertical">
                 <RelativeLayout
-                    android:background="@color/white"
+                    android:background="@color/blue_background"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
-                    <ViewFlipper
-                        android:id="@+id/flipper"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="10dp">
-                    <ImageButton
-                        android:id="@+id/notification"
-                        android:scaleType="fitCenter"
-                        android:padding="5dp"
-                        android:background="@drawable/blue_background"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/ic_notifications_black_24dp"/>
-                        <ImageButton
-                            android:id="@+id/groupback"
-                            android:scaleType="fitCenter"
-                            android:padding="5dp"
-                            android:background="@drawable/blue_background"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/ic_group_black_24dp"/>
-                    </ViewFlipper>
+                    android:layout_height="20dp">
                     <ViewFlipper
                         android:id="@+id/flipper1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/bottom_corner_background"
                         android:layout_centerInParent="true">
                         <TextView
                             android:id="@+id/today"
-                            android:layout_width="100dp"
-                            android:textStyle="bold"
-                            android:layout_height="30dp"
+                            android:layout_width="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_height="20dp"
+                            android:textSize="13dp"
                             android:text="2019/9/5"
+                            android:typeface="monospace"
                             android:gravity="center"
-                            android:textColor="@color/white"
-                            android:background="@drawable/blue_corner_bg"/>
+                            android:textColor="@color/black"
+                            />
                         <TextView
                             android:id="@+id/notices"
-                            android:layout_width="100dp"
-                            android:layout_height="30dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:textSize="13dp"
                             android:text="公告"
                             android:gravity="center"
-                            android:textColor="@color/white"
-                            android:background="@drawable/blue_corner_bg"/>
+                            android:textColor="@color/black" />
                     </ViewFlipper>
-
-
-                    <ImageButton
-                        android:id="@+id/more"
-                        android:scaleType="fitCenter"
-                        android:padding="5dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/blue_background"
-                        android:layout_marginRight="10dp"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@mipmap/tools_white"/>
                 </RelativeLayout>
 
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/bordergray"/>
+
 
             <com.example.daymoon.Layout.ViewPagerSlide
                 android:id="@+id/viewpage"

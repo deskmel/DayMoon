@@ -34,6 +34,7 @@ import com.example.daymoon.GroupInfoManagement.GroupList;
 import com.example.daymoon.Layout.ViewPagerSlide;
 import com.example.daymoon.R;
 import com.example.daymoon.Tool.PermissionUtil;
+import com.example.daymoon.Tool.StatusBarUtil;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
@@ -76,6 +77,11 @@ public class GroupActivity extends AppCompatActivity {
         ZXingLibrary.initDisplayOpinion(this);
         setContentView(R.layout.activity_group);
         mainContext = GroupActivity.this;
+        if (!StatusBarUtil.setStatusBarDarkTheme(this, true)) {
+            //如果不支持设置深色风格 为了兼容总不能让状态栏白白的看不清, 于是设置一个状态栏颜色为半透明,
+            //这样半透明+白=灰, 状态栏的文字能看得清
+            StatusBarUtil.setStatusBarColor(this,0x55000000);
+        }
         initPage();
         initButton();
         final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);

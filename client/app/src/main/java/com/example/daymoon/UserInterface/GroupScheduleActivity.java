@@ -1,6 +1,7 @@
 package com.example.daymoon.UserInterface;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.daymoon.Adapter.NotificationViewAdapter;
 import com.example.daymoon.Adapter.TimeLineAdapter;
 import com.example.daymoon.EventManagement.EventList;
@@ -31,6 +35,7 @@ import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.Layout.ViewPagerSlide;
 import com.example.daymoon.R;
+import com.example.daymoon.Tool.StatusBarUtil;
 import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -67,18 +72,32 @@ public class GroupScheduleActivity extends AppCompatActivity {
     private View timeLinePage;
     private View notificationPage;
     private RecyclerView notificationRecyclerView;
+    private MaterialDialog materialDialog;
+    private MaterialDialog materialDialog_creategroupevent;
+    private CharSequence notification;
+    private TextView noneEvent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         groupID = getIntent().getIntExtra("groupID",-1);
         group = (Group) getIntent().getSerializableExtra("group");
         setContentView(R.layout.activity_group_schedule);
+        StatusBarUtil.setRootViewFitsSystemWindows(this,true);
+        //设置状态栏透明
+        StatusBarUtil.setTranslucentStatus(this);
+        if (!StatusBarUtil.setStatusBarDarkTheme(this, true)) {
+            //如果不支持设置深色风格 为了兼容总不能让状态栏白白的看不清, 于是设置一个状态栏颜色为半透明,
+            //这样半透明+白=灰, 状态栏的文字能看得清
+            StatusBarUtil.setStatusBarColor(this,0x55000000);
+        }
         TextView groupName = findViewById(R.id.group_name);
         groupName.setText(group.getGroupName());
         initButton();
         initData();
         initaddeventbutton();
         initPage();
+        initMaterialDialog();
+
         final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
         Calendar c=Calendar.getInstance();
         TextView today = findViewById(R.id.today);
@@ -119,10 +138,51 @@ public class GroupScheduleActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
         viewPager.setSlide(false);
     }
+
+    private void initMaterialDialog(){
+        materialDialog = new MaterialDialog.Builder(this)
+                .title("创建公告")
+                .titleGravity(GravityEnum.CENTER)
+                .input("输入公告内容", "", false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        notification = input;
+                    }
+                })
+                .positiveText("确认")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        createNotification();
+                    }
+                })
+                .neutralText("取消")
+                .build();
+        materialDialog_creategroupevent = new MaterialDialog.Builder(this)
+                .titleGravity(GravityEnum.CENTER)
+                .title("创建小组事件")
+                .input("标题", "", false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+
+                    }
+                })
+                .input("地点", "", false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+
+                    }
+                })
+                .build();
+    }
+    private void createNotification(){
+
+    }
     private void initTimeLinePage(){
         timeLinePage =  View.inflate(this,R.layout.grouptimeline_layout,null);
         groupEventRecyclerView=timeLinePage.findViewById(R.id.group_list);
         groupEventRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        noneEvent = timeLinePage.findViewById(R.id.noneevent);
     }
     private void initNotificationPage(){
         notificationPage = View.inflate(this,R.layout.notification_layout,null);
@@ -186,6 +246,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
         eventaddbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent=new Intent(GroupScheduleActivity.this,AddGroupEventActivity.class);
                 startActivityForResult(intent,ADD_EVENT);
             }
@@ -194,11 +255,12 @@ public class GroupScheduleActivity extends AppCompatActivity {
         notificationaddbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                materialDialog.show();
             }
         });
         ViewFlipper viewFlipper = findViewById(R.id.flipper);
         ViewFlipper viewFlipper1 = findViewById(R.id.flipper1);
+        ViewFlipper viewFlipper2 = findViewById(R.id.flipper2);
         ImageButton notification = findViewById(R.id.notification);
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,6 +268,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(1);
                 viewFlipper.showNext();
                 viewFlipper1.showNext();
+                viewFlipper2.showNext();
             }
         });
         ImageButton groupback = findViewById(R.id.groupback);
@@ -215,6 +278,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(0);
                 viewFlipper.showNext();
                 viewFlipper1.showNext();
+                viewFlipper2.showNext();
             }
         });
 
@@ -230,12 +294,12 @@ public class GroupScheduleActivity extends AppCompatActivity {
                         new CalendarSerializer()).create();
                 Type GroupEventRecordType = new TypeToken<GroupEventList>(){}.getType();
                 groupEventList = gson.fromJson(result, GroupEventRecordType);
-                TextView noneEvent = findViewById(R.id.noneevent);
-                flushTimeLineList();
-                flushNoificationList();
                 if (groupEventList.size()==0)
                     noneEvent.setText("~这个小组的事件空空如也~");
                 else noneEvent.setText("");
+                flushTimeLineList();
+                flushNoificationList();
+
             }
             @Override
             public void requestFailure(Request request, IOException e) {
@@ -261,7 +325,6 @@ public class GroupScheduleActivity extends AppCompatActivity {
                     groupEventList.add(groupEvent);
                     flushTimeLineList();
                 }
-
                 @Override
                 public void requestFailure(Request request, IOException e) {
 
