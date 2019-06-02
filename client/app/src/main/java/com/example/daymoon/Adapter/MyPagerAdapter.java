@@ -13,23 +13,29 @@ import java.util.List;
 
 public class MyPagerAdapter extends PagerAdapter {
     private Context mContext;
-    private LinkedList<View> viewList;
 
+    public MyPagerAdapter(Context context ,List<String> list) {
+    }
+
+    @Override
+    public int getCount() {
+        return 0;
+    }
+
+    @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        container.addView(viewList.get(position));
-        return viewList.get(position);
+        View view = View.inflate(mContext, R.layout.calendar_layout,null);
+        return view;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView(viewList.get(position));
+        // super.destroyItem(container,position,object); 这一句要删除，否则报错
+        container.removeView((View)object);
     }
+
     @Override
-    public int getCount(){
-        return viewList.size();
-    }
     public boolean isViewFromObject(View view, Object object) {
         return view == object;
     }
-
 }

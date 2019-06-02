@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -14,35 +15,49 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 
 import com.example.daymoon.Adapter.GroupViewAdapter;
+import com.example.daymoon.Adapter.NotificationViewAdapter;
 import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
+import com.example.daymoon.GroupEventManagement.Notification;
+import com.example.daymoon.GroupEventManagement.NotificationList;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
 import com.example.daymoon.GroupInfoManagement.GroupList;
+import com.example.daymoon.Layout.ViewPagerSlide;
 import com.example.daymoon.R;
 import com.example.daymoon.Tool.PermissionUtil;
+import com.example.daymoon.Tool.StatusBarUtil;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.yalantis.phoenix.PullToRefreshView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.zip.Inflater;
 
 public class GroupActivity extends AppCompatActivity {
     private final int REQUEST_QRCODE = 1;
     private final int REQUEST_CREATEGROUP = 2;
     private int userId;
-    private RecyclerView recyclerView;
+    private RecyclerView groupListRecyclerView;
+    private RecyclerView notificationRecyclerView;
     private GroupViewAdapter adapter =null;
     private GroupList groupList;
+    private ViewPagerSlide viewPager;
+    private LayoutInflater inflater;
+    private View groupListPage;
+    private View notificationPage;
     private ImageButton more;
     private Context mainContext = null;
     private ClientGroupInfoControl clientGroupInfoControl;
@@ -50,7 +65,11 @@ public class GroupActivity extends AppCompatActivity {
     private ImageButton calenderButton;
     private TextView today;
     private PullToRefreshView mPullToRefreshView;
-
+    private ArrayList<View> viewList;
+    private ImageButton notification;
+    private ImageButton groupback;
+    private ViewFlipper viewFlipper;
+    private ViewFlipper viewFlipper1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +77,20 @@ public class GroupActivity extends AppCompatActivity {
         ZXingLibrary.initDisplayOpinion(this);
         setContentView(R.layout.activity_group);
         mainContext = GroupActivity.this;
-        recyclerView=findViewById(R.id.group_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
-        flushlist();
+        if (!StatusBarUtil.setStatusBarDarkTheme(this, true)) {
+            //如果不支持设置深色风格 为了兼容总不能让状态栏白白的看不清, 于是设置一个状态栏颜色为半透明,
+            //这样半透明+白=灰, 状态栏的文字能看得清
+            StatusBarUtil.setStatusBarColor(this,0x55000000);
+        }
+        initPage();
+        initButton();
+        final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
+        Calendar c=Calendar.getInstance();
+        today=findViewById(R.id.today);
+        today.setText(timeformat.format(c.getTime()));
+        refresh();
+    }
+    private void initButton(){
         calenderButton=findViewById(R.id.calendar);
         calenderButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,11 +106,78 @@ public class GroupActivity extends AppCompatActivity {
                 showPopUpMenu();
             }
         });
-        final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
-        Calendar c=Calendar.getInstance();
-        today=findViewById(R.id.today);
-        today.setText(timeformat.format(c.getTime()));
-        refresh();
+        viewFlipper1 = findViewById(R.id.flipper1);
+        viewFlipper = findViewById(R.id.flipper);
+        notification = findViewById(R.id.notification);
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(1);
+                viewFlipper.showNext();
+                viewFlipper1.showNext();
+            }
+        });
+        groupback = findViewById(R.id.groupback);
+        groupback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(0);
+                viewFlipper.showNext();
+                viewFlipper1.showNext();
+            }
+        });
+
+    }
+    private void initPage(){
+        viewPager=(ViewPagerSlide) findViewById(R.id.viewpage);
+        initGroupListPager();
+        initNotificationPager();
+        viewList = new ArrayList<View>();// 将要分页显示的View装入数组中
+        viewList.add(groupListPage);
+        viewList.add(notificationPage);
+        PagerAdapter pagerAdapter = new PagerAdapter() {
+            @Override
+            public boolean isViewFromObject(View arg0, Object arg1) {
+                // TODO Auto-generated method stub
+                return arg0 == arg1;
+            }
+
+            @Override
+            public int getCount() {
+                // TODO Auto-generated method stub
+                return viewList.size();
+            }
+
+            @Override
+            public void destroyItem(ViewGroup container, int position,
+                                    Object object) {
+                // TODO Auto-generated method stub
+                container.removeView(viewList.get(position));
+            }
+
+            @Override
+            public Object instantiateItem(ViewGroup container, int position) {
+                // TODO Auto-generated method stub
+                container.addView(viewList.get(position));
+                return viewList.get(position);
+            }
+        };
+        viewPager.setAdapter(pagerAdapter);
+    }
+    private void initGroupListPager(){
+        groupListPage = View.inflate(this,R.layout.group_layout,null);
+        groupListRecyclerView=groupListPage.findViewById(R.id.group_list);
+        groupListRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        groupListRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        groupListRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        flushlist();
+    }
+    private void initNotificationPager(){
+        notificationPage = View.inflate(this,R.layout.notification_layout,null);
+        notificationRecyclerView = notificationPage.findViewById(R.id.notification_list);
+        notificationRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        notificationRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        notificationRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
 
     }
     private void flushlist(){
@@ -91,6 +186,7 @@ public class GroupActivity extends AppCompatActivity {
             public void run() {
                 groupList = ClientGroupInfoControl.getGroupList();
                 flushGroupList();
+                flushNotificationList();
             }
         }, new Runnable() {
             @Override
@@ -99,10 +195,18 @@ public class GroupActivity extends AppCompatActivity {
             }
         });
     }
+    private void flushNotificationList(){
+        Notification notification = new Notification("瞎几把搞","sg",Calendar.getInstance().getTime(),"游山玩水");
+        NotificationList notificationList= new NotificationList();
+        notificationList.add(notification);
+        NotificationViewAdapter notificationViewAdapter = new NotificationViewAdapter(notificationList,mainContext,0);
+        notificationRecyclerView.setAdapter(notificationViewAdapter);
+
+    }
     private void flushGroupList()
     {
         adapter = new GroupViewAdapter(groupList, mainContext);
-        recyclerView.setAdapter(adapter);
+        groupListRecyclerView.setAdapter(adapter);
         adapter.setonItemClickListener(new GroupViewAdapter.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View v, int Position) {
@@ -156,8 +260,6 @@ public class GroupActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_QRCODE);
             }
         });
-
-
     }
     private void addBackground(Activity activity,float bgAlpha) {
         // 设置背景颜色变暗

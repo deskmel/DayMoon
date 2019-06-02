@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.R;
+import com.example.daymoon.Tool.StatusBarUtil;
 import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
 import com.example.daymoon.UserInfoManagement.UserInformationHolder;
 
@@ -54,6 +55,9 @@ public class LoginActivity extends AppCompatActivity {
     }
     //获取界面控件
     private void init() {
+        StatusBarUtil.setRootViewFitsSystemWindows(this,true);
+        //设置状态栏透明
+        StatusBarUtil.setTranslucentStatus(this);
         //从main_title_bar中获取的id
         //tv_main_title=findViewById(R.id.tv_main_title);
         //tv_main_title.setText("登录");

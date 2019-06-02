@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_background"
+    android:background="@color/white"
     tools:context=".UserInterface.GroupScheduleActivity">
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,35 +13,94 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/blue_top"
+    android:background="@color/white"
+
     android:id="@+id/menu">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="40dp">
         <ImageButton
             android:id="@+id/back"
             android:scaleType="fitCenter"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentLeft="true"
-            android:background="@color/blue_top"
+            android:layout_centerVertical="true"
+            android:background="@color/white"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:src="@mipmap/left_white"/>
-        <TextView
-            android:id="@+id/group_name"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_chevron_left_black_24dp"/>
+        <ViewFlipper
+            android:id="@+id/flipper"
+            android:layout_toRightOf="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp">
+            <ImageButton
+                android:id="@+id/notification"
+                android:scaleType="fitCenter"
+                android:padding="5dp"
+                android:background="@color/white"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_notifications_black_24dp"/>
+            <ImageButton
+                android:id="@+id/groupback"
+                android:scaleType="fitCenter"
+                android:padding="5dp"
+                android:background="@color/white"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_group_black_24dp"/>
+        </ViewFlipper>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
             android:layout_centerInParent="true"
-            android:textColor="@color/white"
-            android:textSize="16dp"
-            android:text="小组"/>
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/group_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_gravity="center"
+                android:textSize="13dp"
+                android:text="小组"/>
+            <ViewFlipper
+                android:id="@+id/flipper1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+                <TextView
+                    android:id="@+id/today"
+                    android:typeface="monospace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:text="2019/9/5"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:background="@color/white"/>
+                <TextView
+                    android:id="@+id/notices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:text="小组公告"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:background="@color/white"/>
+            </ViewFlipper>
+        </LinearLayout>
+
 
         <ImageButton
             android:scaleType="fitCenter"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@color/blue_top"
+            android:background="@color/white"
             android:layout_toLeftOf="@+id/info"
             android:layout_centerInParent="true"
             android:layout_marginRight="5dp" />
@@ -52,8 +111,8 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:background="@color/blue_top"
-            android:src="@mipmap/info_list_white"
+            android:background="@color/white"
+            android:src="@drawable/ic_clear_all_black_24dp"
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             />
@@ -62,112 +121,53 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
-        <View
-            android:layerType="software"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/dashline"/>
+        android:background="@color/white"  >                                                                                                                                                                                                                         ">
         <com.yalantis.phoenix.PullToRefreshView
             android:id="@+id/pull_to_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="vertical">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
-                <ImageButton
-                    android:scaleType="fitCenter"
-                    android:padding="5dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/blue_background"
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@mipmap/search"/>
-                <TextView
-                    android:id="@+id/today"
-                    android:layout_width="100dp"
-                    android:layout_centerInParent="true"
-                    android:textStyle="bold"
-                    android:layout_height="30dp"
-                    android:text="2019/9/5"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:background="@drawable/blue_corner_bg"/>
-                <ImageButton
-                    android:id="@+id/tools"
-                    android:scaleType="fitCenter"
-                    android:padding="5dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/blue_background"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@mipmap/tools_white"/>
-            </RelativeLayout>
-
-        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/event_list"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-            </android.support.v7.widget.RecyclerView>
-        </LinearLayout>
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <View
-                android:id="@+id/v_line"
-                android:layout_width="1dp"
-                android:layout_height="40dp"
-                android:layout_centerHorizontal="true"
-                android:background="#666666" />
-            <RelativeLayout
-                android:id="@+id/rl_title"
+            <com.example.daymoon.Layout.ViewPagerSlide
+                android:id="@+id/viewpagers"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp">
-                <ImageView
-                    android:background="@color/white"
-                    android:id="@+id/add_event_image"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    android:src="@mipmap/addprofilephoto" />
-                <LinearLayout
-                    android:id="@+id/addeventtime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_centerVertical="true">
-                </LinearLayout>
-
-            </RelativeLayout>
-        </RelativeLayout>
+                android:layout_height="match_parent"/>
+        </LinearLayout>
     </LinearLayout>
-    </ScrollView>
         </com.yalantis.phoenix.PullToRefreshView>
+        <ViewFlipper
+            android:id="@+id/flipper2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp">
+        <ImageButton
+            android:background="@color/white"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/add_blue"
+            android:id="@+id/add_event_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            />
+        <ImageButton
+            android:background="@color/white"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/add_blue"
+            android:id="@+id/add_notification_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            />
+        </ViewFlipper>
     </RelativeLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

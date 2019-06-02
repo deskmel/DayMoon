@@ -24,7 +24,7 @@ import okhttp3.Request;
 
 import static com.example.daymoon.Define.Constants.SERVER_IP;
 
-public class QRCodeActivity extends AppCompatActivity {
+public class QRCodeActivity extends BaseActivity {
 
     private int groupID;
     private ImageView qrCodeImageView;

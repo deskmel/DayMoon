@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.example.daymoon.GroupInfoManagement.Group;
 import com.example.daymoon.R;
 
-public class GroupDetailActivity extends AppCompatActivity {
+public class GroupDetailActivity extends BaseActivity {
     int groupID;
     RelativeLayout qrCode;
     TextView groupname;
@@ -35,7 +35,7 @@ public class GroupDetailActivity extends AppCompatActivity {
         });
     }
 
-    
+
     private void initView(){
         groupname=findViewById(R.id.group_name);
         groupDescription=findViewById(R.id.group_description);

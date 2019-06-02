@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/calendar_bg"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/picker"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp">
+                <Button
+                    android:id="@+id/left"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:background="@mipmap/left_blue"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerInParent="true"
+                    android:gravity="left"
+                    android:textAllCaps="false" />
+                <TextView
+                    android:id="@+id/tv_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:includeFontPadding="false"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/blue_light"
+                    android:textSize="13sp" />
+                <Button
+                    android:id="@+id/addbutton"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@mipmap/add_blue"
+                    android:layout_toLeftOf="@+id/right"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="right"
+                    android:textAllCaps="false" />
+                <Button
+                    android:id="@+id/right"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:background="@mipmap/right_blue"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="right"
+                    android:textAllCaps="false" />
+            </RelativeLayout>
+        </LinearLayout>
+        <com.haibin.calendarview.CalendarLayout
+            android:id="@+id/calendarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:default_status="expand">
+            <com.haibin.calendarview.CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="0dp"
+                app:current_month_text_color="#212121"
+                app:month_view="com.example.daymoon.Layout.MyMonthView"
+                app:month_view_show_mode="mode_fix"
+                app:week_view="com.exampe.daymoon.Layout.MyWeekView"
+                app:day_text_size="13sp"
+                app:calendar_height="40dp"
+                app:other_month_text_color="#cccccc"
+                app:week_line_background="#e6e6e6" />
+            <ScrollView
+                android:id="@+id/scrollView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:orientation="vertical">
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/list_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="400dp">
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+            </ScrollView>
+        </com.haibin.calendarview.CalendarLayout>
+    </LinearLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

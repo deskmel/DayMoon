@@ -97,7 +97,7 @@ public class GroupEvent extends Event implements Serializable {
     }
     public String getEndDate() {
         SimpleDateFormat dateFormat;
-        dateFormat = new SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA);
+        dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
         Log.d("?",dateFormat.format(endTime.getTime()));
         return dateFormat.format(endTime.getTime());
     }

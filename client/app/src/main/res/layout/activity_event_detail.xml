@@ -12,8 +12,9 @@
         android:layout_marginBottom="5dp">
         <RelativeLayout
             android:layout_width="match_parent"
+            android:paddingTop="15dp"
             android:layout_height="50dp"
-            android:background="@drawable/menu_bg">
+            android:background="#2196f3">
             <TextView
                 android:id="@+id/getback"
                 android:layout_width="wrap_content"
@@ -21,12 +22,13 @@
                 android:gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:text="5月"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center|center_vertical"
+                android:textColor="@color/white"
                 android:text="日程具体信息"/>
             <TextView
                 android:id="@+id/edit"
@@ -36,7 +38,7 @@
                 android:layout_alignParentRight="true"
                 android:gravity="center_vertical"
                 android:text="编辑"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 />
         </RelativeLayout>
         <LinearLayout
@@ -46,79 +48,129 @@
             android:background="@color/white"
             android:layout_marginTop="10dp"
             android:paddingLeft="10dp">
-            <TextView
-                android:id="@+id/event_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:textColor="@color/black"
-                android:text="母亲节" />
-            <TextView
-                android:id="@+id/event_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textSize="12dp"
-                android:text="2019年5月12日 星期日" />
-            <TextView
-                android:id="@+id/event_lasting_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:text="19:00-20:00"/>
-
-            <FrameLayout
-                android:layout_marginTop="20dp"
+            <RelativeLayout
+                android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
-                android:layout_height="100dp">
-                <ViewSwitcher
-                    android:id="@+id/viewswicther"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/eventname"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_label_outline_black_24dp"/>
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/eventname"
+                    android:id="@+id/event_name"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:textSize="22dp"
+                    android:textColor="@color/black"
+                    android:text="母亲节" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:scaleType="fitCenter"
+                    android:id="@+id/time_image"
+                    android:src="@drawable/ic_access_time_black_24dp"/>
+                <LinearLayout
+                    android:layout_toRightOf="@+id/time_image"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:textColor="@color/black"
+                        android:id="@+id/event_lasting_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12dp"
+                        android:text="19:00-20:00"/>
+                    <TextView
+                        android:textColor="@color/black"
+                        android:id="@+id/event_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12dp"
+                        android:text="2019年5月12日 星期日" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/remind_image"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_notifications_none_black_24dp"/>
+                <TextView
+                    android:layout_toRightOf="@+id/remind_image"
+                    android:layout_marginLeft="15dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </ViewSwitcher>
-            </FrameLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="40dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/white_bg"
-            android:paddingLeft="10dp"
-            android:orientation="vertical">
-            <View
+                    android:layout_height="25dp"
+                    android:gravity="center_vertical"
+                    android:textSize="15dp"
+                    android:text="提醒"
+                    android:textColor="@color/black"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_place_black_24dp"
+                    android:id="@+id/place_image"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+                <TextView
+                    android:layout_toRightOf="@id/place_image"
+                    android:textColor="@color/black"
+                    android:id="@+id/location"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:text="东上院101"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/des_image"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_description_black_24dp"/>
+                <TextView
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/des_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:gravity="center_vertical"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    android:text="描述"/>
+            </RelativeLayout>
 
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bordergray"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:gravity="center_vertical"
-                android:text="日历"
-                android:textSize="15dp"
-                android:textColor="@color/black" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/bordergray"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:gravity="center_vertical"
-                android:textSize="15dp"
-                android:text="提醒"
-                android:textColor="@color/black"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/bordergray"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:gravity="center_vertical"
-                android:textSize="15dp"
-                android:textColor="@color/black"
-                android:text="描述"/>
+
             <TextView
                 android:layout_marginTop="5dp"
                 android:id="@+id/event_descriptions"
@@ -129,17 +181,12 @@
                 android:minHeight="100dp"
                 android:background="@color/white"
                 android:textSize="15dp"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/bordergray"/>
         </LinearLayout>
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
-
         <TextView
             android:id="@+id/delete_event"
             android:background="@drawable/white_bg"
