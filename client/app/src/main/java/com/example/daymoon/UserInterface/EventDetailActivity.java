@@ -11,8 +11,9 @@ import com.example.daymoon.EventManagement.Event;
 import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.R;
+import com.example.daymoon.Tool.StatusBarUtil;
 
-public class EventDetailActivity extends BaseActivity{
+public class EventDetailActivity extends AppCompatActivity{
     Event event;
     private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
     TextView eventTitle, eventTime, eventLastTime, eventDescription;
@@ -22,6 +23,7 @@ public class EventDetailActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
+        StatusBarUtil.setTranslucentStatus(this);
         event =(Event) getIntent().getSerializableExtra("event");
         eventTitle=(TextView) findViewById(R.id.event_name);
         eventTime= (TextView) findViewById(R.id.event_time);
