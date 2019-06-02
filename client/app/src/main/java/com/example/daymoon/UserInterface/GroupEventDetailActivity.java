@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.R;
+import com.example.daymoon.Tool.StatusBarUtil;
 
 public class GroupEventDetailActivity extends AppCompatActivity {
     private TextView starttime;
@@ -20,6 +21,10 @@ public class GroupEventDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //当FitsSystemWindows设置 true 时，会在屏幕最上方预留出状态栏高度的 padding
+        StatusBarUtil.setRootViewFitsSystemWindows(this, true);
+        //设置状态栏透明
+        StatusBarUtil.setTranslucentStatus(this);
         setContentView(R.layout.activity_group_event_detail);
         event =(GroupEvent) getIntent().getSerializableExtra("groupevent");
         initView();
@@ -35,7 +40,11 @@ public class GroupEventDetailActivity extends AppCompatActivity {
         title.setText(event.getTitle());
         description.setText(event.getDescription());
         description.setText(event.getLocation());
-        starttime.setText(String.format("%s %s %s","开始",event.getBeginDate(),event.getBeginHour()));
-        endtime.setText(String.format("%s %s %s","开始",event.getEndDate(),event.getEndHour()));
+        starttime.setText(String.format("%s %s %s","",event.getBeginDate(),event.getBeginHour()));
+        if (event.getBeginDate().equals(event.getEndDate()))endtime.setText(String.format("%s %s %s","-","",event.getEndHour()));
+        else endtime.setText(String.format("%s %s %s","-",event.getEndDate(),event.getEndHour()));
+
+
+
     }
 }

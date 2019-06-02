@@ -12,7 +12,7 @@ import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.R;
 
-public class EventDetailActivity extends AppCompatActivity {
+public class EventDetailActivity extends BaseActivity{
     Event event;
     private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
     TextView eventTitle, eventTime, eventLastTime, eventDescription;

@@ -38,7 +38,7 @@ import java.util.Locale;
 
 import okhttp3.Request;
 
-public class AddGroupEventActivity extends AppCompatActivity {
+public class AddGroupEventActivity extends BaseActivity {
     private int selector= GroupEvent.EVENTTYPE.Default;
     private MaterialEditText title;
     private MaterialEditText location;

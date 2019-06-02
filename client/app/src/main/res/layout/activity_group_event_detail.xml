@@ -12,18 +12,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/iosbackground"
+            android:background="@color/white"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp">
 
             <LinearLayout
+                android:paddingTop="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/menu_bg"
-                android:orientation="horizontal"
+                android:layout_height="150dp"
+                android:background="#2196f3"
+                android:orientation="vertical"
                 tools:layout_editor_absoluteX="97dp"
                 tools:layout_editor_absoluteY="0dp">
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -36,12 +39,13 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:gravity="center_vertical"
-                        android:textColor="@color/red"
+                        android:textColor="@color/white"
                         android:text="返回" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:textColor="@color/white"
                         android:gravity="center|center_vertical"
                         android:text="小组事件信息" />
                     <TextView
@@ -51,158 +55,164 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:gravity="center_vertical"
-                        android:textColor="@color/red"
+                        android:textColor="@color/white"
                         android:text="编辑" />
                 </RelativeLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/creatorimage"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/head_icon"/>
+                        <LinearLayout
+                            android:layout_toRightOf="@+id/creatorimage"
+                            android:layout_marginLeft="15dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/participator"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="13dp"
+                                android:text="1人参与"/>
+                            <TextView
+                                android:id="@+id/creater"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="14dp"
+                                android:text="沈贯  创建"/>
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
             </LinearLayout>
 
 
             <LinearLayout
                 android:layout_marginTop="30dp"
                 android:paddingBottom="20dp"
-                android:background="@color/white"
                 android:id="@+id/eventname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <TextView
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_marginLeft="10dp"
+                        android:scaleType="fitCenter"
+                        android:id="@+id/event_name_icon"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_label_outline_black_24dp"/>
+                    <TextView
+                        android:gravity="center_vertical"
+                        android:layout_toRightOf="@id/event_name_icon"
+                        android:paddingLeft="8dp"
+                        android:id="@+id/title"
+                        android:textSize="18dp"
+                        android:textColor="@color/black"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:text="东上院组会"
+                        />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerVertical="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_place_black_24dp"
+                        android:id="@+id/place_image"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp" />
+                    <TextView
+                        android:layout_toRightOf="@id/place_image"
+
+                        android:id="@+id/location"
+                        android:paddingLeft="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:text="东上院101"/>
+                </RelativeLayout>
+                <RelativeLayout
                     android:layout_marginTop="10dp"
-                    android:paddingLeft="8dp"
-                    android:id="@+id/title"
-                    android:textSize="18dp"
-                    android:textColor="@color/black"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="东上院组会"
-                    />
-                <TextView
-                    android:layout_marginTop="5dp"
-                    android:id="@+id/location"
-                    android:paddingLeft="8dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="地点 东上院101"/>
-                <TextView
-                    android:id="@+id/starttime"
-                    android:paddingLeft="8dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="开始 2018年4年29日 10:00"/>
-                <TextView
-                    android:id="@+id/endtime"
-                    android:paddingLeft="8dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="结束 2018年4年29日 10:00"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="30dp"
-                android:background="@drawable/white_bg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <LinearLayout
+                    android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp">
-                        <TextView
-                            android:paddingLeft="8dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="发起人"
-                            android:textSize="15dp"
-                            android:gravity="center_vertical"/>
-                        <TextView
-                            android:id="@+id/creater"
-                            android:text="沈贯"
-                            android:gravity="center_vertical"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="30dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent" />
-                    </RelativeLayout>
-                </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/bordergray"/>
-                <LinearLayout
+                    <ImageView
+                        android:scaleType="fitCenter"
+                        android:id="@+id/time_image"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_access_time_black_24dp"/>
+                    <TextView
+                        android:layout_toRightOf="@+id/time_image"
+                        android:id="@+id/starttime"
+                        android:paddingLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2018年4年29日 10:00"/>
+                    <TextView
+                        android:layout_toRightOf="@id/starttime"
+                        android:id="@+id/endtime"
+                        android:paddingLeft="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-2018年4年29日 10:00"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <RelativeLayout
+                    <ImageView
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/des_image"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_description_black_24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp" />
+                    <TextView
+                        android:layout_toRightOf="@id/des_image"
+                        android:paddingLeft="20dp"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp">
-                        <TextView
-                            android:paddingLeft="8dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="参与成员"
-                            android:textSize="15dp"
-                            android:gravity="center_vertical"/>
-                        <ImageView
-                            android:id="@+id/member_right"
-                            android:scaleType="fitCenter"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@mipmap/right"/>
-                        <ImageView
-                            android:id="@+id/member"
-                            android:src="@mipmap/user"
-                            android:scaleType="fitCenter"
-                            android:layout_centerVertical="true"
-                            android:layout_toLeftOf="@+id/member_right"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp" />
-                    </RelativeLayout>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="40dp"
-                android:background="@drawable/white_bg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:paddingTop="10dp"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="8dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="描述:"/>
+                        android:layout_height="wrap_content"
+                        android:text="描述"/>
+
+                </RelativeLayout>
                 <View
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/bordergray"/>
                 <TextView
+                    android:layout_marginLeft="10dp"
                     android:id="@+id/description"
                     android:paddingTop="5dp"
-                    android:paddingLeft="8dp"
+                    android:paddingLeft="0dp"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:text="@string/group_description"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="40dp"
-                android:background="@drawable/white_bg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp">
-                    <TextView
-                        android:id="@+id/delete"
-                        android:layout_centerInParent="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="删除小组事件"
-                        android:textColor="@color/red"/>
-                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
