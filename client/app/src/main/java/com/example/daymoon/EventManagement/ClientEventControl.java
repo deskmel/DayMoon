@@ -242,7 +242,7 @@ public class ClientEventControl {//施工
                 resultList.add(event);
             }
         }
-
+        return resultList;
     }
 
     public static Map<String, Calendar> getDatesHasEvent()
