@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
@@ -223,7 +224,7 @@ public class ClientEventControl {//施工
     // 输入日期，得到当天的eventList
     public static EventList findEventListByDate(int year, int month, int day){
         EventList resultList = new EventList();
-        Log.d("haha",String.valueOf(getInstance().eventList.size()));
+        Log.d("hahaevent",String.valueOf(getInstance().eventList.size()));
         for (Event event:getInstance().eventList){
             if (event.getBeginTime().get(GregorianCalendar.YEAR) == year
                     && event.getBeginTime().get(GregorianCalendar.MONTH ) + 1 == month
@@ -234,18 +235,48 @@ public class ClientEventControl {//施工
         return resultList;
     }
 
-    public static EventList findEventListByWeek(int year,int weekOfWeek){
+    public static EventList findEventListByWeek(int year,int weekOfYear){
         EventList resultList = new EventList();
-        for (Event event:getInstance().eventList ){
-            Log.d("events_WeekOfYEAR",String.valueOf(event.getBeginTime().get(java.util.Calendar.WEEK_OF_YEAR)));
-            if (event.getBeginTime().get(java.util.Calendar.WEEK_OF_YEAR) == weekOfWeek
+        if (getInstance().eventList!=null){
+            for (Event event:getInstance().eventList ){
+                Log.d("events_WeekOfYEAR",String.valueOf(event.getBeginTime().get(java.util.Calendar.WEEK_OF_YEAR)));
+                if (event.getBeginTime().get(java.util.Calendar.WEEK_OF_YEAR) == weekOfYear
+                        && year == event.getBeginTime().get(java.util.Calendar.YEAR) ){
+                    resultList.add(event);
+                }
+            }
+        }
+
+        return resultList;
+    }
+
+    public static GroupEventList findGroupEventListByDate(int year,int month,int day){
+        GroupEventList resultList = new GroupEventList();
+        //
+        if (getInstance().groupEventList!=null)
+        {
+            Log.d("hahagroupevent",String.valueOf(getInstance().groupEventList.size()));
+            for (GroupEvent event:getInstance().groupEventList){
+                if (event.getBeginTime().get(GregorianCalendar.YEAR) == year
+                        && event.getBeginTime().get(GregorianCalendar.MONTH ) + 1 == month
+                        && event.getBeginTime().get(GregorianCalendar.DATE) == day){
+                    resultList.add(event);
+                }
+            }
+        }
+        return resultList;
+    }
+
+    public  static  GroupEventList findGroupEventListByWeek(int year,int weekOfYear){
+        GroupEventList resultList = new GroupEventList();
+        for (GroupEvent event:getInstance().groupEventList){
+            if (event.getBeginTime().get(java.util.Calendar.WEEK_OF_YEAR) == weekOfYear
                     && year == event.getBeginTime().get(java.util.Calendar.YEAR) ){
                 resultList.add(event);
             }
         }
         return resultList;
     }
-
     public static Map<String, Calendar> getDatesHasEvent()
     {
         Map<String,Calendar> map=new HashMap<>();
@@ -255,6 +286,12 @@ public class ClientEventControl {//施工
             Calendar calendar = getSchemeCalendar(c.get(java.util.Calendar.YEAR),c.get(java.util.Calendar.MONTH)+1,c.get(java.util.Calendar.DATE),"1");
             map.put(calendar.toString(),calendar);
         }
+        /*
+        for (GroupEvent event:getInstance().groupEventList){
+            GregorianCalendar c = event.getBeginTime();
+            Calendar calendar = getSchemeCalendar(c.get(java.util.Calendar.YEAR),c.get(java.util.Calendar.MONTH)+1,c.get(java.util.Calendar.DATE),"2");
+            map.put(calendar.toString(),calendar);
+        }*/
         return map;
     }
 
