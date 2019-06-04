@@ -43,8 +43,5 @@ public class GroupEventDetailActivity extends AppCompatActivity {
         starttime.setText(String.format("%s %s %s","",event.getBeginDate(),event.getBeginHour()));
         if (event.getBeginDate().equals(event.getEndDate()))endtime.setText(String.format("%s %s %s","-","",event.getEndHour()));
         else endtime.setText(String.format("%s %s %s","-",event.getEndDate(),event.getEndHour()));
-
-
-
     }
 }

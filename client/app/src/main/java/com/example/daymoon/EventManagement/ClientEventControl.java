@@ -232,6 +232,16 @@ public class ClientEventControl {//施工
         return resultList;
     }
 
+    public static EventList findEventListByWeek(int year,int weekOfWeek){
+        EventList resultList = new EventList();
+        for (Event event:getInstance().eventList ){
+            if (event.getBeginTime().get(java.util.Calendar.WEEK_OF_YEAR) == weekOfWeek
+                    && year == event.getBeginTime().get(java.util.Calendar.YEAR) ){
+                resultList.add(event);
+            }
+        }
+
+    }
 
     public static Map<String, Calendar> getDatesHasEvent()
     {
