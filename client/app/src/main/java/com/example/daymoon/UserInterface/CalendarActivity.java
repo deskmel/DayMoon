@@ -1,6 +1,8 @@
 package com.example.daymoon.UserInterface;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
@@ -43,7 +45,11 @@ import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
 import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
+
+import com.example.daymoon.LocalDatabase.LocalDatabaseHelper;
+
 import com.example.daymoon.Layout.ViewPagerSlide;
+
 import com.example.daymoon.R;
 import com.example.daymoon.Tool.StatusBarUtil;
 import com.example.daymoon.Tool.pxUtils;
@@ -99,6 +105,8 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     private View timetablePager;
     private int userId;
     private ArrayList<View> viewList;
+    private Cursor cursor;
+    private SQLiteDatabase db;
     private ImageButton toTimeLinePageButton;
     private ConstraintLayout clContent;
 
@@ -111,6 +119,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         ClientEventControl.getEventListFromServer(new Runnable() {
             @Override
             public void run() {
+
                 setSchemeDate();
                 flushListView();
             }
@@ -174,6 +183,13 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
             }
         };
         viewPager.setAdapter(pagerAdapter);
+
+
+        //日历
+        //按钮
+        initButton();
+        //侧滑菜单实现
+        initMenu();
     }
     private void initButton(){
         //绑定小组页面

@@ -1,7 +1,12 @@
 package com.example.daymoon.UserInterface;
 
 import android.content.Intent;
+
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
 import android.support.annotation.NonNull;
+
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +38,11 @@ import com.example.daymoon.GroupEventManagement.NotificationList;
 import com.example.daymoon.GroupInfoManagement.Group;
 import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
+
+import com.example.daymoon.LocalDatabase.LocalDatabaseHelper;
+
 import com.example.daymoon.Layout.ViewPagerSlide;
+
 import com.example.daymoon.R;
 import com.example.daymoon.Tool.StatusBarUtil;
 import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
@@ -66,6 +75,10 @@ public class GroupScheduleActivity extends AppCompatActivity {
     private static int SUCCESS_CODE = 1;
     private static int FAILURE_CODE = 0;
     private PullToRefreshView mPullToRefreshView;
+
+    private Cursor cursor;
+    private SQLiteDatabase db;
+
     private ViewPagerSlide viewPager;
     private RecyclerView groupEventRecyclerView;
     private ArrayList<View> viewList;
@@ -76,6 +89,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
     private MaterialDialog materialDialog_creategroupevent;
     private CharSequence notification;
     private TextView noneEvent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -294,6 +308,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                         new CalendarSerializer()).create();
                 Type GroupEventRecordType = new TypeToken<GroupEventList>(){}.getType();
                 groupEventList = gson.fromJson(result, GroupEventRecordType);
+
                 if (groupEventList.size()==0)
                     noneEvent.setText("~这个小组的事件空空如也~");
                 else noneEvent.setText("");
@@ -331,5 +346,12 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        cursor.close();
+        db.close();
     }
 }

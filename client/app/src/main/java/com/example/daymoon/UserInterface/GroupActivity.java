@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +33,11 @@ import com.example.daymoon.GroupEventManagement.Notification;
 import com.example.daymoon.GroupEventManagement.NotificationList;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
 import com.example.daymoon.GroupInfoManagement.GroupList;
+
+import com.example.daymoon.LocalDatabase.LocalDatabaseHelper;
+
 import com.example.daymoon.Layout.ViewPagerSlide;
+
 import com.example.daymoon.R;
 import com.example.daymoon.Tool.PermissionUtil;
 import com.example.daymoon.Tool.StatusBarUtil;
@@ -65,11 +71,16 @@ public class GroupActivity extends AppCompatActivity {
     private ImageButton calenderButton;
     private TextView today;
     private PullToRefreshView mPullToRefreshView;
+
+    private Cursor cursor;
+    private SQLiteDatabase db;
+
     private ArrayList<View> viewList;
     private ImageButton notification;
     private ImageButton groupback;
     private ViewFlipper viewFlipper;
     private ViewFlipper viewFlipper1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,7 +202,9 @@ public class GroupActivity extends AppCompatActivity {
         }, new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplicationContext(), "something goes wrong", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "something goes wrong when getGroupListFromServer", Toast.LENGTH_LONG).show();
+
+
             }
         });
     }
@@ -311,5 +324,12 @@ public class GroupActivity extends AppCompatActivity {
         else if (requestCode==REQUEST_CREATEGROUP){
             flushGroupList();
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        cursor.close();
+        db.close();
     }
 }

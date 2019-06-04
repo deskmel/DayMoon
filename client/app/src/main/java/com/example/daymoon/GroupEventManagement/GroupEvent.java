@@ -67,6 +67,15 @@ public class GroupEvent extends Event implements Serializable {
 
     }
 
+    /**
+     * 为SQLite重载
+     */
+    public GroupEvent(int eventID, int groupID, int[] MemberID, String eventName, String description, GregorianCalendar beginTime, GregorianCalendar endTime, int whetherProcess){
+        super(eventID, eventName,description, beginTime, endTime, whetherProcess );
+        this.groupID = groupID;
+        this.MemberID = MemberID;
+    }
+
     public String getLocation(){
         return location;
     }
@@ -139,6 +148,10 @@ public class GroupEvent extends Event implements Serializable {
     public void setEventID(int eventID) {
         this.eventID = eventID;
     }
+
+    public int getGroupID(){return groupID;}
+
+    public int [] getMemberID(){ return  MemberID;}
 
     public class EVENTTYPE{
         public static final int Default = 1, game = 2, discussion = 3, travel = 4, sports = 5, eating = 6, lesson =7;

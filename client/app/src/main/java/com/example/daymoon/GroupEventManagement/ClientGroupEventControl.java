@@ -44,6 +44,8 @@ public class ClientGroupEventControl {
         getInstance().currentUserID = userID;
     }
 
+    public static int getCurrentUseID(){return getInstance().currentUserID;}
+
     public static void getGroupEventListFromServer(int groupID, HttpRequest.DataCallback dataCallback){
         Map<String, String> params = new HashMap<>();
         params.put("userID", String.valueOf(getInstance().currentUserID));
@@ -75,6 +77,8 @@ public class ClientGroupEventControl {
         params.put("eventID", String.valueOf(eventID));
         new HttpRequestThread(SERVER_IP+"getgroupevent", params, dataCallback).start();
     }
+
+
 
     /*public String getLatestGroupEventDes(int groupId){
         groupEventList=new GroupEventList();
