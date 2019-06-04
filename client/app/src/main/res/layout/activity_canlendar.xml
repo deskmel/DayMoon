@@ -41,28 +41,31 @@
                     android:textColor="@color/black"
                     android:gravity="center"
                     android:text="日历"/>
+                <ViewFlipper
+                    android:id="@+id/flipper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/group"
+                    android:layout_marginRight="10dp">
                 <ImageButton
                     android:id="@+id/timelineButton"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:padding="2dp"
                     android:scaleType="fitCenter"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/calendarButton"
-                    android:layout_marginRight="14dp"
+
                     android:src="@drawable/ic_subject_black_24dp"
                     android:background="@color/white"/>
-                <ImageButton
-                    android:id="@+id/calendarButton"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:padding="2dp"
-                    android:scaleType="fitCenter"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_toLeftOf="@+id/group"
-                    android:background="@drawable/white_background"
-                    android:src="@mipmap/calendar"/>
+                    <ImageButton
+                        android:id="@+id/backcalendar"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:padding="2dp"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/calendar"
+                        android:background="@color/white"/>
+                </ViewFlipper>
                 <ImageButton
                     android:id="@+id/group"
                     android:layout_centerVertical="true"

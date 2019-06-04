@@ -325,11 +325,12 @@ public class GroupActivity extends AppCompatActivity {
             flushGroupList();
         }
     }
-
+    /*
     @Override
     public void onDestroy(){
         super.onDestroy();
         cursor.close();
         db.close();
     }
+    */
 }

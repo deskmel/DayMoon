@@ -194,7 +194,6 @@ public class ClientEventControl {//施工
             @Override
             public void requestSuccess(String result) {
                 Log.i("success","add the event successfully");
-
                 Toast.makeText(context, "成功修改事件并上传", Toast.LENGTH_SHORT).show();
                 getInstance().eventList.set(index, event);
                 success.run();
@@ -224,6 +223,7 @@ public class ClientEventControl {//施工
     // 输入日期，得到当天的eventList
     public static EventList findEventListByDate(int year, int month, int day){
         EventList resultList = new EventList();
+        Log.d("haha",String.valueOf(getInstance().eventList.size()));
         for (Event event:getInstance().eventList){
             if (event.getBeginTime().get(GregorianCalendar.YEAR) == year
                     && event.getBeginTime().get(GregorianCalendar.MONTH ) + 1 == month

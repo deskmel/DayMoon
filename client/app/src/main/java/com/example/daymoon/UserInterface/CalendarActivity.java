@@ -73,6 +73,7 @@ import java.util.Locale;
 import java.util.Map;
 import android.view.GestureDetector;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 
@@ -96,8 +97,11 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     private int selectYear;
     private int selectMonth;
     private int selectDay;
+    private int selectWeek;
     private EventList todayEventList;
+    private EventList weekEventList;
     private GroupEventList todayGroupEventList;
+    private GroupEventList weekGroupEventList;
     private GestureDetector mDetector;
     private LayoutInflater inflater;
     private View calendarPager;
@@ -115,11 +119,11 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         super.onCreate(savedInstanceState);
         userId = getIntent().getIntExtra("userid",-1);
         if (userId<0) System.out.println("no userID given");
+        Log.d("wtf",String.valueOf(userId));
         ClientEventControl.setCurrentUserID(userId);//TODO 替换为由登录界面传递过来的ID
         ClientEventControl.getEventListFromServer(new Runnable() {
             @Override
             public void run() {
-
                 setSchemeDate();
                 flushListView();
             }
@@ -134,16 +138,12 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         }
         mainContext = CalendarActivity.this;
         user=findViewById(R.id.user);
-        calendarButton=findViewById(R.id.calendarButton);
         toTimeLinePageButton = findViewById(R.id.timelineButton);
         group=findViewById(R.id.group);
         //ViewPager
         initPage();
-        //按钮
-        initButton();
-        //侧滑菜单实现
-        initMenu();
     }
+
     private  void initPage(){
         viewPager=(ViewPagerSlide) findViewById(R.id.viewpapers);
         inflater=getLayoutInflater();
@@ -183,28 +183,35 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
             }
         };
         viewPager.setAdapter(pagerAdapter);
-
-
         //日历
         //按钮
         initButton();
         //侧滑菜单实现
         initMenu();
     }
-    private void initButton(){
+    private void initButton() {
         //绑定小组页面
         group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(CalendarActivity.this,GroupActivity.class);
+                Intent intent = new Intent(CalendarActivity.this, GroupActivity.class);
                 startActivity(intent);
             }
         });
-
+        ViewFlipper viewFlipper = findViewById(R.id.flipper);
         toTimeLinePageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(2);
+                viewFlipper.showNext();
+            }
+        });
+        ImageButton backCalendar = findViewById(R.id.backcalendar);
+        backCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(0);
+                viewFlipper.showNext();
             }
         });
     }
@@ -284,9 +291,11 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         timetablePager=View.inflate(this,R.layout.timetable_layout,null);
         clContent = timetablePager.findViewById(R.id.cl_content);
         weekView = timetablePager.findViewById(R.id.calendarView);
-        Event event = new Event("哈皮", "??",2019, 5, 31, 10, 29, 2019, 5, 31, 12, 40, true);
         initData();
-        setNewTextView(event);
+        weekEventList = ClientEventControl.findEventListByWeek(selectYear,selectWeek);
+        for (Event event:weekEventList){
+            setNewTextView(event);
+        }
     }
 
     /**
@@ -347,6 +356,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 selectYear = calendar.getYear();
                 selectMonth = calendar.getMonth();
                 selectDay = calendar.getDay();
+                selectWeek = calendar.getWeek();
                 flushListView();
             }
         });
@@ -376,6 +386,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
 
     private void flushListView(){
         todayEventList = ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay);
+        Log.d("num",String.valueOf(todayEventList.size()));
         todayGroupEventList = new GroupEventList();
         todayGroupEventList.add(new GroupEvent(0,1,"白痴","真的傻逼",2019,5,31,9,30));
         adapter = new EventViewAdapter(todayEventList, mainContext,todayGroupEventList); //设置adapter
