@@ -1,6 +1,8 @@
 package com.example.daymoon.UserInterface;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
@@ -23,6 +25,7 @@ import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.GroupInfoManagement.Group;
 import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
+import com.example.daymoon.LocalDatabase.LocalDatabaseHelper;
 import com.example.daymoon.R;
 import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
 import com.google.gson.Gson;
@@ -56,6 +59,9 @@ public class GroupScheduleActivity extends AppCompatActivity {
     private TextView today;
     private TextView groupName;
     private PullToRefreshView mPullToRefreshView;
+    private Cursor cursor;
+    private SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +149,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                         new CalendarSerializer()).create();
                 Type GroupEventRecordType = new TypeToken<GroupEventList>(){}.getType();
                 groupEventList = gson.fromJson(result, GroupEventRecordType);
+
                 flushList();
             }
             @Override
@@ -176,5 +183,12 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        cursor.close();
+        db.close();
     }
 }

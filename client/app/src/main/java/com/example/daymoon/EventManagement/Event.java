@@ -68,6 +68,21 @@ public class Event implements Comparable<Event>, Serializable {
         }
 
     }
+
+    /**
+     * 为SQLite重载一下
+     */
+    public Event(int eventID, String eventName, String description, GregorianCalendar beginTime, GregorianCalendar endTime, int whetherProcess){
+        this.eventID = eventID;
+        this.eventName = eventName;
+        this.description = description;
+        this.beginTime = beginTime;
+        this.endTime = endTime;
+        if (whetherProcess == 0){this.whetherProcess = false;}
+        else{this.whetherProcess = true;}
+    }
+
+
     public int compareTo(Event event)
     {
         return this.beginTime.compareTo(event.getBeginTime());

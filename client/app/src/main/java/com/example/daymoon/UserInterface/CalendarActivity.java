@@ -1,6 +1,8 @@
 package com.example.daymoon.UserInterface;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
@@ -36,6 +38,7 @@ import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
+import com.example.daymoon.LocalDatabase.LocalDatabaseHelper;
 import com.example.daymoon.R;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
@@ -86,6 +89,9 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     private View timetablePager;
     private int userId;
     private ArrayList<View> viewList;
+    private Cursor cursor;
+    private SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +101,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         ClientEventControl.getEventListFromServer(new Runnable() {
             @Override
             public void run() {
+
                 setSchemeDate();
                 flushListView();
             }
@@ -147,7 +154,6 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
             }
         };
         viewPager.setAdapter(pagerAdapter);
-
 
 
         //日历
@@ -485,6 +491,13 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     private void setSchemeDate(){
         map =ClientEventControl.getDatesHasEvent();
         calendarView.setSchemeDate(map);
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        cursor.close();
+        db.close();
     }
 
 }

@@ -19,6 +19,7 @@ import static com.example.daymoon.Define.Constants.SERVER_IP;
 import okhttp3.Request;
 
 
+import com.example.daymoon.LocalDatabase.LocalDatabaseHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -61,6 +62,7 @@ public class ClientEventControl {//施工
                 System.out.println(result);
                 Type EventRecordType = new TypeToken<EventList>(){}.getType();
                 getInstance().eventList = gson.fromJson(result, EventRecordType);
+
                 callback.run();
             }
             @Override

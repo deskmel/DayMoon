@@ -26,6 +26,19 @@ public class Group implements Serializable {
         this.description=groupDescription;
     }
 
+    /**
+     * 为SQLite重载
+     */
+    public Group(int groupID, String groupName, String description, int[] memberIDs, int[] eventIDs, int leaderID, String imgName){
+        this.groupID = groupID;
+        this.groupName = groupName;
+        this.description = description;
+        this.memberIDs = memberIDs;
+        this.eventIDs = eventIDs;
+        this.leaderID = leaderID;
+        this.imgName = imgName;
+    }
+
     public void addGroupMember(User user){
         groupMember.add(user);
     }
@@ -53,4 +66,10 @@ public class Group implements Serializable {
     public LinkedList<GroupEvent> getEventList() {
         return eventList;
     }
+
+    public int [] getMemberIDs(){ return memberIDs; }
+
+    public int [] getEventIDs(){ return eventIDs; }
+
+    public int getLeaderID(){return leaderID;}
 }
