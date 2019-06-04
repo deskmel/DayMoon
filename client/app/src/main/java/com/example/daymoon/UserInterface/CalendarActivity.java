@@ -10,6 +10,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -65,6 +66,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -292,7 +294,22 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         clContent = timetablePager.findViewById(R.id.cl_content);
         weekView = timetablePager.findViewById(R.id.calendarView);
         initData();
-        weekEventList = ClientEventControl.findEventListByWeek(selectYear,selectWeek);
+        weekView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(Calendar calendar, boolean isClick) {
+
+                GregorianCalendar c = new GregorianCalendar(calendar.getYear(),calendar.getMonth()-1,calendar.getDay());
+                Log.d("week",String.valueOf(c.get(java.util.Calendar.WEEK_OF_YEAR)));
+                Log.d("year",String.valueOf(c.get(java.util.Calendar.YEAR)));
+                selectWeek = c.get(java.util.Calendar.WEEK_OF_YEAR);
+                clContent.removeViews(50,weekEventList==null? 0:weekEventList.size());
+                weekEventList = ClientEventControl.findEventListByWeek(c.get(java.util.Calendar.YEAR),c.get(java.util.Calendar.WEEK_OF_YEAR));
+                flushTimeTable();
+            }
+        });
+    }
+    private void flushTimeTable(){
+        clContent=timetablePager.findViewById(R.id.cl_content);
         for (Event event:weekEventList){
             setNewTextView(event);
         }
@@ -353,10 +370,11 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Calendar calendar, boolean isClick) {
+                GregorianCalendar c = new GregorianCalendar(calendar.getYear(),calendar.getMonth()-1,calendar.getDay());
                 selectYear = calendar.getYear();
                 selectMonth = calendar.getMonth();
                 selectDay = calendar.getDay();
-                selectWeek = calendar.getWeek();
+                selectWeek = c.get(java.util.Calendar.WEEK_OF_YEAR);
                 flushListView();
             }
         });
@@ -418,17 +436,18 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
 
 
 
-    private int oneHourPx60;//一个小时高度是60dp，转换成像素
+    private int oneHourPx30;//一个小时高度是60dp，转换成像素
     private int oneMimutePx1;//一分钟高度是1dp，转化成像素
     private int oneDayPx;
     private int offset;
     private int width;
+    private int padding;
     private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     //放在onCreate里
     private void initData() {
-        oneHourPx60 = pxUtils.dip2px(this, 60);//假如你不是60dp就换掉
-        oneMimutePx1 = pxUtils.dip2px(this, 1);//这个用你的1小时的高度除60就行了
+        oneHourPx30 = pxUtils.dip2px(this, 30);//假如你不是60dp就换掉
+        oneMimutePx1 = pxUtils.dip2px(this,(float) 30./60 );//这个用你的1小时的高度除60就行了
         //显示控件宽度，不是必须得，假如你的宽度是动态的，然后距离两边多少也可以
         offset = pxUtils.dip2px(this,40);
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
@@ -436,7 +455,8 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         wm.getDefaultDisplay().getMetrics(dm);
         int dmwidth = dm.widthPixels;
         oneDayPx = (dmwidth-offset)/7;
-        width = oneDayPx;}
+        padding = pxUtils.dip2px(this,4);
+        width = oneDayPx-padding*2;}
 
     private void setNewTextView(Event event) {
         //生成一个放入的控件
@@ -445,7 +465,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         textView.setId(View.generateViewId());
         //设置控件属性，这个不用照抄，自己喜欢什么弄什么就行，显示什么背景什么都自己定
         textView.setBackground(getResources().getDrawable(R.drawable.blue_corner_bg));
-        textView.setPadding(2,5,2,2);
+        textView.setPadding(5,5,5,5);
         textView.setTextColor(getResources().getColor(R.color.black));
         textView.setText(event.getTitle());
         //底下获取Calendar，为了拿到一天的时间
@@ -462,12 +482,13 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         //这就是上面为什么把ConstraintLayout里所有控件都加了id的原因
         ConstraintSet constraintSet = new ConstraintSet();
         //把显示内容添加进去
-        textView.setTextSize(12);
+        textView.setTextSize(11);
+        textView.setTypeface(ResourcesCompat.getFont(this,R.font.msyh));
         clContent.addView(textView);
         //计算距离顶部的高度，很好理解，比如说13点20分，那就是距离0点有13个小时，再加上20分钟的高度
-        int marginTop = calendar1.get(java.util.Calendar.HOUR_OF_DAY) * oneHourPx60 +
+        int marginTop = calendar1.get(java.util.Calendar.HOUR_OF_DAY) * oneHourPx30 +
                 calendar1.get(java.util.Calendar.MINUTE) * oneMimutePx1;
-        int marginStart = (calendar1.get(java.util.Calendar.DAY_OF_WEEK)-1) * oneDayPx + offset;
+        int marginStart = (calendar1.get(java.util.Calendar.DAY_OF_WEEK)-1) * oneDayPx + offset+padding;
         //设置显示内容宽度
         constraintSet.clone(clContent);
         constraintSet.constrainWidth(textView.getId(), width);

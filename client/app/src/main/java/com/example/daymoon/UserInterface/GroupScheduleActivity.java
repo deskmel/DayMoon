@@ -347,11 +347,11 @@ public class GroupScheduleActivity extends AppCompatActivity {
             });
         }
     }
-
+    /*
     @Override
     public void onDestroy(){
         super.onDestroy();
         cursor.close();
         db.close();
-    }
+    }*/
 }
