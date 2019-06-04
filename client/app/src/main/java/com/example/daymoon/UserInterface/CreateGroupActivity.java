@@ -35,7 +35,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class CreateGroupActivity extends AppCompatActivity {
+public class CreateGroupActivity extends BaseActivity {
     private ImageView profilephoto;
     private MaterialEditText groupname;
     private Button submit;

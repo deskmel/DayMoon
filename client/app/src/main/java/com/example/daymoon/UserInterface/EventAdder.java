@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class EventAdder extends AppCompatActivity {
+public class EventAdder extends BaseActivity {
 
     //页面控件
     private TextView startDate;

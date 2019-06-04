@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class EditEventActivity extends AppCompatActivity {
+public class EditEventActivity extends BaseActivity {
     private JellyToggleButton jtb_whethercontinue;
     private TextView startTimeView,endTimeView,delete,back,complete;
     private MaterialEditText title,description;

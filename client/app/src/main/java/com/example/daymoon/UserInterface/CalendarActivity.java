@@ -38,8 +38,13 @@ import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
+
 import com.example.daymoon.LocalDatabase.LocalDatabaseHelper;
+
+import com.example.daymoon.Layout.ViewPagerSlide;
+
 import com.example.daymoon.R;
+import com.example.daymoon.Tool.StatusBarUtil;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
@@ -70,12 +75,13 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     private CalendarLayout calendarLayout;
     private LinearLayout picker;//日期选择器
     private TextView tvMonth;
-    private RecyclerView recyclerView;
+    private RecyclerView calendarRecyclerView;
+    private RecyclerView timelineRecyclerView;
     private Context mainContext = null;
     private EventViewAdapter adapter = null;
     private Button btn_add;//添加事件的按钮
     private AlertDialog alert = null;//提醒框
-    private ViewPager viewPager;
+    private ViewPagerSlide viewPager;
     private ImageButton user,calendarButton,group;
     //private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
     private int selectYear;
@@ -91,6 +97,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     private ArrayList<View> viewList;
     private Cursor cursor;
     private SQLiteDatabase db;
+    private ImageButton toTimeLinePageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,21 +116,27 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         ClientGroupInfoControl.setCurrentUserID(userId);
         ClientGroupEventControl.setCurrentUserID(userId);
         setContentView(R.layout.activity_canlendar);//绑定界面
+        if (!StatusBarUtil.setStatusBarDarkTheme(this, true)) {
+            //如果不支持设置深色风格 为了兼容总不能让状态栏白白的看不清, 于是设置一个状态栏颜色为半透明,
+            //这样半透明+白=灰, 状态栏的文字能看得清
+            StatusBarUtil.setStatusBarColor(this,0x55000000);
+        }
         mainContext = CalendarActivity.this;
         user=findViewById(R.id.user);
-        calendarButton=findViewById(R.id.calendarButton);
-        group=findViewById(R.id.group);
 
+        calendarButton=findViewById(R.id.calendarButton);
+        toTimeLinePageButton = findViewById(R.id.timelineButton);
+        group=findViewById(R.id.group);
         //ViewPager
-        viewPager=(ViewPager) findViewById(R.id.viewpapers);
+        viewPager=(ViewPagerSlide) findViewById(R.id.viewpapers);
         inflater=getLayoutInflater();
-        initCalendar();
-        initTimeLine();
-        initTimeTable();
+        initCalendarPage();
+        initTimeLinePage();
+        initTimeTablePage();
         viewList = new ArrayList<View>();// 将要分页显示的View装入数组中
         viewList.add(calendarPager);
         viewList.add(timeLine);
-        viewList.add(timetablePager);
+        //viewList.add(timetablePager);
 
         PagerAdapter pagerAdapter = new PagerAdapter() {
 
@@ -162,11 +175,66 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         //侧滑菜单实现
         initMenu();
     }
-    private void initTimeLine(){
+    private void initButton(){
+        //绑定小组页面
+        group.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(CalendarActivity.this,GroupActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        toTimeLinePageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+    }
+    private void initMenu(){
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
+        setDrawerTheme(
+                new DrawerTheme(this)
+        );
+        addProfile(
+                new DrawerProfile()
+                        .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.mipmap.user))
+                        .setBackground(getResources().getDrawable(R.drawable.cv_bg_material))
+                        .setName(getString(R.string.profile_name))
+                        .setDescription(getString((R.string.profile_description)))
+                        .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
+                            @Override
+                            public void onClick(DrawerProfile drawerProfile, long l) {
+                                Toast.makeText(CalendarActivity.this,"clicked profile",Toast.LENGTH_SHORT).show();
+                            }
+                        })
+        );
+        addItem(new DrawerItem()
+                .setImage(ContextCompat.getDrawable(this,R.drawable.setting_new))
+                .setTextPrimary(getString(R.string.menu_item_setting))
+        );
+        addDivider();
+        user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDrawer();
+            }
+        });
+    }
+
+    /**
+     * 时间轴界面
+     */
+    private void initTimeLinePage(){
         timeLine = View.inflate(this,R.layout.timeline_layout,null);
         ImageView eventaddbutton=timeLine.findViewById(R.id.add_event_image);
-        recyclerView=timeLine.findViewById(R.id.event_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        timelineRecyclerView=timeLine.findViewById(R.id.event_list);
+        timelineRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
         java.util.Calendar c= java.util.Calendar.getInstance();
         TextView today=timeLine.findViewById(R.id.today);
@@ -180,11 +248,12 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
             }
         });
         flushTimeViewList();
-
     }
     private void flushTimeViewList(){
         NewTimeLineAdapter timeLineAdapter=new NewTimeLineAdapter(ClientEventControl.getEventList(),this);
-        recyclerView.setAdapter(timeLineAdapter);
+        timelineRecyclerView = timeLine.findViewById(R.id.event_list);; //绑定listview
+        timelineRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        timelineRecyclerView.setAdapter(timeLineAdapter);
         timeLineAdapter.setonItemClickListener(new NewTimeLineAdapter.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View v, int Position) {
@@ -194,161 +263,28 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
             }
         });
     }
-    private void initTimeTable(){
+
+    /**
+     * 未完成 周视图形式界面，以事件块的形式表现事件
+     */
+    private void initTimeTablePage(){
         timetablePager=View.inflate(this,R.layout.timetable_layout,null);
 
         WeekView mWeekView = (WeekView) timetablePager.findViewById(R.id.weekView);
 
-// Set an action when any event is clicked.
         mWeekView.setOnEventClickListener(new WeekView.EventClickListener() {
             @Override
             public void onEventClick(WeekViewEvent event, RectF eventRect) {
 
             }
         });
-
-// The week view has infinite scrolling horizontally. We have to provide the events of a
-// month every time the month changes on the week view.
-        mWeekView.setMonthChangeListener(new MonthLoader.MonthChangeListener() {
-            @Override
-            public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-                List<WeekViewEvent> events = new List<WeekViewEvent>() {
-                    @Override
-                    public int size() {
-                        return 0;
-                    }
-
-                    @Override
-                    public boolean isEmpty() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean contains(@androidx.annotation.Nullable Object o) {
-                        return false;
-                    }
-
-                    @NonNull
-                    @Override
-                    public Iterator<WeekViewEvent> iterator() {
-                        return null;
-                    }
-
-                    @androidx.annotation.Nullable
-                    @Override
-                    public Object[] toArray() {
-                        return new Object[0];
-                    }
-
-                    @Override
-                    public <T> T[] toArray(@androidx.annotation.Nullable T[] a) {
-                        return null;
-                    }
-
-                    @Override
-                    public boolean add(WeekViewEvent weekViewEvent) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean remove(@androidx.annotation.Nullable Object o) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean containsAll(@NonNull Collection<?> c) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean addAll(@NonNull Collection<? extends WeekViewEvent> c) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean addAll(int index, @NonNull Collection<? extends WeekViewEvent> c) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean removeAll(@NonNull Collection<?> c) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean retainAll(@NonNull Collection<?> c) {
-                        return false;
-                    }
-
-                    @Override
-                    public void clear() {
-
-                    }
-
-                    @Override
-                    public WeekViewEvent get(int index) {
-                        return null;
-                    }
-
-                    @Override
-                    public WeekViewEvent set(int index, WeekViewEvent element) {
-                        return null;
-                    }
-
-                    @Override
-                    public void add(int index, WeekViewEvent element) {
-
-                    }
-
-                    @Override
-                    public WeekViewEvent remove(int index) {
-                        return null;
-                    }
-
-                    @Override
-                    public int indexOf(@androidx.annotation.Nullable Object o) {
-                        return 0;
-                    }
-
-                    @Override
-                    public int lastIndexOf(@androidx.annotation.Nullable Object o) {
-                        return 0;
-                    }
-
-                    @NonNull
-                    @Override
-                    public ListIterator<WeekViewEvent> listIterator() {
-                        return null;
-                    }
-
-                    @NonNull
-                    @Override
-                    public ListIterator<WeekViewEvent> listIterator(int index) {
-                        return null;
-                    }
-
-                    @NonNull
-                    @Override
-                    public List<WeekViewEvent> subList(int fromIndex, int toIndex) {
-                        return null;
-                    }
-                };
-                return events;
-            }
-        });
-
-// Set long press listener for events.
-        mWeekView.setEventLongPressListener(new WeekView.EventLongPressListener() {
-            @Override
-            public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-
-            }
-        });
-
-
     }
 
-    private void initCalendar(){
+    /**
+     * 日历界面 主界面
+     *
+     */
+    private void initCalendarPage(){
         calendarPager= View.inflate(this,R.layout.calendar_layout,null);
         calendarView = calendarPager.findViewById(R.id.calendarView);//绑定calendar
         calendarLayout=calendarPager.findViewById(R.id.calendarLayout);
@@ -356,10 +292,10 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         picker = calendarPager.findViewById(R.id.picker);//时间选择器
         tvMonth = calendarPager.findViewById(R.id.tv_month);//textview
         btn_add = calendarPager.findViewById(R.id.addbutton);
-        recyclerView = calendarPager.findViewById(R.id.list_one); //绑定listview
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        calendarRecyclerView = calendarPager.findViewById(R.id.list_one); //绑定listview
+        calendarRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        calendarRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        calendarRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         //UIControl = new TestUserInterfaceControl();
         selectDay = calendarView.getCurDay();
         selectMonth = calendarView.getCurMonth();
@@ -428,53 +364,11 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         setSchemeDate();
     }
 
-    private void initButton(){
-        //绑定小组页面
-        group.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(CalendarActivity.this,GroupActivity.class);
-                startActivity(intent);
-            }
-        });
 
-    }
-    private void initMenu(){
-        if (getSupportActionBar() != null){
-            getSupportActionBar().hide();
-        }
-        setDrawerTheme(
-                new DrawerTheme(this)
-        );
-        addProfile(
-                new DrawerProfile()
-                        .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.mipmap.user))
-                        .setBackground(getResources().getDrawable(R.drawable.cv_bg_material))
-                        .setName(getString(R.string.profile_name))
-                        .setDescription(getString((R.string.profile_description)))
-                        .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
-                            @Override
-                            public void onClick(DrawerProfile drawerProfile, long l) {
-                                Toast.makeText(CalendarActivity.this,"clicked profile",Toast.LENGTH_SHORT).show();
-                            }
-                        })
-        );
-        addItem(new DrawerItem()
-                .setImage(ContextCompat.getDrawable(this,R.drawable.setting_new))
-                .setTextPrimary(getString(R.string.menu_item_setting))
-        );
-        addDivider();
-        user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDrawer();
-            }
-        });
-    }
     private void flushListView(){
         todayEventList = ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay);
         adapter = new EventViewAdapter(todayEventList, mainContext); //设置adapter
-        recyclerView.setAdapter(adapter);
+        calendarRecyclerView .setAdapter(adapter);
         adapter.setonItemClickListener(new EventViewAdapter.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View v, int Position) {
