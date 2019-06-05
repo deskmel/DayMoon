@@ -45,14 +45,14 @@ public class HttpRequest {
         return httpRequest;
     }
 
-    public static void post(String url, Map<String, String> params, DataCallback dataCallbackack) {
-        getInstance().innerPost(url, params, dataCallbackack);
+    public static void post(String url, Map<String, String> params, DataCallback dataCallback) {
+        getInstance().innerPost(url, params, dataCallback);
     }
-    static void postFile(String url, String name, String fileName, File file, Map<String,String> params, DataCallback dataCallback){
+    public static void postFile(String url, String name, String fileName, File file, Map<String,String> params, DataCallback dataCallback){
         getInstance().innerPostFile(url, name, fileName, file, params, dataCallback);
     }
 
-    static void getFile(String url, FileCallback fileCallback){
+    public static void getFile(String url, FileCallback fileCallback){
         getInstance().innerGetFile(url, fileCallback);
     }
 

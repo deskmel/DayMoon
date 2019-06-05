@@ -86,7 +86,7 @@ public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.View
 
 
 
-        new HttpRequestThread(SERVER_IP + "image/" + groupList.get(position).getImgName(), new HttpRequest.FileCallback() {
+        HttpRequest.getFile(SERVER_IP + "image/" + groupList.get(position).getImgName(), new HttpRequest.FileCallback() {
             @Override
             public void requestSuccess(Bitmap bitmap) throws Exception {
                 holder.groupImage.setImageBitmap(bitmap);
@@ -96,7 +96,7 @@ public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.View
             public void requestFailure(Request request, IOException e) {
 
             }
-        }).run();
+        });
         //holder.des.setText(eventList.get(position).getDescription());
         //holder.confirmDelete.setText("删除"+eventList.get(position).getTitle()+"？");
         /*

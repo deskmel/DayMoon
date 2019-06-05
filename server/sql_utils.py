@@ -25,6 +25,11 @@ class DayMoonDB(object):
         self.cur=self.db.cursor()
         self.lock=lock
 
+    def sqlExecute(self, sql):
+        self.lock.acquire()
+        self.cur.execute(sql)
+        self.lock.release()
+
     def isValidLogin(self,logstr,password):
         '''
         登录时验证使用，可使用name,mail,phone中任一方法登录
@@ -41,12 +46,16 @@ class DayMoonDB(object):
         if userIDset:return userIDset[0]
         else:
             sql = "SELECT `userID` FROM `users` WHERE `mailAddress`='%s' AND `userPassword`='%s'" % (logstr, password)
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             userIDset = self.cur.fetchone()
             if userIDset: return userIDset[0]
             else:
                 sql = "SELECT `userID` FROM `users` WHERE `phoneNumber`='%s' AND `userPassword`='%s'" % (logstr, password)
+                self.lock.acquire()
                 self.cur.execute(sql)
+                self.lock.release()
                 userIDset = self.cur.fetchone()
                 if userIDset: return userIDset[0]
         return False
@@ -62,7 +71,9 @@ class DayMoonDB(object):
         '''
         sql='''INSERT INTO `users` (`userID`, `userName`, `userPassword`, `mailAddress`, `phoneNumber`, `groupIDs`, `eventIDs`) VALUES (NULL, '%s', '%s', '%s', '%s', '[]', '[]');'''%(name,password,mail,phoneNumber)
         try:
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
             self.cur.execute('select max(`userID`) from `users`;')
             id=self.cur.fetchone()[0]
@@ -92,7 +103,9 @@ class DayMoonDB(object):
         sql="UPDATE `users` SET "+wholeStr+" WHERE `users`.`userID` = %d;"%userID
         print(sql)
         try:
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
             return True
         except Exception as err:
@@ -106,7 +119,9 @@ class DayMoonDB(object):
         :return: 若存在用户，返回dict_json(不含密码)，否则返回None
         '''
         sql = '''SELECT * FROM `users` WHERE `userID`=%d''' % userID
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         info=self.cur.fetchone()
         if not info:return None
         infodict={'userID':info[0],'userName':info[1],'mailAddress':info[3],'phoneNumber':info[4],'groupIDs':json.loads(info[5]),'eventIDs':json.loads(info[6])}
@@ -131,18 +146,24 @@ class DayMoonDB(object):
                 sql='''INSERT INTO `events` (`eventID`, `userID`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '1', '%s');'''%(userID,eventName,description,beginTime,endTime,remind)
             else:
                 sql='''INSERT INTO `events` (`eventID`, `userID`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`) VALUES (NULL, '%d', '%s', '%s', '%s', '1970-01-01 00:00:00', '0', '%s');'''%(userID,eventName,description,beginTime,remind)
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
             self.cur.execute('select max(`eventID`) from `events`;')
             eventID=self.cur.fetchone()[0]
 
             sql = '''SELECT `eventIDs` FROM `users` WHERE `userID`=%d''' % userID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             events = json.loads(self.cur.fetchone()[0])
             events.append(eventID)
             events = json.dumps(list(set(events)),ensure_ascii=False)  # 防止重复
             sql = '''update `users` set `eventIDs`='%s' WHERE `userID`=%d;''' % (events, userID)
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
 
             return eventID
@@ -163,7 +184,9 @@ class DayMoonDB(object):
         :return: 成功为True，失败为err
         '''
         sql = '''SELECT `userID` FROM `events` WHERE `eventID`=%d''' % eventID
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         info=self.cur.fetchone()
         if not info:return None
         realuser = info[0]
@@ -179,7 +202,9 @@ class DayMoonDB(object):
         wholeStr = wholeStr[:-1]  # 去除最后一个逗号
         sql = "UPDATE `events` SET " + wholeStr + " WHERE `events`.`eventID` = %d;" % eventID
         try:
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
             return True
         except Exception as err:
@@ -196,11 +221,15 @@ class DayMoonDB(object):
 
 
         sql = '''SELECT `userID` FROM `events` WHERE `eventID`=%d''' % eventID
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         realuser = self.cur.fetchone()[0]
         if realuser!=userID: return 'NO ACCESS'
         sql = '''SELECT * FROM `events` WHERE `eventID`=%d''' % eventID
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         info = self.cur.fetchone()
         print(info)
         if not info: return None
@@ -218,21 +247,29 @@ class DayMoonDB(object):
         '''
         try:
             sql = '''SELECT `userID` FROM `events` WHERE `eventID`=%d''' % eventID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             realuser = self.cur.fetchone()[0]
             if realuser != userID: return 'NO ACCESS'
 
             sql='''DELETE FROM `events` WHERE `events`.`eventID` = %d'''%eventID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
 
             sql = '''SELECT `eventIDs` FROM `users` WHERE `userID`=%d''' % userID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             events = json.loads(self.cur.fetchone()[0])
             events.remove(eventID)
             events = json.dumps(events, ensure_ascii=False)  # 防止重复
             sql = '''update `users` set `eventIDs`='%s' WHERE `userID`=%d;''' % (events, userID)
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
 
             return True
@@ -252,7 +289,9 @@ class DayMoonDB(object):
         '''
         sql = '''INSERT INTO `groups` (`groupID`, `groupName`, `description`, `memberIDs`, `eventIDs`, `leaderID`, `imgName`) VALUES (NULL, '%s', '%s', '[]', '[]', '%d', '%s');''' % (groupName,description,leaderID,imgName)
         try:
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
             self.cur.execute('select max(`groupID`) from `groups`;')
             groupID=self.cur.fetchone()[0]
@@ -272,7 +311,9 @@ class DayMoonDB(object):
         '''
         try:
             sql='''SELECT `leaderID`, `memberIDs` FROM `groups` WHERE `groupID`=%d'''%groupID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             info=self.cur.fetchone()
             if not info:return None
             realLeader,members = info
@@ -281,18 +322,24 @@ class DayMoonDB(object):
             for memberID in members:
                 self.quitGroup(memberID,groupID)
             sql='''DELETE FROM `groups` WHERE `groups`.`groupID` = %d'''%groupID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
 
             sql = '''SELECT `groupIDs` FROM `users` WHERE `userID`=%d''' % leaderID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             groups = json.loads(self.cur.fetchone()[0])
 
             if groupID in groups:
                 groups.remove(groupID)
                 groups = json.dumps(groups, ensure_ascii=False)
                 sql = '''update `users` set `groupIDs`='%s' WHERE `userID`=%d;''' % (groups, leaderID)
+                self.lock.acquire()
                 self.cur.execute(sql)
+                self.lock.release()
                 self.db.commit()
 
         except Exception as err:
@@ -308,21 +355,29 @@ class DayMoonDB(object):
         '''
         try:
             sql='''SELECT `groupIDs` FROM `users` WHERE `userID`=%d'''%userID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             groups=json.loads(self.cur.fetchone()[0])
             groups.append(groupID)
             groups=json.dumps(list(set(groups)),ensure_ascii=False)#防止重复
             sql='''update `users` set `groupIDs`='%s' WHERE `userID`=%d;'''%(groups,userID)
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
 
             sql = '''SELECT `memberIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             members = json.loads(self.cur.fetchone()[0])
             members.append(userID)
             members = json.dumps(list(set(members)),ensure_ascii=False)  # 防止重复
             sql = '''update `groups` set `memberIDs`='%s' WHERE `groupID`=%d;''' % (members, groupID)
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
 
             return True
@@ -339,28 +394,38 @@ class DayMoonDB(object):
         '''
         try:
             sql = '''SELECT `leaderID` FROM `groups` WHERE `groupID`=%d''' % groupID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             realLeader = self.cur.fetchone()[0]
             if realLeader == userID: return 'LEADER不可以quit，你可以选择删除'
 
             sql='''SELECT `groupIDs` FROM `users` WHERE `userID`=%d'''%userID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             groups=json.loads(self.cur.fetchone()[0])
             if groupID in groups:
                 groups.remove(groupID)
                 groups=json.dumps(groups,ensure_ascii=False)
                 sql='''update `users` set `groupIDs`='%s' WHERE `userID`=%d;'''%(groups,userID)
+                self.lock.acquire()
                 self.cur.execute(sql)
+                self.lock.release()
                 self.db.commit()
 
             sql = '''SELECT `memberIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             members = json.loads(self.cur.fetchone()[0])
             if userID in members:
                 members.remove(userID)
                 members=json.dumps(members,ensure_ascii=False)
                 sql = '''update `groups` set `memberIDs`='%s' WHERE `groupID`=%d;''' % (members, groupID)
+                self.lock.acquire()
                 self.cur.execute(sql)
+                self.lock.release()
                 self.db.commit()
 
             return True
@@ -377,7 +442,9 @@ class DayMoonDB(object):
         :return: 成功为True，失败为err
         '''
         sql = '''SELECT `leaderID`, `memberIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         realLeader, members = self.cur.fetchone()
         members = json.loads(members)
         if realLeader != foot: return 'NO ACCESS'
@@ -393,7 +460,9 @@ class DayMoonDB(object):
         '''
 
         sql = '''SELECT * FROM `groups` WHERE `groupID`=%d''' % groupID
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         info = self.cur.fetchone()
         if not info:return None
 
@@ -422,7 +491,9 @@ class DayMoonDB(object):
         '''
         try:
             sql = '''SELECT `memberIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             members = self.cur.fetchone()[0]
             members = json.loads(members)
             if not dutyUserIDs:dutyUserIDs=members
@@ -436,18 +507,24 @@ class DayMoonDB(object):
             else:
                 sql = '''INSERT INTO `groupEvents` (`eventID`, `groupID`, `dutyUserIDs`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`,`location`,`eventType`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '1970-01-01 00:00:00', '0', '%s' ,'%s', '%d');''' % (
                     groupID, json.dumps(dutyUserIDs, ensure_ascii=False), eventName, description, beginTime,remind, location,eventType)
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
             self.cur.execute('select max(`eventID`) from `groupEvents`;')
             eventID = self.cur.fetchone()[0]
 
             sql = '''SELECT `eventIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             events = json.loads(self.cur.fetchone()[0])
             events.append(eventID)
             events = json.dumps(list(set(events)), ensure_ascii=False)  # 防止重复
             sql = '''update `groups` set `eventIDs`='%s' WHERE `groupID`=%d;''' % (events, groupID)
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
 
             return eventID
@@ -468,7 +545,9 @@ class DayMoonDB(object):
         :return: 成功返回True，失败返回err
         '''
         sql = '''SELECT `dutyUserIDs`, `groupID` FROM `groupEvents` WHERE `eventID`=%d''' % eventID
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         info=self.cur.fetchone()
         if not info: return None
         dutys_now = json.loads(info[0])
@@ -477,7 +556,9 @@ class DayMoonDB(object):
 
         if dutyUserIDs:  # 若要改变该事件的管理员用户
             sql = '''SELECT `memberIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             members = self.cur.fetchone()[0]
             members = json.loads(members)
             dutyUserIDs = list(set(dutyUserIDs) & set(members))  # 取交集
@@ -500,7 +581,9 @@ class DayMoonDB(object):
         sql = "UPDATE `groupEvents` SET " + wholeStr + " WHERE `groupEvents`.`eventID` = %d;" % eventID
 
         try:
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
             return True
         except Exception as err:
@@ -515,14 +598,18 @@ class DayMoonDB(object):
         :return: 若存在事件，返回dict_json，否则返回None或err
         '''
         sql = '''SELECT * FROM `groupEvents` WHERE `eventID`=%d''' % eventID
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         info = self.cur.fetchone()
         if not info: return None
         realusers = json.loads(info[2])
         groupID=info[1]
         if userID not in realusers:
             sql = '''SELECT `leaderID` FROM `groups` WHERE `groupID`=%d''' % groupID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             leader = self.cur.fetchone()[0]
             if userID!=leader:return 'NO ACCESS'
 
@@ -542,7 +629,9 @@ class DayMoonDB(object):
         '''
         try:
             sql = '''SELECT `dutyUserIDs`,`groupID` FROM `groupEvents` WHERE `eventID`=%d''' % eventID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             info=self.cur.fetchone()
 
             if not info:return None
@@ -551,16 +640,22 @@ class DayMoonDB(object):
             if userID not in users:return 'NO ACCESS'
 
             sql='''DELETE FROM `groupEvents` WHERE `groupEvents`.`eventID` = %d'''%eventID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
 
             sql = '''SELECT `eventIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             events = json.loads(self.cur.fetchone()[0])
             events.remove(eventID)
             events = json.dumps(events, ensure_ascii=False)
             sql = '''update `groups` set `eventIDs`='%s' WHERE `groupID`=%d;''' % (events, groupID)
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             self.db.commit()
 
             return True
@@ -578,7 +673,9 @@ class DayMoonDB(object):
         :return: json_dict
         '''
         sql = '''SELECT `eventIDs` FROM `users` WHERE `userID`=%d''' % userID
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         events = json.loads(self.cur.fetchone()[0])
 
         allMyEvents=[]
@@ -593,7 +690,9 @@ class DayMoonDB(object):
         :return: json_dict
         '''
         sql = '''SELECT `groupIDs` FROM `users` WHERE `userID`=%d''' % userID
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         groups = json.loads(self.cur.fetchone()[0])
 
         allMyGroups=[]
@@ -611,12 +710,16 @@ class DayMoonDB(object):
 
         allMyGroupEvents=[]
         sql = '''SELECT `eventIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         events = json.loads(self.cur.fetchone()[0])
         for eventID in events:
             sql = '''SELECT * FROM `groupEvents` WHERE `eventID`=%d''' % eventID
             print(sql)
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             info = self.cur.fetchone()
             realusers = json.loads(info[2])
             if (userID in realusers) or (realusers == []):
@@ -630,17 +733,23 @@ class DayMoonDB(object):
 
     def getAllMyGroupEventlists(self,userID):
         sql = '''SELECT `groupIDs` FROM `users` WHERE `userID`=%d''' % userID
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         groups = json.loads(self.cur.fetchone()[0])
 
         allMyGroupEvents = []
         for groupID in groups:
             sql = '''SELECT `eventIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+            self.lock.acquire()
             self.cur.execute(sql)
+            self.lock.release()
             events = json.loads(self.cur.fetchone()[0])
             for eventID in events:
                 sql = '''SELECT * FROM `groupEvents` WHERE `eventID`=%d''' % eventID
+                self.lock.acquire()
                 self.cur.execute(sql)
+                self.lock.release()
                 info = self.cur.fetchone()
                 realusers = json.loads(info[2])
                 if userID in realusers:
@@ -650,7 +759,7 @@ class DayMoonDB(object):
                                 'AllMember': str(realusers == []), 'MemberID': realusers, 'location': info[9],
                                 'eventType': info[10]}
                     allMyGroupEvents.append(infodict)
-        return json.dumps(allMyGroupEvents, ensure_ascii=False)
+        return allMyGroupEvents
 
     # -----------个人信息汇总-----------#
 
@@ -658,7 +767,9 @@ class DayMoonDB(object):
         qrCodeKey = str(uuid.uuid4())
         startTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         sql = '''INSERT INTO `qrcode` (`qrCodeKey`, `groupID`, `startTime`) VALUES ('%s', '%d', '%s');''' % (qrCodeKey, groupID ,startTime)
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         self.db.commit()
         return qrCodeKey
 
@@ -666,7 +777,9 @@ class DayMoonDB(object):
         print(qrCodeKey)
         sql = '''SELECT * FROM `qrcode` WHERE `qrCodeKey`= \'%s\'''' % qrCodeKey
         print(sql)
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         info = self.cur.fetchone()
 
         if not info: return False

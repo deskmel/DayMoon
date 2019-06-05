@@ -5,8 +5,8 @@ from flask import Response
 import os, sys, threading
 from sql_utils import *
 
-f = open("err.log","w")
-sys.stderr = f
+#f = open("err.log","w")
+#sys.stderr = f
 app = Flask(__name__)
 rem=Remind()
 
@@ -37,6 +37,7 @@ def login():
         logstr=request.form.get('logstr')
         password = request.form.get('password')
         isValid=db.isValidLogin(logstr,password)
+        print(isValid)
         if isValid:
             return str(isValid)
     return ""

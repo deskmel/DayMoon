@@ -52,7 +52,7 @@ public class ClientGroupEventControl {
         params.put("groupID", String.valueOf(groupID));
         System.out.println(getInstance().currentUserID);
         System.out.println(groupID);
-        new HttpRequestThread(SERVER_IP+"getallmygroupevents", params, dataCallback).start();
+        HttpRequest.post(SERVER_IP+"getallmygroupevents", params, dataCallback);
     }
 
     public static void createGroupEvent(GroupEventInfomationHolder groupEventInfomationHolder, HttpRequest.DataCallback dataCallback){
@@ -67,7 +67,7 @@ public class ClientGroupEventControl {
         params.put("eventType", String.valueOf(groupEventInfomationHolder.eventType));
         params.put("whetherProcess", groupEventInfomationHolder.allday?"1":"0");
         System.out.println(params);
-        new HttpRequestThread(SERVER_IP+"submitgroupevent", params, dataCallback).start();
+        HttpRequest.post(SERVER_IP+"submitgroupevent", params, dataCallback);
 
     }
 
@@ -75,7 +75,7 @@ public class ClientGroupEventControl {
         Map<String, String> params = new HashMap<>();
         params.put("userID", String.valueOf(getInstance().currentUserID));
         params.put("eventID", String.valueOf(eventID));
-        new HttpRequestThread(SERVER_IP+"getgroupevent", params, dataCallback).start();
+        HttpRequest.post(SERVER_IP+"getgroupevent", params, dataCallback);
     }
 
 

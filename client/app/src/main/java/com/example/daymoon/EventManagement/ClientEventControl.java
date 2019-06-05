@@ -55,7 +55,7 @@ public class ClientEventControl {//施工
     public static void getEventListFromServer(Runnable callback){
         Map<String,String> params = new HashMap<>();
         params.put("userID",String.valueOf(getInstance().currentUserID));
-        new HttpRequestThread(SERVER_IP+"getallmyevents",params, new HttpRequest.DataCallback(){
+        HttpRequest.post(SERVER_IP+"getallmyevents",params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
                 Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
@@ -70,13 +70,13 @@ public class ClientEventControl {//施工
             public void requestFailure(Request request, IOException e) {
                 Log.e("shit", "oops! Something goes wrong");
             }
-        }).start();
+        });
     }
 
     public static void getGroupEventListFromServer(Runnable callback){
         Map<String,String> params = new HashMap<>();
         params.put("userID",String.valueOf(getInstance().currentUserID));
-        new HttpRequestThread(SERVER_IP+"getallmygroupeventlists",params, new HttpRequest.DataCallback(){
+        HttpRequest.post(SERVER_IP+"getallmygroupeventlists",params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
                 Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
@@ -90,7 +90,7 @@ public class ClientEventControl {//施工
             public void requestFailure(Request request, IOException e) {
                 Log.e("shit", "oops! Something goes wrong");
             }
-        }).start();
+        });
     }
 
 
@@ -112,7 +112,7 @@ public class ClientEventControl {//施工
         params.put("endTime", event.getEndTimeFormat());
         params.put("description", event.getDescription());
 
-        new HttpRequestThread(SERVER_IP+"submitevent", params, new HttpRequest.DataCallback(){
+        HttpRequest.post(SERVER_IP+"submitevent", params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
                 Log.i("success","add the event successfully");
@@ -129,7 +129,7 @@ public class ClientEventControl {//施工
                 Log.e("shit","oops! Something goes wrong");
                 failure.run();
             }
-        }).start();
+        });
     }
 
 
@@ -141,7 +141,7 @@ public class ClientEventControl {//施工
         params.put("userID", String.valueOf(getInstance().currentUserID));
         params.put("eventID", String.valueOf(eventID));
 
-        new HttpRequestThread(SERVER_IP+"deleteevent", params, new HttpRequest.DataCallback(){
+        HttpRequest.post(SERVER_IP+"deleteevent", params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
                 Log.i("success","delete the event successfully");
@@ -157,7 +157,7 @@ public class ClientEventControl {//施工
                 Log.e("shit","oops! Something goes wrong");
                 failure.run();
             }
-        }).start();
+        });
 
     }
 
@@ -191,7 +191,7 @@ public class ClientEventControl {//施工
         params.put("description", event.getDescription());
 
         if (index == -1) return;
-        new HttpRequestThread(SERVER_IP+"editevent", params, new HttpRequest.DataCallback(){
+        HttpRequest.post(SERVER_IP+"editevent", params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
                 Log.i("success","add the event successfully");
@@ -206,7 +206,7 @@ public class ClientEventControl {//施工
                 Log.e("shit","oops! Something goes wrong");
                 failure.run();
             }
-        }).start();
+        });
 
     }
 

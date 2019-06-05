@@ -58,7 +58,7 @@ public class ClientGroupInfoControl {
     public static void getGroupListFromServer(Runnable success, Runnable failure){
         Map<String, String> params = new HashMap<>();
         params.put("userID", String.valueOf(getInstance().currentUserID));
-        new HttpRequestThread(SERVER_IP+"getallmygroups", params, new HttpRequest.DataCallback(){
+        HttpRequest.post(SERVER_IP+"getallmygroups", params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
                 Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
@@ -72,7 +72,7 @@ public class ClientGroupInfoControl {
                 Log.e("shit", "oops! Something goes wrong");
                 failure.run();
             }
-        }).start();
+        });
     }
 
     public static void createGroup(GroupInformationHolder groupInformationHolder, Runnable success, Runnable failure){
@@ -82,7 +82,7 @@ public class ClientGroupInfoControl {
         params.put("leaderID", String.valueOf(getInstance().currentUserID));
         final String uuid = UUID.randomUUID().toString();
         params.put("imgName", uuid);
-        new HttpRequestThread(SERVER_IP+"creategroup", "image", uuid, groupInformationHolder.image, params, new HttpRequest.DataCallback(){
+        HttpRequest.postFile(SERVER_IP+"creategroup", "image", uuid, groupInformationHolder.image, params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
                 //TODO 服务器不同返回值进行不同操作
@@ -93,7 +93,7 @@ public class ClientGroupInfoControl {
                 Log.e("shit", "oops! Something goes wrong");
                 failure.run();
             }
-        }).start();
+        });
     }
 
     /*public static String getLatestGroupEventDes(int groupId){
@@ -123,14 +123,14 @@ public class ClientGroupInfoControl {
     public static void generateQRCode(int groupID, HttpRequest.DataCallback dataCallback){
         Map<String, String> params = new HashMap<>();
         params.put("groupID", String.valueOf(groupID));
-        new HttpRequestThread(SERVER_IP+"genqrcode", params, dataCallback).start();
+        HttpRequest.post(SERVER_IP+"genqrcode", params, dataCallback);
     }
 
     public static void joinGroupByQRCode(String qrCodeKey, Runnable success, Runnable failure){
         Map<String, String> params = new HashMap<>();
         params.put("qrCodeKey", qrCodeKey);
         params.put("userID", String.valueOf(getInstance().currentUserID));
-        new HttpRequestThread(SERVER_IP+"joingroupbyqrcode", params, new HttpRequest.DataCallback(){
+        HttpRequest.post(SERVER_IP+"joingroupbyqrcode", params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
                 //TODO 服务器不同返回值进行不同操作
@@ -141,7 +141,7 @@ public class ClientGroupInfoControl {
                 Log.e("shit", "oops! Something goes wrong");
                 failure.run();
             }
-        }).start();
+        });
     }
 }
 

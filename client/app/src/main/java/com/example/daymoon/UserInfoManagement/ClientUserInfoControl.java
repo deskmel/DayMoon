@@ -41,7 +41,7 @@ public class ClientUserInfoControl {
     public static void getUserInfoFromServer(User user, int userID, Runnable success, Runnable failure){
         Map<String,String> params = new HashMap<>();
         params.put("userID", String.valueOf(userID));
-        new HttpRequestThread(SERVER_IP+"getuserinfo",params, new HttpRequest.DataCallback(){
+        HttpRequest.post(SERVER_IP+"getuserinfo",params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
                 Gson gson = new GsonBuilder().create();
@@ -54,7 +54,7 @@ public class ClientUserInfoControl {
                 Log.e("shit", "oops! Something goes wrong");
                 failure.run();
             }
-        }).start();
+        });
     }
 
     public static void addUser(UserInformationHolder userInformationHolder, HttpRequest.DataCallback dataCallback){
@@ -72,7 +72,7 @@ public class ClientUserInfoControl {
         params.put("phoneNumber",userInformationHolder.name);
         System.out.println(userInformationHolder.name);
         System.out.println(String.valueOf(MD5Tool.encode(userInformationHolder.password)));
-        new HttpRequestThread(SERVER_IP+"signup",params, dataCallback).start();
+        HttpRequest.post(SERVER_IP+"signup",params, dataCallback);
     }
 
     public static void login(UserInformationHolder userInformationHolder, HttpRequest.DataCallback dataCallback){
@@ -80,10 +80,9 @@ public class ClientUserInfoControl {
         params.put("logstr", userInformationHolder.name);
         try {
             params.put("password", String.valueOf(MD5Tool.encode(userInformationHolder.password)));
-            System.out.println(String.valueOf(MD5Tool.encode(userInformationHolder.password)));
         }catch (RuntimeException e){
             return;
         }
-        new HttpRequestThread(SERVER_IP+"login", params, dataCallback).start();
+        HttpRequest.post(SERVER_IP+"login", params, dataCallback);
     }
 }
