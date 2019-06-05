@@ -17,3 +17,4 @@ client/.idea/workspace.xml
 /build
 /captures
 .externalNativeBuild
+/server/venv

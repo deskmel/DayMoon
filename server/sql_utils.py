@@ -20,7 +20,7 @@ class Remind(object):
         return json.dumps(self.__dict__,ensure_ascii=False)
 
 class DayMoonDB(object):
-    def __init__(self,lock,host='localhost',user="root", db="DayMoon"):
+    def __init__(self,lock,host='localhost',user="root", db="daymoon"):
         self.db = pymysql.connect(host=host, user=user,db=db,charset="utf8",use_unicode=True)
         self.cur=self.db.cursor()
         self.lock=lock
