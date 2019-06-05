@@ -49,7 +49,7 @@
                     android:layout_toLeftOf="@+id/group"
                     android:layout_marginRight="10dp">
                 <ImageButton
-                    android:id="@+id/timelineButton"
+                    android:id="@+id/timetableButton"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:padding="2dp"

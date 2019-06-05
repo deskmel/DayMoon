@@ -10,6 +10,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -46,6 +47,7 @@ import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.GroupInfoManagement.ClientGroupInfoControl;
 
+import com.example.daymoon.Layout.MyTimeTableUtils;
 import com.example.daymoon.LocalDatabase.LocalDatabaseHelper;
 
 import com.example.daymoon.Layout.ViewPagerSlide;
@@ -65,6 +67,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -79,20 +82,16 @@ import androidx.annotation.NonNull;
 
 public class CalendarActivity extends DrawerActivity implements CalendarView.OnViewChangeListener{
 
-    private Map<String, Calendar> map = new HashMap<>();
     private CalendarView calendarView;
     private CalendarView weekView;
     private CalendarLayout calendarLayout;
-    private LinearLayout picker;//日期选择器
     private TextView tvMonth;
     private RecyclerView calendarRecyclerView;
     private RecyclerView timelineRecyclerView;
     private Context mainContext = null;
     private EventViewAdapter adapter = null;
-    private Button btn_add;//添加事件的按钮
     private AlertDialog alert = null;//提醒框
     private ViewPagerSlide viewPager;
-    private ImageButton user,calendarButton,group;
     //private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
     private int selectYear;
     private int selectMonth;
@@ -107,41 +106,47 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     private View calendarPager;
     private View timeLine;
     private View timetablePager;
-    private int userId;
     private ArrayList<View> viewList;
     private Cursor cursor;
     private SQLiteDatabase db;
-    private ImageButton toTimeLinePageButton;
     private ConstraintLayout clContent;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userId = getIntent().getIntExtra("userid",-1);
-        if (userId<0) System.out.println("no userID given");
-        Log.d("wtf",String.valueOf(userId));
+        int userId = getIntent().getIntExtra("userid", -1);
+        if (userId <0) System.out.println("no userID given");
         ClientEventControl.setCurrentUserID(userId);//TODO 替换为由登录界面传递过来的ID
         ClientEventControl.getEventListFromServer(new Runnable() {
             @Override
             public void run() {
                 setSchemeDate();
-                flushListView();
+                flushCalendarListView();
+            }
+        });
+        ClientEventControl.getGroupEventListFromServer(new Runnable() {
+            @Override
+            public void run() {
+                setSchemeDate();
+                flushCalendarListView();
             }
         });
         ClientGroupInfoControl.setCurrentUserID(userId);
         ClientGroupEventControl.setCurrentUserID(userId);
         setContentView(R.layout.activity_canlendar);//绑定界面
+        //设置沉浸式界面 - 狗屎方法 - 但是不想改了
         if (!StatusBarUtil.setStatusBarDarkTheme(this, true)) {
             //如果不支持设置深色风格 为了兼容总不能让状态栏白白的看不清, 于是设置一个状态栏颜色为半透明,
             //这样半透明+白=灰, 状态栏的文字能看得清
             StatusBarUtil.setStatusBarColor(this,0x55000000);
         }
         mainContext = CalendarActivity.this;
-        user=findViewById(R.id.user);
-        toTimeLinePageButton = findViewById(R.id.timelineButton);
-        group=findViewById(R.id.group);
-        //ViewPager
+        //初始化多个页面
+        //日历 月视图 周视图 时间轴
         initPage();
+        //按钮
+        initButton();
+        //侧滑菜单实现
+        initMenu();
     }
 
     private  void initPage(){
@@ -184,13 +189,14 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         };
         viewPager.setAdapter(pagerAdapter);
         //日历
-        //按钮
-        initButton();
-        //侧滑菜单实现
-        initMenu();
     }
+
+    /**
+     * 按钮绑定
+     */
     private void initButton() {
         //绑定小组页面
+        ImageButton group = findViewById(R.id.group);
         group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,6 +205,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
             }
         });
         ViewFlipper viewFlipper = findViewById(R.id.flipper);
+        ImageButton toTimeLinePageButton = findViewById(R.id.timetableButton);
         toTimeLinePageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,7 +222,12 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
             }
         });
     }
+
+    /**
+     * 个人界面 后期修改
+     */
     private void initMenu(){
+        ImageButton user = findViewById(R.id.user);
         if (getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
@@ -250,21 +262,8 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
 
     /**
      * 时间轴界面
+     * 暂时未加入
      */
-    private void flushTimeViewList(){
-        NewTimeLineAdapter timeLineAdapter=new NewTimeLineAdapter(ClientEventControl.getEventList(),this);
-        timelineRecyclerView = timeLine.findViewById(R.id.event_list);; //绑定listview
-        timelineRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        timelineRecyclerView.setAdapter(timeLineAdapter);
-        timeLineAdapter.setonItemClickListener(new NewTimeLineAdapter.OnRecyclerItemClickListener() {
-            @Override
-            public void onItemClick(View v, int Position) {
-                Intent intent=new Intent(CalendarActivity.this,EventDetailActivity.class);
-                intent.putExtra("groupevent",ClientEventControl.getEventList().get(Position));
-                startActivityForResult(intent,0);
-            }
-        });
-    }
     private void initTimeLinePage(){
         timeLine = View.inflate(this,R.layout.timeline_layout,null);
         ImageView eventaddbutton=timeLine.findViewById(R.id.add_event_image);
@@ -282,21 +281,29 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 startActivityForResult(intent,0);
             }
         });
-        flushTimeViewList();
+        flushTimeLineListView();
     }
     /**
-     * 未完成 周视图形式界面，以事件块的形式表现事件
+     * 周视图形式界面，以事件块的形式表现事件
+     * ToDo 周切换时 下发时间块随之滑动
      */
     private void initTimeTablePage(){
         timetablePager=View.inflate(this,R.layout.timetable_layout,null);
         clContent = timetablePager.findViewById(R.id.cl_content);
         weekView = timetablePager.findViewById(R.id.calendarView);
-        initData();
-        weekEventList = ClientEventControl.findEventListByWeek(selectYear,selectWeek);
-        for (Event event:weekEventList){
-            setNewTextView(event);
-        }
+        weekView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(Calendar calendar, boolean isClick) {
+
+                GregorianCalendar c = new GregorianCalendar(calendar.getYear(),calendar.getMonth()-1,calendar.getDay());
+                Log.d("week",String.valueOf(c.get(java.util.Calendar.WEEK_OF_YEAR)));
+                Log.d("year",String.valueOf(c.get(java.util.Calendar.YEAR)));
+                selectWeek = c.get(java.util.Calendar.WEEK_OF_YEAR);
+                flushTimeTableListView();
+            }
+        });
     }
+
 
     /**
      * 日历界面 主界面
@@ -307,9 +314,11 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         calendarView = calendarPager.findViewById(R.id.calendarView);//绑定calendar
         calendarLayout=calendarPager.findViewById(R.id.calendarLayout);
         Log.d("s",calendarLayout.toString());
-        picker = calendarPager.findViewById(R.id.picker);//时间选择器
+        //日期选择器
+        LinearLayout picker = calendarPager.findViewById(R.id.picker);
         tvMonth = calendarPager.findViewById(R.id.tv_month);//textview
-        btn_add = calendarPager.findViewById(R.id.addbutton);
+        //添加事件的按钮
+        Button btn_add = calendarPager.findViewById(R.id.addbutton);
         calendarRecyclerView = calendarPager.findViewById(R.id.list_one); //绑定listview
         calendarRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         calendarRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -353,11 +362,12 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Calendar calendar, boolean isClick) {
+                GregorianCalendar c = new GregorianCalendar(calendar.getYear(),calendar.getMonth()-1,calendar.getDay());
                 selectYear = calendar.getYear();
                 selectMonth = calendar.getMonth();
                 selectDay = calendar.getDay();
-                selectWeek = calendar.getWeek();
-                flushListView();
+                selectWeek = c.get(java.util.Calendar.WEEK_OF_YEAR);
+                flushCalendarListView();
             }
         });
         //为加号绑定此弹出表单
@@ -376,19 +386,51 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         });
 
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        flushListView();
-        setSchemeDate();
+
+    /**
+     * 事件列表更新 
+     * 进入页面时刷新
+     * 返回页面时刷新
+     * 日期更换时刷新
+     * 
+     */
+    private void flushView(){
+        flushCalendarListView();
+        flushTimeTableListView();
+        flushTimeLineListView();
     }
 
-
-    private void flushListView(){
+    private void flushTimeLineListView(){
+        NewTimeLineAdapter timeLineAdapter=new NewTimeLineAdapter(ClientEventControl.getEventList(),this);
+        timelineRecyclerView = timeLine.findViewById(R.id.event_list);; //绑定listview
+        timelineRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        timelineRecyclerView.setAdapter(timeLineAdapter);
+        timeLineAdapter.setonItemClickListener(new NewTimeLineAdapter.OnRecyclerItemClickListener() {
+            @Override
+            public void onItemClick(View v, int Position) {
+                Intent intent=new Intent(CalendarActivity.this,EventDetailActivity.class);
+                intent.putExtra("groupevent",ClientEventControl.getEventList().get(Position));
+                startActivityForResult(intent,0);
+            }
+        });
+    }
+    
+    
+    private void flushTimeTableListView(){
+        clContent.removeViews(50,weekEventList==null? 0:weekEventList.size());
+        weekEventList = ClientEventControl.findEventListByWeek(selectYear,selectWeek);
+        //weekGroupEventList = ClientEventControl.findGroupEventListByWeek(selectYear,selectWeek);
+        weekGroupEventList = null;
+        clContent=timetablePager.findViewById(R.id.cl_content);
+        MyTimeTableUtils myTimeTableUtils = new MyTimeTableUtils(this,clContent,weekEventList,weekGroupEventList);
+        myTimeTableUtils.flush();
+    }
+    
+    private void flushCalendarListView(){
         todayEventList = ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay);
-        Log.d("num",String.valueOf(todayEventList.size()));
-        todayGroupEventList = new GroupEventList();
-        todayGroupEventList.add(new GroupEvent(0,1,"白痴","真的傻逼",2019,5,31,9,30));
+        todayGroupEventList = ClientEventControl.findGroupEventListByDate(selectYear, selectMonth, selectDay);
+        Log.d("num",String.valueOf(todayGroupEventList.size()));
+        //todayGroupEventList.add(new GroupEvent(0,1,"白痴","真的傻逼",2019,5,31,9,30));
         adapter = new EventViewAdapter(todayEventList, mainContext,todayGroupEventList); //设置adapter
         calendarRecyclerView .setAdapter(adapter);
         adapter.setonItemClickListener(new EventViewAdapter.OnRecyclerItemClickListener() {
@@ -412,72 +454,14 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     }
 
     private void setSchemeDate(){
-        map =ClientEventControl.getDatesHasEvent();
+        Map<String, Calendar> map = ClientEventControl.getDatesHasEvent();
         calendarView.setSchemeDate(map);
     }
 
-
-
-    private int oneHourPx60;//一个小时高度是60dp，转换成像素
-    private int oneMimutePx1;//一分钟高度是1dp，转化成像素
-    private int oneDayPx;
-    private int offset;
-    private int width;
-    private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-
-    //放在onCreate里
-    private void initData() {
-        oneHourPx60 = pxUtils.dip2px(this, 60);//假如你不是60dp就换掉
-        oneMimutePx1 = pxUtils.dip2px(this, 1);//这个用你的1小时的高度除60就行了
-        //显示控件宽度，不是必须得，假如你的宽度是动态的，然后距离两边多少也可以
-        offset = pxUtils.dip2px(this,40);
-        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics dm = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(dm);
-        int dmwidth = dm.widthPixels;
-        oneDayPx = (dmwidth-offset)/7;
-        width = oneDayPx;}
-
-    private void setNewTextView(Event event) {
-        //生成一个放入的控件
-        TextView textView = new TextView(this);
-        //给控件赋予一个id
-        textView.setId(View.generateViewId());
-        //设置控件属性，这个不用照抄，自己喜欢什么弄什么就行，显示什么背景什么都自己定
-        textView.setBackground(getResources().getDrawable(R.drawable.blue_corner_bg));
-        textView.setPadding(2,5,2,2);
-        textView.setTextColor(getResources().getColor(R.color.black));
-        textView.setText(event.getTitle());
-        //底下获取Calendar，为了拿到一天的时间
-        //获取开始时间的Calendar，这个东西很强大，能单独设置年月日时分秒为多少
-        java.util.Calendar calendar1 = java.util.Calendar.getInstance();
-        calendar1.setTime(event.getBeginTime().getTime());
-        //获取结束时间的Calendar
-        java.util.Calendar calendar2 = java.util.Calendar.getInstance();
-        calendar2.setTime(event.getEndTime().getTime());
-        //设置高度，算出他们直接差了多少分钟，然后乘以分钟所占的像素
-        int height = (int) ((calendar2.getTimeInMillis() - calendar1.getTimeInMillis()) /
-                60000 * oneMimutePx1);
-        //动态在ConstraintLayout里面加入控件，需要ConstraintSet，使用这个，就必须所有控件都有id
-        //这就是上面为什么把ConstraintLayout里所有控件都加了id的原因
-        ConstraintSet constraintSet = new ConstraintSet();
-        //把显示内容添加进去
-        textView.setTextSize(12);
-        clContent.addView(textView);
-        //计算距离顶部的高度，很好理解，比如说13点20分，那就是距离0点有13个小时，再加上20分钟的高度
-        int marginTop = calendar1.get(java.util.Calendar.HOUR_OF_DAY) * oneHourPx60 +
-                calendar1.get(java.util.Calendar.MINUTE) * oneMimutePx1;
-        int marginStart = (calendar1.get(java.util.Calendar.DAY_OF_WEEK)-1) * oneDayPx + offset;
-        //设置显示内容宽度
-        constraintSet.clone(clContent);
-        constraintSet.constrainWidth(textView.getId(), width);
-        constraintSet.constrainHeight(textView.getId(), height);
-        //设置显示位置，这个是水平居中，假如需要偏左偏右，就设置下margin，参考最后一个connect
-        constraintSet.connect(textView.getId(),ConstraintSet.START,
-                ConstraintSet.PARENT_ID,ConstraintSet.START,marginStart);
-        constraintSet.connect(textView.getId(),ConstraintSet.TOP,
-                ConstraintSet.PARENT_ID,ConstraintSet.TOP,marginTop);
-        //应用
-        constraintSet.applyTo(clContent);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        flushView();
+        setSchemeDate();
     }
 }
