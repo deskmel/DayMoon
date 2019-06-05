@@ -1,15 +1,17 @@
 from flask import Flask
-from flask import render_template,redirect,url_for
 from flask import request
 from flask import Response
 
-import uuid
-import os
+import os, sys, threading
 from sql_utils import *
 
+f = open("err.log","w")
+sys.stderr = f
 app = Flask(__name__)
 rem=Remind()
-db=DayMoonDB()
+
+lock=threading.Lock()
+db=DayMoonDB(lock)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 @app.route('/')

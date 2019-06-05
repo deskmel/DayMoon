@@ -20,9 +20,10 @@ class Remind(object):
         return json.dumps(self.__dict__,ensure_ascii=False)
 
 class DayMoonDB(object):
-    def __init__(self,host='localhost',user="root", db="daymoon"):
-        self.db = pymysql.connect(host=host, user=user, password="7UdiP3X8",db=db,charset="utf8",use_unicode=True)
+    def __init__(self,lock,host='localhost',user="root", db="DayMoon"):
+        self.db = pymysql.connect(host=host, user=user,db=db,charset="utf8",use_unicode=True)
         self.cur=self.db.cursor()
+        self.lock=lock
 
     def isValidLogin(self,logstr,password):
         '''
@@ -32,7 +33,10 @@ class DayMoonDB(object):
         :return: 若成功返回int userID, 失败返回bool False
         '''
         sql="SELECT `userID` FROM `users` WHERE `userName`='%s' AND `userPassword`='%s'"%(logstr,password)
+        print(sql)
+        self.lock.acquire()
         self.cur.execute(sql)
+        self.lock.release()
         userIDset = self.cur.fetchone()
         if userIDset:return userIDset[0]
         else:
