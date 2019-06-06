@@ -448,7 +448,6 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         MyTimeTableUtils myTimeTableUtils = new MyTimeTableUtils(this,clContent,weekEventList,weekGroupEventList);
         myTimeTableUtils.flush();
     }
-    
     private void flushCalendarListView(){
         todayEventList = ClientEventControl.findEventListByDate(selectYear, selectMonth, selectDay);
         todayGroupEventList = ClientEventControl.findGroupEventListByDate(selectYear, selectMonth, selectDay);

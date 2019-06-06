@@ -160,16 +160,17 @@ public class GroupScheduleActivity extends AppCompatActivity {
             }
         });
         ViewFlipper viewFlipper = findViewById(R.id.flipper);
-        ViewFlipper viewFlipper1 = findViewById(R.id.flipper1);
         ViewFlipper viewFlipper2 = findViewById(R.id.flipper2);
+        ViewFlipper viewFlipper3 = findViewById(R.id.flipper3);
         ImageButton notification = findViewById(R.id.notification);
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(1);
                 viewFlipper.showNext();
-                viewFlipper1.showNext();
                 viewFlipper2.showNext();
+                TextView today = findViewById(R.id.today);
+                today.setText("公告");
             }
         });
         ImageButton groupback = findViewById(R.id.groupback);
@@ -178,8 +179,11 @@ public class GroupScheduleActivity extends AppCompatActivity {
             public void onClick(View v) {
                 viewPager.setCurrentItem(0);
                 viewFlipper.showNext();
-                viewFlipper1.showNext();
                 viewFlipper2.showNext();
+                Calendar c=Calendar.getInstance();
+                final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
+                TextView today = findViewById(R.id.today);
+                today.setText(timeformat.format(c.getTime()));
             }
         });
         ImageButton timeTableButton = findViewById(R.id.freetimetable);
@@ -187,9 +191,27 @@ public class GroupScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(2);
+                viewFlipper3.showNext();
+                Calendar c=Calendar.getInstance();
+                final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
+                TextView today = findViewById(R.id.today);
+                today.setText(timeformat.format(c.getTime()));
+            }
+        });
+        ImageButton backButton = findViewById(R.id.calendar);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(0);
+                viewFlipper3.showNext();
+                Calendar c=Calendar.getInstance();
+                final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
+                TextView today = findViewById(R.id.today);
+                today.setText(timeformat.format(c.getTime()));
             }
         });
     }
+
     private void initPage(){
         viewPager=(ViewPagerSlide) findViewById(R.id.viewpagers);
         initTimeLinePage();
@@ -341,8 +363,6 @@ public class GroupScheduleActivity extends AppCompatActivity {
             }
         });
     }
-
-
     private void initData(){
 
         groupEventList=new GroupEventList();

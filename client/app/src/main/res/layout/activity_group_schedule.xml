@@ -68,31 +68,16 @@
                 android:layout_gravity="center"
                 android:textSize="13dp"
                 android:text="小组"/>
-            <ViewFlipper
-                android:id="@+id/flipper1"
+            <TextView
+                android:id="@+id/today"
+                android:typeface="monospace"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true">
-                <TextView
-                    android:id="@+id/today"
-                    android:typeface="monospace"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="10dp"
-                    android:text="2019/9/5"
-                    android:layout_gravity="center"
-                    android:textColor="@color/black"
-                    android:background="@color/white"/>
-                <TextView
-                    android:id="@+id/notices"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="10dp"
-                    android:text="小组公告"
-                    android:layout_gravity="center"
-                    android:textColor="@color/black"
-                    android:background="@color/white"/>
-            </ViewFlipper>
+                android:textSize="10dp"
+                android:text="2019/9/5"
+                android:layout_gravity="center"
+                android:textColor="@color/black"
+                android:background="@color/white"/>
         </LinearLayout>
 
 
@@ -116,17 +101,30 @@
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             />
-        <ImageButton
+        <ViewFlipper
             android:layout_toLeftOf="@+id/info"
+            android:id="@+id/flipper3"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+        <ImageButton
             android:id="@+id/freetimetable"
             android:scaleType="fitCenter"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:padding="4dp"
-            android:layout_centerVertical="true"
             android:src="@mipmap/calendar"
-            android:layout_marginRight="10dp"
             android:background="@color/white"/>
+        <ImageButton
+            android:id="@+id/calendar"
+            android:scaleType="fitCenter"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="4dp"
+            android:src="@drawable/ic_timeline_black_24dp"
+            android:background="@color/white"/>
+        </ViewFlipper>
     </RelativeLayout>
 </LinearLayout>
     <RelativeLayout
