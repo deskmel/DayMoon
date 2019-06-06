@@ -95,7 +95,7 @@ public class MyMonthView extends MonthView {
                 canvas.drawCircle(cx , cy + 45, mItemWidth / 15, paint3);
             }
         }
-        else if (hasScheme) {
+        else if (hasScheme && calendar.isCurrentMonth()) {
             if ("1".equals(calendar.getScheme())) {
                 // 不可完成的，绘制圆
                 paint1.setStrokeWidth(0);
@@ -104,9 +104,11 @@ public class MyMonthView extends MonthView {
                 paint1.setStyle(Paint.Style.FILL);
                 canvas.drawCircle(cx , cy + 45, mItemWidth / 15, paint1);
             } else if ("2".equals(calendar.getScheme())) {
-                //可以完成的，先绘制背景图再写文字，防止文字被遮住
-                canvas.drawBitmap(dayBgBitmap, x + mItemWidth / 4 - 5, y + mItemHeight / 4 + 8, paint2);
-                canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, paint2);
+                paint1.setStrokeWidth(0);
+                canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, mCurMonthTextPaint);
+                paint1.setColor(ContextCompat.getColor(context, R.color.green));
+                paint1.setStyle(Paint.Style.FILL);
+                canvas.drawCircle(cx , cy + 45, mItemWidth / 15, paint1);
             } else if ("3".equals(calendar.getScheme())) {
                 //今日已完成的，绘制圆+打勾图片
                 paint1.setStrokeWidth(0);
@@ -130,7 +132,6 @@ public class MyMonthView extends MonthView {
             else{
                 canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, calendar.isCurrentMonth() ? mCurMonthTextPaint : mOtherMonthTextPaint);
             }
-
         }
     }
 
@@ -138,7 +139,6 @@ public class MyMonthView extends MonthView {
         final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
-
     public static int dpToPx(Context context, float dp){
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);

@@ -417,10 +417,13 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     
     
     private void flushTimeTableListView(){
-        clContent.removeViews(50,weekEventList==null? 0:weekEventList.size());
+        int size = 0;
+        size += weekEventList==null? 0:weekEventList.size();
+        size += weekGroupEventList==null?0:weekGroupEventList.size();
+        clContent.removeViews(50,size);
         weekEventList = ClientEventControl.findEventListByWeek(selectYear,selectWeek);
         //weekGroupEventList = ClientEventControl.findGroupEventListByWeek(selectYear,selectWeek);
-        weekGroupEventList = null;
+        weekGroupEventList = ClientEventControl.findGroupEventListByWeek(selectYear,selectWeek);
         clContent=timetablePager.findViewById(R.id.cl_content);
         MyTimeTableUtils myTimeTableUtils = new MyTimeTableUtils(this,clContent,weekEventList,weekGroupEventList);
         myTimeTableUtils.flush();

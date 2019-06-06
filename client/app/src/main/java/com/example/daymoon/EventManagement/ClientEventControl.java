@@ -286,12 +286,11 @@ public class ClientEventControl {//施工
             Calendar calendar = getSchemeCalendar(c.get(java.util.Calendar.YEAR),c.get(java.util.Calendar.MONTH)+1,c.get(java.util.Calendar.DATE),"1");
             map.put(calendar.toString(),calendar);
         }
-        /*
         for (GroupEvent event:getInstance().groupEventList){
             GregorianCalendar c = event.getBeginTime();
             Calendar calendar = getSchemeCalendar(c.get(java.util.Calendar.YEAR),c.get(java.util.Calendar.MONTH)+1,c.get(java.util.Calendar.DATE),"2");
             map.put(calendar.toString(),calendar);
-        }*/
+        }
         return map;
     }
 
