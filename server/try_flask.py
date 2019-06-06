@@ -56,15 +56,13 @@ def edituser():
         res='修改结果:  '+str(edt)
     return render_template('edituser.html',res=res)
 
-@app.route('/getuser',methods=['GET', 'POST'])
+@app.route('/getuserinfo',methods=['GET', 'POST'])
 def getuser():
     res=None
     if request.method == 'POST':
         userID=int(request.form.get('userID'))
-
-        info=db.getUserInfo(userID)
-        res='查询结果:  '+str(info)
-    return render_template('getuser.html',res=res)
+        res=db.getUserInfo(userID)
+    return res
 
 @app.route('/getallmyevents',methods=['GET', 'POST'])
 def getallmyevents():
@@ -82,6 +80,14 @@ def getgroupevent():
         eventID=int(request.form.get('eventID'))
         res=db.getGroupEventInfo(eventID,userID)
     return res
+
+@app.route('/getallmynotificationlists',methods=['GET', 'POST'])
+def getallmynotifications():
+    res=[]
+    if request.method == 'POST':
+        userID = int(request.form.get('userID'))
+        res = db.getAllMyNotificationLists(userID)
+    return json.dumps(res,ensure_ascii=False)
 
 @app.route('/getallmygroupevents',methods=['GET', 'POST'])#某一小组 所有事件
 def getallmygroupevents():
@@ -109,7 +115,7 @@ def getallmygroups():
         userID=int(request.form.get('userID'))
         print(userID)
         res=db.getAllMyGroups(userID)
-    return res
+    return json.dumps(res, ensure_ascii=False)
 
 
 
@@ -127,6 +133,18 @@ def submitevent():
         remind=rem.str()
         print(description, eventName)
         res=db.submitEventInfo(userID,eventName,whetherProcess,beginTime,endTime,description,remind)
+    return str(res)
+
+@app.route('/submitnotification',methods=['GET', 'POST'])
+def submitnotification():
+    res=None
+    if request.method == 'POST':
+        creatorName = request.form.get("creatorName")
+        createTime = request.form.get("createTime")
+        groupID = int(request.form.get("groupID"))
+        groupName = request.form.get("groupName")
+        message = request.form.get("message")
+        res = db.submitNotificationInfo(creatorName, createTime, groupID, groupName, message)
     return str(res)
 
 @app.route('/submitgroupevent',methods=['GET', 'POST'])

@@ -55,6 +55,7 @@ import com.example.daymoon.Layout.ViewPagerSlide;
 import com.example.daymoon.R;
 import com.example.daymoon.Tool.StatusBarUtil;
 import com.example.daymoon.Tool.pxUtils;
+import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
@@ -116,6 +117,17 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         super.onCreate(savedInstanceState);
         int userId = getIntent().getIntExtra("userid", -1);
         if (userId <0) System.out.println("no userID given");
+        ClientUserInfoControl.setCurrentUser(userId, new Runnable(){
+            @Override
+            public void run() {
+
+            }
+        }, new Runnable(){
+            @Override
+            public void run() {
+
+            }
+        });
         ClientEventControl.setCurrentUserID(userId);//TODO 替换为由登录界面传递过来的ID
         ClientEventControl.getEventListFromServer(new Runnable() {
             @Override
@@ -263,7 +275,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 new DrawerProfile()
                         .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.mipmap.user))
                         .setBackground(getResources().getDrawable(R.drawable.cv_bg_material))
-                        .setName(getString(R.string.profile_name))
+                        .setName(ClientUserInfoControl.getCurrentUser().getName())
                         .setDescription(getString((R.string.profile_description)))
                         .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
                             @Override

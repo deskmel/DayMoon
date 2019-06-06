@@ -1,23 +1,16 @@
 package com.example.daymoon.GroupEventManagement;
 
-import android.provider.ContactsContract;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.daymoon.EventManagement.Event;
 import com.example.daymoon.EventManagement.EventList;
-import com.example.daymoon.GroupInfoManagement.Group;
-import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
-import com.example.daymoon.HttpUtil.HttpRequestThread;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +26,8 @@ public class ClientGroupEventControl {
 
     private GroupEventList allMemberGroupEventList;
     private EventList allMemberEventList;
+    private NotificationList notificationList;
+
     private static ClientGroupEventControl clientGroupEventControl;
     private static ClientGroupEventControl getInstance(){
         if (clientGroupEventControl==null){
@@ -60,6 +55,53 @@ public class ClientGroupEventControl {
         HttpRequest.post(SERVER_IP+"getallmygroupevents", params, dataCallback);
     }
 
+    public static NotificationList getNotificationList(){
+        return getInstance().notificationList;
+    }
+
+    public static void getNotificationListFromServer(Runnable success, Runnable failure){
+        Map<String, String> params = new HashMap<>();
+        params.put("userID", String.valueOf(getInstance().currentUserID));
+        HttpRequest.post(SERVER_IP + "getallmynotificationlists", params, new HttpRequest.DataCallback() {
+            @Override
+            public void requestSuccess(String result) throws Exception {
+                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+                System.out.println(result);
+                Type NotificationRecordType = new TypeToken<NotificationList>(){}.getType();
+                getInstance().notificationList = gson.fromJson(result, NotificationRecordType);
+                success.run();
+            }
+
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                failure.run();
+            }
+        });
+    }
+
+    public static void createNotification(Notification notification, Runnable success, Runnable failure){
+        Map<String, String> params = new HashMap<>();
+        params.put("creatorName",notification.getCreatorName());
+        params.put("createTime",notification.getCreateTimeFormat());
+        params.put("groupID",String.valueOf(notification.getGroupID()));
+        params.put("groupName",String.valueOf(notification.getGroupname()));
+        params.put("message",String.valueOf(notification.getMessage()));
+        System.out.println(params);
+        HttpRequest.post(SERVER_IP + "submitnotification", params, new HttpRequest.DataCallback() {
+            @Override
+            public void requestSuccess(String result) throws Exception {
+                success.run();
+            }
+
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                Log.e("error","something wrong in creating notification");
+                failure.run();
+            }
+        });
+    }
+
+
     public static void createGroupEvent(GroupEventInfomationHolder groupEventInfomationHolder, HttpRequest.DataCallback dataCallback){
         Map<String, String> params = new HashMap<>();
         params.put("userID", String.valueOf(getInstance().currentUserID));
@@ -73,8 +115,8 @@ public class ClientGroupEventControl {
         params.put("whetherProcess", groupEventInfomationHolder.allday?"1":"0");
         System.out.println(params);
         HttpRequest.post(SERVER_IP+"submitgroupevent", params, dataCallback);
-
     }
+
     public static void getAllMemberEventFromServer(){
         return;
     }
@@ -84,6 +126,7 @@ public class ClientGroupEventControl {
         params.put("eventID", String.valueOf(eventID));
         HttpRequest.post(SERVER_IP+"getgroupevent", params, dataCallback);
     }
+
     public static EventList findAllMemberEventListByWeek(int year,int weekOfYear){
         EventList resultList = new EventList();
         if (getInstance().allMemberEventList!=null){
@@ -98,6 +141,7 @@ public class ClientGroupEventControl {
 
         return resultList;
     }
+
     public static GroupEventList findAllMemberGroupEventListByWeek(int year,int weekOfYear){
         GroupEventList resultList = new GroupEventList();
         if (getInstance().allMemberGroupEventList!=null){

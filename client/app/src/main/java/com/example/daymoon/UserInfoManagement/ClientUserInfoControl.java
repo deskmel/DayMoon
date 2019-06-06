@@ -1,9 +1,11 @@
 package com.example.daymoon.UserInfoManagement;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.HttpUtil.HttpRequestThread;
+import com.example.daymoon.R;
 import com.example.daymoon.Tool.MD5Tool;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -38,7 +40,25 @@ public class ClientUserInfoControl {
         getUserInfoFromServer(getInstance().currentUser, userID, success, failure);
     }
 
-    public static void getUserInfoFromServer(User user, int userID, Runnable success, Runnable failure){
+    public static User getCurrentUser(){
+        return getInstance().currentUser;
+    }
+
+    public static void getProfilePhoto(){
+        if (getInstance().currentUser!=null)
+        HttpRequest.getFile(SERVER_IP + "image/" + getInstance().currentUser.getProfilePhotoName(), new HttpRequest.FileCallback() {
+            @Override
+            public void requestSuccess(Bitmap bitmap) throws Exception {
+                getInstance().currentUser.setProfilePhoto(bitmap);
+            }
+
+            @Override
+            public void requestFailure(Request request, IOException e) {
+            }
+        });
+    }
+
+    private static void getUserInfoFromServer(User user, int userID, Runnable success, Runnable failure){
         Map<String,String> params = new HashMap<>();
         params.put("userID", String.valueOf(userID));
         HttpRequest.post(SERVER_IP+"getuserinfo",params, new HttpRequest.DataCallback(){
@@ -47,6 +67,7 @@ public class ClientUserInfoControl {
                 Gson gson = new GsonBuilder().create();
                 Type UserRecordType = new TypeToken<User>(){}.getType();
                 user.CopyFrom(gson.fromJson(result, UserRecordType));
+                getProfilePhoto();
                 success.run();
             }
             @Override

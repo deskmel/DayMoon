@@ -60,13 +60,13 @@ public class GroupActivity extends AppCompatActivity {
     private RecyclerView notificationRecyclerView;
     private GroupViewAdapter adapter =null;
     private GroupList groupList;
+    private NotificationList notificationList;
     private ViewPagerSlide viewPager;
     private LayoutInflater inflater;
     private View groupListPage;
     private View notificationPage;
     private ImageButton more;
     private Context mainContext = null;
-    private ClientGroupInfoControl clientGroupInfoControl;
     private PopupWindow popupWindow;
     private ImageButton calenderButton;
     private TextView today;
@@ -197,21 +197,28 @@ public class GroupActivity extends AppCompatActivity {
             public void run() {
                 groupList = ClientGroupInfoControl.getGroupList();
                 flushGroupList();
-                flushNotificationList();
             }
         }, new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(getApplicationContext(), "something goes wrong when getGroupListFromServer", Toast.LENGTH_LONG).show();
+            }
+        });
 
-
+        ClientGroupEventControl.getNotificationListFromServer(new Runnable() {
+            @Override
+            public void run() {
+                notificationList = ClientGroupEventControl.getNotificationList();
+                flushNotificationList();;
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), "something goes wrong when getNotificationListFromServer", Toast.LENGTH_LONG).show();
             }
         });
     }
     private void flushNotificationList(){
-        Notification notification = new Notification("瞎几把搞","sg",Calendar.getInstance().getTime(),"游山玩水");
-        NotificationList notificationList= new NotificationList();
-        notificationList.add(notification);
         NotificationViewAdapter notificationViewAdapter = new NotificationViewAdapter(notificationList,mainContext,0);
         notificationRecyclerView.setAdapter(notificationViewAdapter);
 

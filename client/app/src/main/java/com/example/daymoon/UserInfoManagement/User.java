@@ -1,21 +1,23 @@
 package com.example.daymoon.UserInfoManagement;
 
+
 import android.graphics.Bitmap;
 
 public class User {
     private int id;
-    private String name, description, mailAddress, phoneNumber;
+    private String name, description, mailAddress, phoneNumber, profilePhotoName;
     private int[] groupIDs, eventIDs;
     private Bitmap profilePhoto;
 
     User(){}
 
-    public User(int id, String name, String description, String mailAddress, String phoneNumber){
+    public User(int id, String name, String description, String mailAddress, String phoneNumber, String profilePhotoName){
         this.id = id;
         this.name = name;
         this.description = description;
         this.mailAddress = mailAddress;
         this.phoneNumber = phoneNumber;
+        this.profilePhotoName = profilePhotoName;
     }
 
     public User(int id, String name){
@@ -74,6 +76,10 @@ public class User {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String getProfilePhotoName(){
+        return profilePhotoName;
     }
 
     public Bitmap getProfilePhoto() {

@@ -20,8 +20,8 @@ class Remind(object):
         return json.dumps(self.__dict__,ensure_ascii=False)
 
 class DayMoonDB(object):
-    def __init__(self,lock,host='localhost',user="root", db="daymoon"):
-        self.db = pymysql.connect(host=host, user=user,db=db,charset="utf8",use_unicode=True)
+    def __init__(self,lock,host='localhost',user="root",db="daymoon"):
+        self.db = pymysql.connect(host=host, user=user, db=db, password="7UdiP3X8",charset="utf8",use_unicode=True)
         self.cur=self.db.cursor()
         self.lock=lock
 
@@ -69,7 +69,7 @@ class DayMoonDB(object):
         :param phoneNumber: str,前端已确认是valid
         :return: 若成功，返回userID，若失败，返回提示字符串(name,mail,phone不可重复)
         '''
-        sql='''INSERT INTO `users` (`userID`, `userName`, `userPassword`, `mailAddress`, `phoneNumber`, `groupIDs`, `eventIDs`) VALUES (NULL, '%s', '%s', '%s', '%s', '[]', '[]');'''%(name,password,mail,phoneNumber)
+        sql='''INSERT INTO `users` (`userID`, `userName`, `userPassword`, `mailAddress`, `phoneNumber`, `groupIDs`, `eventIDs`, `profilePhotoName`) VALUES (NULL, '%s', '%s', '%s', '%s', '[]', '[]','default');'''%(name,password,mail,phoneNumber)
         try:
             self.lock.acquire()
             self.cur.execute(sql)
@@ -122,9 +122,11 @@ class DayMoonDB(object):
         self.lock.acquire()
         self.cur.execute(sql)
         self.lock.release()
+
         info=self.cur.fetchone()
         if not info:return None
-        infodict={'userID':info[0],'userName':info[1],'mailAddress':info[3],'phoneNumber':info[4],'groupIDs':json.loads(info[5]),'eventIDs':json.loads(info[6])}
+        infodict={'id':info[0],'name':info[1],'mailAddress':info[3],'phoneNumber':info[4],'groupIDs':json.loads(info[5]),'eventIDs':json.loads(info[6]),'profilePhotoName':info[7]}
+        print(infodict)
         return json.dumps(infodict,ensure_ascii=False)
     # -----------user的增、改、查-----------#
 
@@ -167,6 +169,17 @@ class DayMoonDB(object):
             self.db.commit()
 
             return eventID
+        except Exception as err:
+            self.db.rollback()
+            return str(err)
+
+    def submitNotificationInfo(self, creatorName, createTime, groupID, groupName, message):
+        try:
+            sql='''INSERT INTO `notifications` (`creatorName`, `createTime`, `groupID`, `groupName`, `message`) VALUES ('%s', '%s', '%d', '%s', '%s');'''%(creatorName, createTime, groupID, groupName, message)
+            self.lock.acquire()
+            self.cur.execute(sql)
+            self.lock.release()
+            self.db.commit()
         except Exception as err:
             self.db.rollback()
             return str(err)
@@ -699,7 +712,35 @@ class DayMoonDB(object):
         for groupID in groups:
             allMyGroups.append(json.loads(self.getGroupInfo(groupID ,userID)))
 
-        return json.dumps(allMyGroups,ensure_ascii=False)
+        return allMyGroups
+
+    def getAllNotifications(self,groupID):
+        sql = '''SELECT * FROM `notifications` WHERE `groupID`=%d''' % groupID
+        self.lock.acquire()
+        self.cur.execute(sql)
+        self.lock.release()
+        notifications = self.cur.fetchall()
+
+        allNotification = []
+        for notification in notifications:
+            allNotification.append({'creatorName':notification[0],'groupName':notification[1],
+                                    'createTime':notification[2].strftime("%Y-%m-%d %H:%M:%S"),
+                                    'message':notification[3],
+                                    'groupID':notification[4]})
+
+        return allNotification
+
+    def getAllMyNotificationLists(self,userID):
+        sql = '''SELECT `groupIDs` FROM `users` WHERE `userID`=%d''' % userID
+        self.lock.acquire()
+        self.cur.execute(sql)
+        self.lock.release()
+        groups = json.loads(self.cur.fetchone()[0])
+        print(groups)
+        allMyNotifications=[]
+        for groupID in groups:
+            allMyNotifications.extend(self.getAllNotifications(groupID))
+        return allMyNotifications
 
     def getAllMyGroupEvents(self,groupID,userID):
         '''

@@ -1,5 +1,6 @@
 package com.example.daymoon.UserInterface;
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.database.Cursor;
@@ -62,6 +63,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -92,11 +94,12 @@ public class GroupScheduleActivity extends AppCompatActivity {
     private RecyclerView notificationRecyclerView;
     private MaterialDialog materialDialog;
     private MaterialDialog materialDialog_creategroupevent;
-    private CharSequence notification;
+    private String message;
     private TextView noneEvent;
     private View timetablePager;
     private ConstraintLayout clContent;
     private CalendarView weekView;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +107,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
         groupID = getIntent().getIntExtra("groupID",-1);
         group = (Group) getIntent().getSerializableExtra("group");
         setContentView(R.layout.activity_group_schedule);
+        context = this.getApplicationContext();
         StatusBarUtil.setRootViewFitsSystemWindows(this,true);
         //设置状态栏透明
         StatusBarUtil.setTranslucentStatus(this);
@@ -257,14 +261,26 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 .input("输入公告内容", "", false, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        notification = input;
+                        message = input.toString();
                     }
                 })
                 .positiveText("确认")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        createNotification();
+                        Notification notification = new Notification(dialog.getInputEditText().getText().toString(), ClientUserInfoControl.getCurrentUser().getName(), new Date(), group.getGroupName(), groupID);
+                        ClientGroupEventControl.createNotification(notification, new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(context, "成功创建公告", Toast.LENGTH_LONG).show();
+                                flushNotificationList();
+                            }
+                        }, new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(context, "something goes wrong", Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
                 })
                 .neutralText("取消")
@@ -286,9 +302,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 })
                 .build();
     }
-    private void createNotification(){
 
-    }
     private void initTimeTablePage(){
         timetablePager = View.inflate(this,R.layout.timetable_layout,null);
         clContent = timetablePager.findViewById(R.id.cl_content);
@@ -340,13 +354,22 @@ public class GroupScheduleActivity extends AppCompatActivity {
             }
         });
     }
-    private void flushNoificationList(){
-        Notification notification = new Notification("瞎几把搞","sg",Calendar.getInstance().getTime(),"游山玩水");
-        NotificationList notificationList= new NotificationList();
-        notificationList.add(notification);
-        NotificationViewAdapter notificationViewAdapter = new NotificationViewAdapter(notificationList,this,1);
-        notificationRecyclerView.setAdapter(notificationViewAdapter);
+    private void flushNotificationList(){
+        ClientGroupEventControl.getNotificationListFromServer(new Runnable() {
+            @Override
+            public void run() {
+                NotificationViewAdapter notificationViewAdapter = new NotificationViewAdapter(ClientGroupEventControl.getNotificationList().filterByGroupID(groupID),context,0);
+                notificationRecyclerView.setAdapter(notificationViewAdapter);
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), "something goes wrong when getNotificationListFromServer", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
+
     private void refresh(){
         mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
         mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
@@ -356,7 +379,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         flushTimeLineList();
-                        flushNoificationList();
+                        flushNotificationList();
                         mPullToRefreshView.setRefreshing(false);
                     }
                 }, 500);
@@ -378,7 +401,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                     noneEvent.setText("~这个小组的事件空空如也~");
                 else noneEvent.setText("");
                 flushTimeLineList();
-                flushNoificationList();
+                flushNotificationList();
                 flushTimeTableList();
 
             }

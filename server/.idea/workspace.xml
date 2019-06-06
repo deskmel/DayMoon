@@ -2,9 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dfb9ab52-ac06-400b-bea2-7d08df6bf3de" name="Default Changelist" comment="adapt to the client">
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/Define/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/Define/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/GroupEventManagement/ClientGroupEventControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/GroupEventManagement/ClientGroupEventControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/GroupEventManagement/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/GroupEventManagement/Notification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/GroupEventManagement/NotificationList.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/GroupEventManagement/NotificationList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInfoManagement/ClientUserInfoControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInfoManagement/ClientUserInfoControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInfoManagement/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInfoManagement/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/CalendarActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/CalendarActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/GroupActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/GroupActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/GroupScheduleActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/GroupScheduleActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../client/app/src/main/java/com/example/daymoon/UserInterface/LoginActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../client/local.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sql_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/sql_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/try_flask.py" beforeDir="false" afterPath="$PROJECT_DIR$/try_flask.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,7 +25,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/server$temp.coverage" NAME="temp Coverage Results" MODIFIED="1559725604286" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="D:/python" />
-    <SUITE FILE_PATH="coverage/server$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1559732202201" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/server$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1559839428235" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/server$server.coverage" NAME="server Coverage Results" MODIFIED="1557726504298" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
   <component name="DatabaseView">
@@ -35,10 +46,10 @@
     <session id="1703084519">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="10" />
+          <entry key="project.closed" value="11" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.10" value="3" />
-          <entry key="project.open.time.11" value="1" />
+          <entry key="project.open.time.11" value="2" />
           <entry key="project.open.time.12" value="2" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.20" value="1" />
@@ -46,7 +57,7 @@
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="3" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="15" />
+          <entry key="project.opened" value="16" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -69,14 +80,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="4785" />
+          <entry key="py" value="6553" />
           <entry key="txt" value="41" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="41" />
-          <entry key="Python" value="4782" />
+          <entry key="Python" value="6550" />
           <entry key="SQL" value="3" />
         </counts>
       </usages-collector>
@@ -87,11 +98,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/try_flask.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="52" column="10" selection-start-line="52" selection-start-column="10" selection-end-line="52" selection-end-column="10" />
+            <state relative-caret-position="156">
+              <caret line="58" column="24" selection-start-line="58" selection-start-column="24" selection-end-line="58" selection-end-column="24" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
-                <marker date="1559727950402" expanded="true" signature="2468:3036" ph="..." />
+                <marker date="1559839000343" expanded="true" signature="2400:2592" ph="..." />
+                <marker date="1559839000343" expanded="true" signature="2687:3255" ph="..." />
               </folding>
             </state>
           </provider>
@@ -105,11 +117,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sql_utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="87">
-              <caret line="23" column="88" lean-forward="true" selection-start-line="23" selection-start-column="88" selection-end-line="23" selection-end-column="88" />
+            <state relative-caret-position="240">
+              <caret line="721" column="21" selection-start-line="721" selection-start-column="21" selection-end-line="721" selection-end-column="21" />
               <folding>
                 <element signature="e#24#38#0" expanded="true" />
-                <marker date="1559732157579" expanded="true" signature="644:686" ph="..." />
+                <marker date="1559840184268" expanded="true" signature="665:707" ph="..." />
+                <marker date="1559840184268" expanded="true" signature="28327:28965" ph="..." />
               </folding>
             </state>
           </provider>
@@ -160,7 +173,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-10" />
     <option name="y" value="-10" />
     <option name="width" value="1555" />
@@ -315,7 +328,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19839142" />
@@ -418,39 +431,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/err.log">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="-126">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="126">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/err.log" />
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/try_flask.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="52" column="10" selection-start-line="52" selection-start-column="10" selection-end-line="52" selection-end-column="10" />
+        <state relative-caret-position="156">
+          <caret line="58" column="24" selection-start-line="58" selection-start-column="24" selection-end-line="58" selection-end-column="24" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
-            <marker date="1559727950402" expanded="true" signature="2468:3036" ph="..." />
+            <marker date="1559839000343" expanded="true" signature="2400:2592" ph="..." />
+            <marker date="1559839000343" expanded="true" signature="2687:3255" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sql_utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="87">
-          <caret line="23" column="88" lean-forward="true" selection-start-line="23" selection-start-column="88" selection-end-line="23" selection-end-column="88" />
+        <state relative-caret-position="240">
+          <caret line="721" column="21" selection-start-line="721" selection-start-column="21" selection-end-line="721" selection-end-column="21" />
           <folding>
             <element signature="e#24#38#0" expanded="true" />
-            <marker date="1559732157579" expanded="true" signature="644:686" ph="..." />
+            <marker date="1559840184268" expanded="true" signature="665:707" ph="..." />
+            <marker date="1559840184268" expanded="true" signature="28327:28965" ph="..." />
           </folding>
         </state>
       </provider>
