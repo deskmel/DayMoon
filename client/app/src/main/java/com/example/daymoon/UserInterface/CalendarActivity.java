@@ -110,6 +110,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     private Cursor cursor;
     private SQLiteDatabase db;
     private ConstraintLayout clContent;
+    private TextView picker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,6 +146,8 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         initPage();
         //按钮
         initButton();
+
+
         //侧滑菜单实现
         initMenu();
     }
@@ -221,13 +224,35 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 viewFlipper.showNext();
             }
         });
+        picker = findViewById(R.id.date);
+        final boolean[] monthType = {true, true, false, false, false, false};
+        //时间选择器选择年月，对应的日历切换到指定日期
+        picker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("wtf","???");
+                TimePickerView pvTime = new TimePickerBuilder(CalendarActivity.this, new OnTimeSelectListener() {
+                    @Override
+                    public void onTimeSelect(Date date, View v) {
+                        java.util.Calendar c = java.util.Calendar.getInstance();
+                        c.setTime(date);
+                        int year = c.get(java.util.Calendar.YEAR);
+                        int month = c.get(java.util.Calendar.MONTH);
+                        //滚动到指定日期
+                        calendarView.scrollToCalendar(year, month + 1, 1);
+                        weekView.scrollToCalendar(year,month+1,1);
+                    }
+                }).setType(monthType).build();
+                pvTime.show();
+            }
+        });
     }
 
     /**
      * 个人界面 后期修改
      */
     private void initMenu(){
-        ImageButton user = findViewById(R.id.user);
+
         if (getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
@@ -252,12 +277,14 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 .setTextPrimary(getString(R.string.menu_item_setting))
         );
         addDivider();
+        /*
+        ImageButton user = findViewById(R.id.user);
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openDrawer();
             }
-        });
+        });*/
     }
 
     /**
@@ -296,9 +323,18 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
             public void onDateSelected(Calendar calendar, boolean isClick) {
 
                 GregorianCalendar c = new GregorianCalendar(calendar.getYear(),calendar.getMonth()-1,calendar.getDay());
-                Log.d("week",String.valueOf(c.get(java.util.Calendar.WEEK_OF_YEAR)));
-                Log.d("year",String.valueOf(c.get(java.util.Calendar.YEAR)));
+                //Log.d("week",String.valueOf(c.get(java.util.Calendar.WEEK_OF_YEAR)));
+               // Log.d("year",String.valueOf(c.get(java.util.Calendar.YEAR)));
+                selectYear = calendar.getYear();
+                selectMonth = calendar.getMonth();
+                selectDay = calendar.getDay();
                 selectWeek = c.get(java.util.Calendar.WEEK_OF_YEAR);
+                TextView date_text = findViewById(R.id.date);
+                date_text.setText(String.format("%d月%d日",selectMonth,selectDay));
+                TextView year_text = findViewById(R.id.year);
+                year_text.setText(String.valueOf(selectYear));
+                TextView des_text=findViewById(R.id.des_date);
+                des_text.setText(calendar.getLunar());
                 flushTimeTableListView();
             }
         });
@@ -315,10 +351,9 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         calendarLayout=calendarPager.findViewById(R.id.calendarLayout);
         Log.d("s",calendarLayout.toString());
         //日期选择器
-        LinearLayout picker = calendarPager.findViewById(R.id.picker);
-        tvMonth = calendarPager.findViewById(R.id.tv_month);//textview
+
         //添加事件的按钮
-        Button btn_add = calendarPager.findViewById(R.id.addbutton);
+        ImageButton btn_add = findViewById(R.id.addbutton);
         calendarRecyclerView = calendarPager.findViewById(R.id.list_one); //绑定listview
         calendarRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         calendarRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -328,34 +363,13 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         selectMonth = calendarView.getCurMonth();
         selectYear = calendarView.getCurYear();
         //初始化当前年月
-        tvMonth.setText(calendarView.getCurYear() + "年" + calendarView.getCurMonth() + "月");
         //月份切换改变事件
         calendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
             @Override
             public void onMonthChange(int year, int month) {
-                tvMonth.setText(year + "年" + month + "月");
             }
         });
-        final boolean[] monthType = {true, true, false, false, false, false};
-        //时间选择器选择年月，对应的日历切换到指定日期
-        picker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("wtf","???");
-                TimePickerView pvTime = new TimePickerBuilder(CalendarActivity.this, new OnTimeSelectListener() {
-                    @Override
-                    public void onTimeSelect(Date date, View v) {
-                        java.util.Calendar c = java.util.Calendar.getInstance();
-                        c.setTime(date);
-                        int year = c.get(java.util.Calendar.YEAR);
-                        int month = c.get(java.util.Calendar.MONTH);
-                        //滚动到指定日期
-                        calendarView.scrollToCalendar(year, month + 1, 1);
-                    }
-                }).setType(monthType).build();
-                pvTime.show();
-            }
-        });
+
 
         calendarView.setOnViewChangeListener(this);
         //日期点击选择事件
@@ -367,6 +381,12 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 selectMonth = calendar.getMonth();
                 selectDay = calendar.getDay();
                 selectWeek = c.get(java.util.Calendar.WEEK_OF_YEAR);
+                TextView date_text = findViewById(R.id.date);
+                date_text.setText(String.format("%d月%d日",selectMonth,selectDay));
+                TextView year_text = findViewById(R.id.year);
+                year_text.setText(String.valueOf(selectYear));
+                TextView des_text=findViewById(R.id.des_date);
+                des_text.setText(calendar.getLunar());
                 flushCalendarListView();
             }
         });

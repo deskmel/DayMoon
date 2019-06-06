@@ -4,6 +4,8 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.daymoon.EventManagement.Event;
+import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.GroupInfoManagement.Group;
 import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
@@ -28,6 +30,9 @@ public class ClientGroupEventControl {
     private int GroupEventID;
     private int currentUserID;
     private GroupEventList groupEventList;
+
+    private GroupEventList allMemberGroupEventList;
+    private EventList allMemberEventList;
     private static ClientGroupEventControl clientGroupEventControl;
     private static ClientGroupEventControl getInstance(){
         if (clientGroupEventControl==null){
@@ -70,14 +75,43 @@ public class ClientGroupEventControl {
         HttpRequest.post(SERVER_IP+"submitgroupevent", params, dataCallback);
 
     }
-
+    public static void getAllMemberEventFromServer(){
+        return;
+    }
     public static void getGroupEventFromServer(int eventID, HttpRequest.DataCallback dataCallback){
         Map<String, String> params = new HashMap<>();
         params.put("userID", String.valueOf(getInstance().currentUserID));
         params.put("eventID", String.valueOf(eventID));
         HttpRequest.post(SERVER_IP+"getgroupevent", params, dataCallback);
     }
+    public static EventList findAllMemberEventListByWeek(int year,int weekOfYear){
+        EventList resultList = new EventList();
+        if (getInstance().allMemberEventList!=null){
+            for (Event event:getInstance().allMemberEventList ){
+                Log.d("events_WeekOfYEAR",String.valueOf(event.getBeginTime().get(java.util.Calendar.WEEK_OF_YEAR)));
+                if (event.getBeginTime().get(java.util.Calendar.WEEK_OF_YEAR) == weekOfYear
+                        && year == event.getBeginTime().get(java.util.Calendar.YEAR) ){
+                    resultList.add(event);
+                }
+            }
+        }
 
+        return resultList;
+    }
+    public static GroupEventList findAllMemberGroupEventListByWeek(int year,int weekOfYear){
+        GroupEventList resultList = new GroupEventList();
+        if (getInstance().allMemberGroupEventList!=null){
+            for (GroupEvent event:getInstance().allMemberGroupEventList ){
+                Log.d("events_WeekOfYEAR",String.valueOf(event.getBeginTime().get(java.util.Calendar.WEEK_OF_YEAR)));
+                if (event.getBeginTime().get(java.util.Calendar.WEEK_OF_YEAR) == weekOfYear
+                        && year == event.getBeginTime().get(java.util.Calendar.YEAR) ){
+                    resultList.add(event);
+                }
+            }
+        }
+
+        return resultList;
+    }
 
 
     /*public String getLatestGroupEventDes(int groupId){

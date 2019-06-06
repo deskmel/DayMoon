@@ -9,6 +9,9 @@
     android:fitsSystemWindows="true"
     android:background="#e8eaf6"
     tools:openDrawer="start">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,29 +21,43 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:background="@color/white">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <ImageButton
-                    android:id="@+id/user"
-                    android:scaleType="fitCenter"
-                    android:layout_marginLeft="5dp"
-                    android:layout_centerVertical="true"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentLeft="true"
-                    android:background="@color/white"
-                    android:src="@mipmap/user"/>
+
                 <TextView
+                    android:id="@+id/date"
+                    android:layout_marginStart="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textColor="@color/black"
-                    android:gravity="center"
-                    android:text="日历"/>
+                    android:layout_centerVertical="true"
+                    android:textSize="30sp"
+                    android:text="6月6日"
+                    android:textColor="@color/black"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/date"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/year"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2019"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"/>
+                    <TextView
+                        android:id="@+id/des_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="今日"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"/>
+                </LinearLayout>
                 <ViewFlipper
                     android:id="@+id/flipper"
                     android:layout_width="wrap_content"
@@ -61,7 +78,7 @@
                         android:id="@+id/backcalendar"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:padding="2dp"
+                        android:padding="4dp"
                         android:scaleType="fitCenter"
                         android:src="@mipmap/calendar"
                         android:background="@color/white"/>
@@ -84,4 +101,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
+
+
+        <ImageButton
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/add_blue"
+            android:id="@+id/addbutton"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            />
+    </RelativeLayout>
 </android.support.v4.widget.DrawerLayout>

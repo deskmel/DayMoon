@@ -18,24 +18,13 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ImageButton
-                android:id="@+id/user"
-                android:scaleType="fitCenter"
-                android:layout_marginLeft="10dp"
-                android:padding="3dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:background="@color/white"
-                android:src="@mipmap/user"/>
             <ViewFlipper
                 android:id="@+id/flipper"
+                android:layout_toLeftOf="@+id/more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/user"
-                android:layout_marginLeft="10dp">
+                android:layout_marginRight="10dp">
                 <ImageButton
                     android:id="@+id/notification"
                     android:scaleType="fitCenter"
@@ -63,18 +52,17 @@
             <ImageButton
                 android:id="@+id/calendar"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:padding="2dp"
+                android:layout_marginLeft="10dp"
+                android:padding="4dp"
                 android:scaleType="fitCenter"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_toLeftOf="@+id/more"
                 android:background="@color/white"
                 android:src="@mipmap/calendar"/>
             <ImageButton
                 android:id="@+id/more"
                 android:scaleType="fitCenter"
-                android:padding="2dp"
+                android:padding="4dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:background="@color/white"

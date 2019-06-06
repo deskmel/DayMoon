@@ -45,7 +45,18 @@ public class MyTimeTableUtils {
         this.weekGroupEventList = weekGroupEventList;
         initData();
     }
-
+    public void fill(){
+        if (weekEventList!=null){
+            for (Event event:weekEventList){
+                fillEvent(event);
+            }
+        }
+        if (weekGroupEventList != null){
+            for (GroupEvent event:weekGroupEventList){
+                fillGroupEvent(event);
+            }
+        }
+    }
     public void flush(){
         if (weekEventList!=null){
             for (Event event:weekEventList){
@@ -72,6 +83,44 @@ public class MyTimeTableUtils {
         oneDayPx = (dmwidth-offset)/7;
         padding = pxUtils.dip2px(context,4);
         width = oneDayPx-padding*2;}
+    private void fillGroupEvent(GroupEvent event){
+        //生成一个放入的控件
+        TextView textView = new TextView(context);
+        //给控件赋予一个id
+        textView.setId(View.generateViewId());
+        textView.setBackground(context.getResources().getDrawable(R.color.red));
+        java.util.Calendar calendar1 = java.util.Calendar.getInstance();
+        calendar1.setTime(event.getBeginTime().getTime());
+        //获取结束时间的Calendar
+        java.util.Calendar calendar2 = java.util.Calendar.getInstance();
+        calendar2.setTime(event.getEndTime().getTime());
+        //设置高度，算出他们直接差了多少分钟，然后乘以分钟所占的像素
+        int height = (int) ((calendar2.getTimeInMillis() - calendar1.getTimeInMillis()) /
+                60000 * oneMimutePx1);
+        if (calendar2.get(Calendar.DATE)!= calendar1.get(Calendar.DATE) || calendar1.get(Calendar.MONTH) != calendar1.get(Calendar.MONTH) || calendar1.get(Calendar.MONTH) != calendar2.get(Calendar.MONTH)){
+            height = 60 * oneMimutePx1;
+        }
+        addInLayout(textView,calendar1,calendar2,height);
+    }
+    private void fillEvent(Event event){
+        //生成一个放入的控件
+        TextView textView = new TextView(context);
+        //给控件赋予一个id
+        textView.setId(View.generateViewId());
+        textView.setBackground(context.getResources().getDrawable(R.color.red));
+        java.util.Calendar calendar1 = java.util.Calendar.getInstance();
+        calendar1.setTime(event.getBeginTime().getTime());
+        //获取结束时间的Calendar
+        java.util.Calendar calendar2 = java.util.Calendar.getInstance();
+        calendar2.setTime(event.getEndTime().getTime());
+        //设置高度，算出他们直接差了多少分钟，然后乘以分钟所占的像素
+        int height = (int) ((calendar2.getTimeInMillis() - calendar1.getTimeInMillis()) /
+                60000 * oneMimutePx1);
+        if (calendar2.get(Calendar.DATE)!= calendar1.get(Calendar.DATE) || calendar1.get(Calendar.MONTH) != calendar1.get(Calendar.MONTH) || calendar1.get(Calendar.MONTH) != calendar2.get(Calendar.MONTH)){
+            height = 60 * oneMimutePx1;
+        }
+        addInLayout(textView,calendar1,calendar2,height);
+    }
     private void setNewGroupEvent(GroupEvent event){
         //生成一个放入的控件
         TextView textView = new TextView(context);
@@ -104,28 +153,7 @@ public class MyTimeTableUtils {
             height = 60 * oneMimutePx1;
             textView.setText(String.format("%s\n%s",event.getTitle(),"跨天"));
         }
-        //动态在ConstraintLayout里面加入控件，需要ConstraintSet，使用这个，就必须所有控件都有id
-        //这就是上面为什么把ConstraintLayout里所有控件都加了id的原因
-        ConstraintSet constraintSet = new ConstraintSet();
-        //把显示内容添加进去
-        textView.setTextSize(11);
-        textView.setTypeface(ResourcesCompat.getFont(context,R.font.msyh));
-        clContent.addView(textView);
-        //计算距离顶部的高度，很好理解，比如说13点20分，那就是距离0点有13个小时，再加上20分钟的高度
-        int marginTop = calendar1.get(java.util.Calendar.HOUR_OF_DAY) * oneHourPx30 +
-                calendar1.get(java.util.Calendar.MINUTE) * oneMimutePx1;
-        int marginStart = (calendar1.get(java.util.Calendar.DAY_OF_WEEK)-1) * oneDayPx + offset+padding;
-        //设置显示内容宽度
-        constraintSet.clone(clContent);
-        constraintSet.constrainWidth(textView.getId(), width);
-        constraintSet.constrainHeight(textView.getId(), height);
-        //设置显示位置，这个是水平居中，假如需要偏左偏右，就设置下margin，参考最后一个connect
-        constraintSet.connect(textView.getId(),ConstraintSet.START,
-                ConstraintSet.PARENT_ID,ConstraintSet.START,marginStart);
-        constraintSet.connect(textView.getId(),ConstraintSet.TOP,
-                ConstraintSet.PARENT_ID,ConstraintSet.TOP,marginTop);
-        //应用
-        constraintSet.applyTo(clContent);
+        addInLayout(textView,calendar1,calendar2,height);
     }
 
 
@@ -161,6 +189,9 @@ public class MyTimeTableUtils {
             height = 60 * oneMimutePx1;
              textView.setText(String.format("%s\n%s",event.getTitle(),"跨天"));
         }
+        addInLayout(textView,calendar1,calendar2,height);
+    }
+    private void addInLayout(TextView textView,Calendar calendar1,Calendar calendar2,int height){
         //动态在ConstraintLayout里面加入控件，需要ConstraintSet，使用这个，就必须所有控件都有id
         //这就是上面为什么把ConstraintLayout里所有控件都加了id的原因
         ConstraintSet constraintSet = new ConstraintSet();

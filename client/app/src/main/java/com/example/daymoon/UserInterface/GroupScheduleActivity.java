@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 
@@ -29,6 +30,8 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.daymoon.Adapter.NotificationViewAdapter;
 import com.example.daymoon.Adapter.TimeLineAdapter;
+import com.example.daymoon.EventManagement.ClientEventControl;
+import com.example.daymoon.EventManagement.Event;
 import com.example.daymoon.EventManagement.EventList;
 import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
 import com.example.daymoon.GroupEventManagement.GroupEvent;
@@ -39,6 +42,7 @@ import com.example.daymoon.GroupInfoManagement.Group;
 import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
 
+import com.example.daymoon.Layout.MyTimeTableUtils;
 import com.example.daymoon.LocalDatabase.LocalDatabaseHelper;
 
 import com.example.daymoon.Layout.ViewPagerSlide;
@@ -49,6 +53,7 @@ import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.haibin.calendarview.CalendarView;
 import com.yalantis.phoenix.PullToRefreshView;
 
 import java.io.IOException;
@@ -89,6 +94,9 @@ public class GroupScheduleActivity extends AppCompatActivity {
     private MaterialDialog materialDialog_creategroupevent;
     private CharSequence notification;
     private TextView noneEvent;
+    private View timetablePager;
+    private ConstraintLayout clContent;
+    private CalendarView weekView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,14 +125,81 @@ public class GroupScheduleActivity extends AppCompatActivity {
         TextView today = findViewById(R.id.today);
         today.setText(timeformat.format(c.getTime()));
     }
+    private void initButton()
+    {
+        info=findViewById(R.id.info);
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GroupScheduleActivity.this,GroupDetailActivity.class);
+                intent.putExtra("group",group);
+                startActivityForResult(intent,0);
+            }
+        });
+        back=findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        ImageView eventaddbutton = findViewById(R.id.add_event_button);
+        eventaddbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent=new Intent(GroupScheduleActivity.this,AddGroupEventActivity.class);
+                startActivityForResult(intent,ADD_EVENT);
+            }
+        });
+        ImageButton notificationaddbutton = findViewById(R.id.add_notification_button);
+        notificationaddbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                materialDialog.show();
+            }
+        });
+        ViewFlipper viewFlipper = findViewById(R.id.flipper);
+        ViewFlipper viewFlipper1 = findViewById(R.id.flipper1);
+        ViewFlipper viewFlipper2 = findViewById(R.id.flipper2);
+        ImageButton notification = findViewById(R.id.notification);
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(1);
+                viewFlipper.showNext();
+                viewFlipper1.showNext();
+                viewFlipper2.showNext();
+            }
+        });
+        ImageButton groupback = findViewById(R.id.groupback);
+        groupback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(0);
+                viewFlipper.showNext();
+                viewFlipper1.showNext();
+                viewFlipper2.showNext();
+            }
+        });
+        ImageButton timeTableButton = findViewById(R.id.freetimetable);
+        timeTableButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(2);
+            }
+        });
+    }
     private void initPage(){
         viewPager=(ViewPagerSlide) findViewById(R.id.viewpagers);
         initTimeLinePage();
         initNotificationPage();
+        initTimeTablePage();
         refresh();
         viewList = new ArrayList<View>();// 将要分页显示的View装入数组中
         viewList.add(timeLinePage);
         viewList.add(notificationPage);
+        viewList.add(timetablePager);
         PagerAdapter pagerAdapter = new PagerAdapter() {
             @Override
             public boolean isViewFromObject(View arg0, Object arg1) {
@@ -192,6 +267,19 @@ public class GroupScheduleActivity extends AppCompatActivity {
     private void createNotification(){
 
     }
+    private void initTimeTablePage(){
+        timetablePager = View.inflate(this,R.layout.timetable_layout,null);
+        clContent = timetablePager.findViewById(R.id.cl_content);
+        weekView = timetablePager.findViewById(R.id.calendarView);
+        weekView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(com.haibin.calendarview.Calendar calendar, boolean isClick) {
+
+            }
+        });
+        //flushTimeTableList();
+
+    }
     private void initTimeLinePage(){
         timeLinePage =  View.inflate(this,R.layout.grouptimeline_layout,null);
         groupEventRecyclerView=timeLinePage.findViewById(R.id.group_list);
@@ -202,6 +290,21 @@ public class GroupScheduleActivity extends AppCompatActivity {
         notificationPage = View.inflate(this,R.layout.notification_layout,null);
         notificationRecyclerView = notificationPage.findViewById(R.id.notification_list);
         notificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void flushTimeTableList(){
+        int size = 0;
+        int selectYear = 2019;
+        int selectWeek = 27;
+        //EventList allMemberEventList = ClientGroupEventControl.findAllMemberEventListByWeek(selectYear,selectWeek);
+        EventList allMemberEventList = null;
+        //GroupEventList allMemberGroupEventList = ClientGroupEventControl.findAllMemberGroupEventListByWeek(selectYear,selectWeek);
+        GroupEventList allMemberGroupEventList = groupEventList;
+        clContent.removeViews(50,size);
+        //weekGroupEventList = ClientEventControl.findGroupEventListByWeek(selectYear,selectWeek);
+        clContent=timetablePager.findViewById(R.id.cl_content);
+        MyTimeTableUtils myTimeTableUtils = new MyTimeTableUtils(this,clContent,allMemberEventList,allMemberGroupEventList);
+        myTimeTableUtils.fill();
     }
     private void flushTimeLineList(){
         timeLineAdapter=new TimeLineAdapter(groupEventList,this);
@@ -238,65 +341,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
             }
         });
     }
-    private void initButton()
-    {
-        info=findViewById(R.id.info);
-        info.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(GroupScheduleActivity.this,GroupDetailActivity.class);
-                intent.putExtra("group",group);
-                startActivityForResult(intent,0);
-            }
-        });
-        back=findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        ImageView eventaddbutton = findViewById(R.id.add_event_button);
-        eventaddbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent intent=new Intent(GroupScheduleActivity.this,AddGroupEventActivity.class);
-                startActivityForResult(intent,ADD_EVENT);
-            }
-        });
-        ImageButton notificationaddbutton = findViewById(R.id.add_notification_button);
-        notificationaddbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                materialDialog.show();
-            }
-        });
-        ViewFlipper viewFlipper = findViewById(R.id.flipper);
-        ViewFlipper viewFlipper1 = findViewById(R.id.flipper1);
-        ViewFlipper viewFlipper2 = findViewById(R.id.flipper2);
-        ImageButton notification = findViewById(R.id.notification);
-        notification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewPager.setCurrentItem(1);
-                viewFlipper.showNext();
-                viewFlipper1.showNext();
-                viewFlipper2.showNext();
-            }
-        });
-        ImageButton groupback = findViewById(R.id.groupback);
-        groupback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewPager.setCurrentItem(0);
-                viewFlipper.showNext();
-                viewFlipper1.showNext();
-                viewFlipper2.showNext();
-            }
-        });
-
-    }
 
     private void initData(){
 
@@ -314,6 +359,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 else noneEvent.setText("");
                 flushTimeLineList();
                 flushNoificationList();
+                flushTimeTableList();
 
             }
             @Override
