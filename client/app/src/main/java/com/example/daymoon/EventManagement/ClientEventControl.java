@@ -52,7 +52,7 @@ public class ClientEventControl {//施工
     }
 
     // 通过currentUserID向服务器找到当前user的eventList
-    public static void getEventListFromServer(Runnable callback){
+    public static void getEventListFromServer(Runnable callback, Context context){
         Map<String,String> params = new HashMap<>();
         params.put("userID",String.valueOf(getInstance().currentUserID));
         HttpRequest.post(SERVER_IP+"getallmyevents",params, new HttpRequest.DataCallback(){
@@ -63,12 +63,13 @@ public class ClientEventControl {//施工
                 System.out.println(result);
                 Type EventRecordType = new TypeToken<EventList>(){}.getType();
                 getInstance().eventList = gson.fromJson(result, EventRecordType);
-
+                LocalDatabaseHelper localDatabaseHelper=new LocalDatabaseHelper(context);
+                localDatabaseHelper.syncEvents(getEventList());
                 callback.run();
             }
             @Override
             public void requestFailure(Request request, IOException e) {
-                Log.e("shit", "oops! Something goes wrong");
+                getInstance().eventList = new LocalDatabaseHelper(context).queryEventList();
             }
         });
     }

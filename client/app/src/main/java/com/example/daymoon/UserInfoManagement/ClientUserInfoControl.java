@@ -44,16 +44,18 @@ public class ClientUserInfoControl {
         return getInstance().currentUser;
     }
 
-    public static void getProfilePhoto(){
-        if (getInstance().currentUser!=null)
-        HttpRequest.getFile(SERVER_IP + "image/" + getInstance().currentUser.getProfilePhotoName(), new HttpRequest.FileCallback() {
+    public static void getProfilePhoto(User user, Runnable success, Runnable failure){
+        HttpRequest.getFile(SERVER_IP + "image/" + user.getProfilePhotoName(), new HttpRequest.FileCallback() {
             @Override
             public void requestSuccess(Bitmap bitmap) throws Exception {
-                getInstance().currentUser.setProfilePhoto(bitmap);
+                user.setProfilePhoto(bitmap);
+                //System.out.println(bitmap.getHeight());
+                success.run();
             }
 
             @Override
             public void requestFailure(Request request, IOException e) {
+                failure.run();
             }
         });
     }
@@ -67,8 +69,7 @@ public class ClientUserInfoControl {
                 Gson gson = new GsonBuilder().create();
                 Type UserRecordType = new TypeToken<User>(){}.getType();
                 user.CopyFrom(gson.fromJson(result, UserRecordType));
-                getProfilePhoto();
-                success.run();
+                getProfilePhoto(user,success,failure);
             }
             @Override
             public void requestFailure(Request request, IOException e) {

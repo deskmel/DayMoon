@@ -40,15 +40,18 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "DayMoonLocal"; // the name of our database
     private static final int DB_VERSION = 2; // the version of the database
-    private int currentUserID;
+    private static int currentUserID;
 
-    public LocalDatabaseHelper(Context context, int currentUserID) {
+    public static void setCurrentUserID(int currentUserID) {
+        LocalDatabaseHelper.currentUserID = currentUserID;
+    }
+
+    public LocalDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
-        this.currentUserID = currentUserID;
     }
 
     @Override
-    public  void onCreate(SQLiteDatabase db) {
+    public void onCreate(SQLiteDatabase db) {
         ;
     }
 
@@ -56,7 +59,6 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
        ;
     }
-
     /**
      * 判断某张表是否存在
      * @param db
@@ -68,7 +70,7 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
         if(tableName == null){
             return false;
         }
-        Cursor cursor = null;
+        Cursor cursor;
         try {
             String sql = "select count(*) as c from sqlite_master  where type ='table' and name ='"+tableName.trim()+"' ";
             cursor = db.rawQuery(sql, null);
@@ -78,12 +80,10 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
                     result = true;
                 }
             }
-
+            cursor.close();
         } catch (Exception e) {
             System.out.println("Error occurs in tableExist");
         }
-        cursor.close();
-
         return result;
     }
 
@@ -104,7 +104,7 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
         eventValues.put("endTime", formatter.format(event.getEndTime().getTime()));
         eventValues.put("whetherProcess", event.getWhetherProcess());
         eventValues.put("remind",0); //存疑
-        db.insert("events" + Integer.toString(currentUserID), null, eventValues);
+        db.insert("events" + String.valueOf(currentUserID), null, eventValues);
     }
 
     /**
@@ -116,7 +116,7 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
         ContentValues eventValues = new ContentValues();
 
         SimpleDateFormat formatter = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss");
+                "yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         eventValues.put("eventID", event.getEventID());
         eventValues.put("eventName", event.getTitle());
         eventValues.put("description", event.getDescription());
@@ -124,16 +124,17 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
         eventValues.put("endTime", formatter.format(event.getEndTime().getTime()));
         eventValues.put("whetherProcess", event.getWhetherProcess());
         eventValues.put("remind",0); //存疑
-        db.update("events" + Integer.toString(currentUserID),eventValues,"eventID=?",new String[]{Integer.toString(event.getEventID())});
+        db.update("events" + String.valueOf(currentUserID),eventValues,"eventID=?",new String[]{String.valueOf(event.getEventID())});
     }
 
     /**
      * 同步events（前端调用）
      */
-    public void syncEvents(SQLiteDatabase db, EventList eventList){
+    public void syncEvents(EventList eventList){
+        SQLiteDatabase db = getWritableDatabase();
         //判断表events是否存在
-        if (tableExist(db, "events" + Integer.toString(currentUserID)) == false) {
-            String SQL_CREATE_EVENTS = "create table events"+ Integer.toString(currentUserID) +
+        if (!tableExist(db, "events" + String.valueOf(currentUserID))) {
+            String SQL_CREATE_EVENTS = "create table events"+ String.valueOf(currentUserID) +
                     "(eventID INTEGER PRIMARY KEY, " +
                     "eventName CHAR(50), " +
                     "description VARCHAR(500), " +
@@ -154,10 +155,10 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
             else {
                 Cursor cursor = null;
                 for (Event event : eventList) {
-                    cursor = db.query("events" + Integer.toString(currentUserID),
+                    cursor = db.query("events" + String.valueOf(currentUserID),
                             new String[]{"eventName"},
                             "eventID=?",
-                            new String[]{Integer.toString(event.getEventID())},
+                            new String[]{String.valueOf(event.getEventID())},
                             null, null, null);
                     if (cursor.moveToFirst()) {
                         updateEvent(db, event);
@@ -172,17 +173,17 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * 查询当前user的个人event，返回一个eventList（前端调用）
-     * @param db
      * @return
      */
-    public EventList queryEventList(SQLiteDatabase db){
+    public EventList queryEventList(){
+        SQLiteDatabase db = getWritableDatabase();
         EventList eventList = new EventList();
         SimpleDateFormat formatter = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.CHINA);
 
         Cursor cursor = null;
-        if (tableExist(db, "events"+ Integer.toString(currentUserID) )) {
-            cursor = db.rawQuery("SELECT * FROM events" + Integer.toString(currentUserID), null);
+        if (tableExist(db, "events"+ String.valueOf(currentUserID) )) {
+            cursor = db.rawQuery("SELECT * FROM events" + String.valueOf(currentUserID), null);
             while (cursor.moveToNext()) {
                 try {
                     //整理取到的表格信息。出错可能性较大
@@ -206,11 +207,11 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
                     System.out.println("Invalid date format in queryEventList");
                 }
             }
+            cursor.close();
         }
         else{
-            System.out.println("There is no table called events" + Integer.toString(currentUserID));
+            System.out.println("There is no table called events" + String.valueOf(currentUserID));
         }
-        cursor.close();
 
         return eventList;
 
@@ -234,7 +235,7 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
         groupValues.put("eventIDs", eventIDS);
         groupValues.put("leaderID", group.getLeaderID());
         groupValues.put("imgName", group.getImgName());
-        db.insert("groups" + Integer.toString(currentUserID), null, groupValues);
+        db.insert("groups" + String.valueOf(currentUserID), null, groupValues);
 
     }
 
@@ -256,7 +257,7 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
         groupValues.put("eventIDs", eventIDS);
         groupValues.put("leaderID", group.getLeaderID());
         groupValues.put("imgName", group.getImgName());
-        db.update("groups" + Integer.toString(currentUserID),groupValues,"groupID=?",new String[]{Integer.toString(group.getGroupID())});
+        db.update("groups" + String.valueOf(currentUserID),groupValues,"groupID=?",new String[]{String.valueOf(group.getGroupID())});
     }
 
     /**
@@ -264,8 +265,8 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
      */
     public void syncGroups(SQLiteDatabase db, GroupList groupList){
         //判断表groups是否存在
-        if (tableExist(db, "groups" + Integer.toString(currentUserID)) == false) {
-            String SQL_CREATE_GROUPS = "create table groups" + Integer.toString(currentUserID) +
+        if (!tableExist(db, "groups" + String.valueOf(currentUserID))) {
+            String SQL_CREATE_GROUPS = "create table groups" + String.valueOf(currentUserID) +
                     "(groupID INTEGER PRIMARY KEY," +
                     "groupName CHAR(50)," +
                     "description  VARCHAR(500) ," +
@@ -286,10 +287,10 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
             else {
                 Cursor cursor = null;
                 for (Group group : groupList) {
-                    cursor = db.query("groups" + Integer.toString(currentUserID),
+                    cursor = db.query("groups" + String.valueOf(currentUserID),
                             new String[]{"groupName"},
                             "groupID=?",
-                            new String[]{Integer.toString(group.getGroupID())},
+                            new String[]{String.valueOf(group.getGroupID())},
                             null, null, null);
                     if (cursor.moveToFirst()) {
                         updateGroup(db, group);
@@ -312,8 +313,8 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
         Gson gson = new Gson();
 
         Cursor cursor = null;
-        if (tableExist(db, "groups"+ Integer.toString(currentUserID) )) {
-            cursor = db.rawQuery("SELECT * FROM groups" + Integer.toString(currentUserID), null);
+        if (tableExist(db, "groups"+ String.valueOf(currentUserID) )) {
+            cursor = db.rawQuery("SELECT * FROM groups" + String.valueOf(currentUserID), null);
             while (cursor.moveToNext()) {
                 try {
                     //整理取到的表格信息。出错可能性较大
@@ -334,7 +335,7 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
             }
         }
         else{
-            System.out.println("There is no table called groups" + Integer.toString(currentUserID));
+            System.out.println("There is no table called groups" + String.valueOf(currentUserID));
         }
 
         cursor.close();
@@ -361,7 +362,7 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
         groupEventValues.put("endTime", formatter.format(groupEvent.getEndTime().getTime()));
         groupEventValues.put("whetherProcess", groupEvent.getWhetherProcess());
         groupEventValues.put("remind",0); //存疑
-        db.insert("groupevents" + Integer.toString(currentUserID), null, groupEventValues);
+        db.insert("groupevents" + String.valueOf(currentUserID), null, groupEventValues);
 
     }
 
@@ -385,7 +386,7 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
         groupEventValues.put("endTime", formatter.format(groupEvent.getEndTime().getTime()));
         groupEventValues.put("whetherProcess", groupEvent.getWhetherProcess());
         groupEventValues.put("remind",0); //存疑
-        db.update("groupevents"+ Integer.toString(currentUserID),groupEventValues,"groupID=? and eventID=?",new String[]{Integer.toString(groupEvent.getGroupID()), Integer.toString(groupEvent.getEventID())});
+        db.update("groupevents"+ String.valueOf(currentUserID),groupEventValues,"groupID=? and eventID=?",new String[]{String.valueOf(groupEvent.getGroupID()), String.valueOf(groupEvent.getEventID())});
     }
 
     /**
@@ -393,8 +394,8 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
      */
     public void syncGroupEvents(SQLiteDatabase db, GroupEventList groupEventList){
         //判断表groupevents是否存在
-        if (tableExist(db, "groupevents" + Integer.toString(currentUserID))) {
-            String SQL_CREATE_GROUPEVENTS = "create table groupevents " + Integer.toString(currentUserID) +
+        if (tableExist(db, "groupevents" + String.valueOf(currentUserID))) {
+            String SQL_CREATE_GROUPEVENTS = "create table groupevents " + String.valueOf(currentUserID) +
                     "(eventID INTEGER PRIMARY KEY," +
                     "groupID INTEGER," +
                     "dutyUserIDs VARCHAR(500)," +
@@ -418,10 +419,10 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
                 //查询groupID
                 Cursor cursor = null;
                 for (GroupEvent groupEvent : groupEventList){
-                    cursor = db.query("groupevents" + Integer.toString(currentUserID),
+                    cursor = db.query("groupevents" + String.valueOf(currentUserID),
                             new String[] {"eventName"},
                             "groupID=? and eventID=?",
-                            new String[] {Integer.toString(groupEvent.getGroupID()), Integer.toString(groupEvent.getEventID())},
+                            new String[] {String.valueOf(groupEvent.getGroupID()), String.valueOf(groupEvent.getEventID())},
                             null, null, null);
                     if (cursor.moveToFirst()){
                         updateGroupEvent(db, groupEvent);
@@ -447,9 +448,9 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
         Gson gson = new Gson();
 
         Cursor cursor = null;
-        if (tableExist(db, "groupevents"+ Integer.toString(currentUserID) )) {
-            cursor = db.rawQuery("SELECT * FROM groupevents" + Integer.toString(currentUserID) + " WHERE groupID=?",
-                    new String[]{Integer.toString(targetGroupID)});
+        if (tableExist(db, "groupevents"+ String.valueOf(currentUserID) )) {
+            cursor = db.rawQuery("SELECT * FROM groupevents" + String.valueOf(currentUserID) + " WHERE groupID=?",
+                    new String[]{String.valueOf(targetGroupID)});
             while (cursor.moveToNext()) {
                 try {
                     //整理取到的表格信息。出错可能性较大
@@ -477,7 +478,7 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
             }
         }
         else{
-            System.out.println("There is no table called groupevents" + Integer.toString(currentUserID));
+            System.out.println("There is no table called groupevents" + String.valueOf(currentUserID));
         }
 
         cursor.close();
@@ -486,13 +487,13 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * 测试用，查看表内数据。
-     * @param db
      */
-    public void seeTable(SQLiteDatabase db, String tableName){
+    public void seeTable(String tableName){
+        SQLiteDatabase db = getWritableDatabase();
         String SEE_TABLE = "SELECT * FROM " + tableName;
         Cursor cursor = db.rawQuery(SEE_TABLE, null);
 
-        if (tableName == "events" + Integer.toString(currentUserID)) {
+        if (tableName.equals("events" + String.valueOf(currentUserID))) {
             while (cursor.moveToNext()) {
                 System.out.println("eventID:" + cursor.getString(0)
                         + "  eventName:" + cursor.getString(1)
@@ -503,7 +504,7 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
                         + "  remind:" + cursor.getString(6));
             }
         }
-        else if (tableName == "groups"+ Integer.toString(currentUserID)){
+        else if (tableName.equals("groups"+ String.valueOf(currentUserID))){
             while (cursor.moveToNext()) {
                 System.out.println("groupID:" + cursor.getString(0)
                         + "  groupName:" + cursor.getString(1)
@@ -514,7 +515,7 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
                         + "  imgName:" + cursor.getString(6));
             }
         }
-        else if (tableName == "groupevents" + Integer.toString(currentUserID)){
+        else if (tableName.equals("groupevents" + String.valueOf(currentUserID))){
             while (cursor.moveToNext()){
                 System.out.println("eventID:" + cursor.getString(0)
                         + "  groupID:" + cursor.getString(1)

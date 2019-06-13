@@ -117,6 +117,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         super.onCreate(savedInstanceState);
         int userId = getIntent().getIntExtra("userid", -1);
         if (userId <0) System.out.println("no userID given");
+        LocalDatabaseHelper.setCurrentUserID(userId);
         ClientUserInfoControl.setCurrentUser(userId, new Runnable(){
             @Override
             public void run() {
@@ -135,7 +136,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 setSchemeDate();
                 flushCalendarListView();
             }
-        });
+        }, this);
         ClientEventControl.getGroupEventListFromServer(new Runnable() {
             @Override
             public void run() {

@@ -70,7 +70,7 @@ def getallmyevents():
     if request.method == 'POST':
         userID=int(request.form.get('userID'))
         res=db.getAllMyEvents(userID)
-    return res
+    return json.dumps(res,ensure_ascii=False)
 
 @app.route('/getgroupevent',methods=['GET', 'POST'])
 def getgroupevent():
@@ -117,7 +117,21 @@ def getallmygroups():
         res=db.getAllMyGroups(userID)
     return json.dumps(res, ensure_ascii=False)
 
+@app.route('/getallmemberevents', methods=['GET', 'POST'])
+def getallmemberevents():
+    res = ''
+    if request.method == 'POST':
+        groupID = request.form.get('groupID')
+        res = db.getAllMemberEvents(groupID)
+    return json.dumps(res, ensure_ascii=False)
 
+@app.route('/getallmembergroupevents', methods=['GET', 'POST'])
+def getallmembergroupevents():
+    res = ''
+    if request.method == 'POST':
+        groupID = request.form.get('groupID')
+        res = db.getAllMemberGroupEvents(groupID)
+    return json.dumps(res, ensure_ascii=False)
 
 @app.route('/submitevent',methods=['GET', 'POST'])
 def submitevent():
@@ -231,6 +245,8 @@ def joingroupbyqrcode():
             return str(res)
         return ''
     return res
+
+
 
 from flask import render_template, jsonify
 if __name__ == '__main__':

@@ -694,7 +694,7 @@ class DayMoonDB(object):
         allMyEvents=[]
         for eventID in events:
             allMyEvents.append(json.loads(self.getEventInfo(eventID,userID)))
-        return json.dumps(allMyEvents,ensure_ascii=False)
+        return allMyEvents
 
     def getAllMyGroups(self,userID):
         '''
@@ -801,6 +801,30 @@ class DayMoonDB(object):
                                 'eventType': info[10]}
                     allMyGroupEvents.append(infodict)
         return allMyGroupEvents
+
+    def getAllMemberEvents(self,groupID):
+        sql = '''SELECT `memberIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+        self.lock.acquire()
+        self.cur.execute(sql)
+        self.lock.release()
+        memberIDs = json.loads(self.cur.fetchone()[0])
+
+        allMemberEvents = []
+        for memberID in memberIDs:
+            allMemberEvents.extend(self.getAllMyEvents(memberID))
+        return allMemberEvents
+
+    def getAllMemberGroupEvents(self,groupID):
+        sql = '''SELECT `memberIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+        self.lock.acquire()
+        self.cur.execute(sql)
+        self.lock.release()
+        memberIDs = json.loads(self.cur.fetchone()[0])
+
+        allMemberGroupEvents = []
+        for memberID in memberIDs:
+            allMemberGroupEvents.extend(self.getAllMyGroupEventlists(memberID))
+        return allMemberGroupEvents
 
     # -----------个人信息汇总-----------#
 
