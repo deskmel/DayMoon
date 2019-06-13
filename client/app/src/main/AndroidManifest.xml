@@ -10,21 +10,22 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.hardware.camera.autofocus" />
 
     <application
-        tools:replace="android:appComponentFactory"
-        android:appComponentFactory="s"
         android:allowBackup="true"
+        android:appComponentFactory="s"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".UserInterface.GroupEventDetailActivity"></activity>
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:appComponentFactory">
+        <activity android:name=".UserInterface.CreateEventSemanticAnalyze"></activity>
+        <activity android:name=".UserInterface.GroupEventDetailActivity" />
         <activity android:name=".UserInterface.AddGroupEventActivity" />
         <activity android:name=".UserInterface.CreateGroupActivity" />
         <activity android:name=".UserInterface.GroupDetailActivity" />
@@ -33,7 +34,7 @@
         <activity android:name=".UserInterface.EditEventActivity" />
         <activity android:name=".UserInterface.EventDetailActivity" />
         <activity android:name=".UserInterface.EventAdder" />
-        <activity android:name=".UserInterface.QRCodeActivity"/>
+        <activity android:name=".UserInterface.QRCodeActivity" />
         <activity
             android:name=".UserInterface.LoginActivity"
             android:label="DayMoon">
@@ -42,19 +43,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
-
         </activity>
         <activity
             android:name=".UserInterface.CalendarActivity"
-            android:label="DayMoon">
-
-        </activity>
+            android:label="DayMoon"></activity>
         <activity
             android:name=".UserInterface.RegisterActivity"
-            android:label="DayMoon">
-        </activity>
+            android:label="DayMoon"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
