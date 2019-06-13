@@ -3,7 +3,8 @@ import os
 import re
 import  pyltp
 from datetime import *
-LTP_DATA_DIR = 'E:/work/code/Andriod/DayMoon/word2event/ltp_data_v3.4.0'  # ltp模型目录的路径
+
+LTP_DATA_DIR = 'YOUR/PATH/TO/ltp_data_v3.4.0'  # ltp模型目录的路径
 
 
 numdict={'一':'1','二':'2','两':'2','三':'3','四':'4','五':'5','六':'6','七':'7','八':'8','九':'9','十':'10','天':'7','十一':'11','十二':'12'}
