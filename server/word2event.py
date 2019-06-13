@@ -95,86 +95,87 @@ def parseTime(time_tuple):
 
 
 def getRelationship(sentence):
-    sentence=sentence.replace('去','在')
-    sentence = sentence.replace('礼拜', '星期')
-    sentence = sentence.replace('周', '星期')
-    sentence = sentence.replace('十一点', '11点')
-    sentence = sentence.replace('十二点', '12点')
-    sentence = [x for x in sentence]
-    for i in range(len(sentence)-1):
-        if sentence[i] in numdict.keys() and sentence[i+1]in ['点']:
-            sentence[i]=numdict[sentence[i]]
-    sentence=''.join(sentence)
+    returnDict = {'date': '', 'start_time': '', 'end_time': '', 'freq': '', 'people': '', 'place': '', 'things': ''}
+    try:
+        sentence=sentence.replace('去','在')
+        sentence = sentence.replace('礼拜', '星期')
+        sentence = sentence.replace('周', '星期')
+        sentence = sentence.replace('十一点', '11点')
+        sentence = sentence.replace('十二点', '12点')
+        sentence = [x for x in sentence]
+        for i in range(len(sentence)-1):
+            if sentence[i] in numdict.keys() and sentence[i+1]in ['点']:
+                sentence[i]=numdict[sentence[i]]
+        sentence=''.join(sentence)
 
 
-    words = segmentor.segment(sentence)
-    postags = postagger.postag(words)
-
-    wds = list(words)
-    pgs = list(postags)
-
-    time=()
-    people=()
-
-    time_inds=[i for i in range(len(pgs)) if pgs[i]=='nt']
-    if time_inds:
-        from_ind=min(time_inds)
-        to_ind=max(time_inds)
-        if from_ind-1>=0 and (pgs[from_ind-1]=='p' or (pgs[from_ind-1]=='r' and '每'in wds[from_ind-1])): from_ind=from_ind-1
-        if to_ind+1<len(pgs) and pgs[to_ind+1]=='r' and '每'in wds[to_ind+1]:to_ind=to_ind+1
-        time=(wds[from_ind:to_ind+1],pgs[from_ind:to_ind+1])
-        for i in range(from_ind, to_ind + 1): wds[i] = ''
-
-
-    who_inds = [i for i in range(len(pgs)) if pgs[i] == 'nh']
-    if who_inds:
-        from_ind = min(who_inds)
-        to_ind = max(who_inds)
-        if from_ind - 1 >= 0 and wds[from_ind - 1] in ['和','与','陪','同']: from_ind = from_ind - 1
-        people = (wds[from_ind:to_ind + 1], pgs[from_ind:to_ind + 1])
-        for i in range(from_ind, to_ind + 1): wds[i] = ''
-
-    # print(people)
-
-    if time or people:
-        newstr = ''.join(wds)
-        words = segmentor.segment(newstr)
+        words = segmentor.segment(sentence)
         postags = postagger.postag(words)
 
-    wds = list(words)
-    pgs = list(postags)
-    arcs = parser.parse(words, postags)
-    roles = labeller.label(words, postags, arcs)
+        wds = list(words)
+        pgs = list(postags)
 
-    place=()
-    things=[]
-    for role in roles:
-        thingstr=wds[role.index]
-        for arg in role.arguments:
-            if arg.name=='LOC' and not place:
-                start,end=arg.range.start, arg.range.end
-                place=(wds[start:end+1],pgs[start:end+1])
-            if arg.name == 'A1':
-                start, end = arg.range.start, arg.range.end
-                thingstr+=''.join(wds[start:end + 1])
-        things.append(thingstr)
+        time=()
+        people=()
 
-    # print(place)
-    # print(things)
-
-    start_day, start_time, end_time, freq=parseTime(time)
+        time_inds=[i for i in range(len(pgs)) if pgs[i]=='nt']
+        if time_inds:
+            from_ind=min(time_inds)
+            to_ind=max(time_inds)
+            if from_ind-1>=0 and (pgs[from_ind-1]=='p' or (pgs[from_ind-1]=='r' and '每'in wds[from_ind-1])): from_ind=from_ind-1
+            if to_ind+1<len(pgs) and pgs[to_ind+1]=='r' and '每'in wds[to_ind+1]:to_ind=to_ind+1
+            time=(wds[from_ind:to_ind+1],pgs[from_ind:to_ind+1])
+            for i in range(from_ind, to_ind + 1): wds[i] = ''
 
 
-    returnDict={'date':'','start_time':'','end_time':'','freq':'','people':'','place':'','things':''}
-    returnDict['date']=start_day.strftime('%Y-%m-%d')
-    if start_time:returnDict['start_time']='%02d:%02d'%start_time
-    if end_time: returnDict['end_time'] = '%02d:%02d' % end_time
-    if freq:returnDict['freq']=str(freq)
-    if things:returnDict['things']='、'.join(things)
-    if people:returnDict['people']='、'.join([people[0][i] for i in range(len(people[0])) if people[1][i]=='nh'])
-    if place: returnDict['place'] = '、'.join([place[0][i] for i in range(len(place[0])) if place[1][i] == 'n'])
+        who_inds = [i for i in range(len(pgs)) if pgs[i] == 'nh']
+        if who_inds:
+            from_ind = min(who_inds)
+            to_ind = max(who_inds)
+            if from_ind - 1 >= 0 and wds[from_ind - 1] in ['和','与','陪','同']: from_ind = from_ind - 1
+            people = (wds[from_ind:to_ind + 1], pgs[from_ind:to_ind + 1])
+            for i in range(from_ind, to_ind + 1): wds[i] = ''
 
-    return returnDict
+        # print(people)
+
+        if time or people:
+            newstr = ''.join(wds)
+            words = segmentor.segment(newstr)
+            postags = postagger.postag(words)
+
+        wds = list(words)
+        pgs = list(postags)
+        arcs = parser.parse(words, postags)
+        roles = labeller.label(words, postags, arcs)
+
+        place=()
+        things=[]
+        for role in roles:
+            thingstr=wds[role.index]
+            for arg in role.arguments:
+                if arg.name=='LOC' and not place:
+                    start,end=arg.range.start, arg.range.end
+                    place=(wds[start:end+1],pgs[start:end+1])
+                if arg.name == 'A1':
+                    start, end = arg.range.start, arg.range.end
+                    thingstr+=''.join(wds[start:end + 1])
+            things.append(thingstr)
+
+        # print(place)
+        # print(things)
+
+        start_day, start_time, end_time, freq=parseTime(time)
+
+        returnDict['date']=start_day.strftime('%Y-%m-%d')
+        if start_time:returnDict['start_time']='%02d:%02d'%start_time
+        if end_time: returnDict['end_time'] = '%02d:%02d' % end_time
+        if freq:returnDict['freq']=str(freq)
+        if things:returnDict['things']='、'.join(things)
+        if people:returnDict['people']='、'.join([people[0][i] for i in range(len(people[0])) if people[1][i]=='nh'])
+        if place: returnDict['place'] = '、'.join([place[0][i] for i in range(len(place[0])) if place[1][i] == 'n'])
+
+        return returnDict
+    except:return returnDict
 
 
 if __name__ == '__main__':
