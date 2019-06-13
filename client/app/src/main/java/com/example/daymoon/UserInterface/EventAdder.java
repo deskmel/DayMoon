@@ -21,6 +21,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -38,7 +39,7 @@ public class EventAdder extends BaseActivity {
     private Intent intent;
     private Bundle bundle;
     private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
-
+    private java.util.Calendar current;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +59,15 @@ public class EventAdder extends BaseActivity {
         //初始化事件的时间
         eventInformationHolder = new EventInformationHolder(bundle.getInt("selectYear"),bundle.getInt("selectMonth"),bundle.getInt("selectDay"));
         UIControl=new TestUserInterfaceControl();
-
         final SimpleDateFormat dateformat=new SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA);
         final SimpleDateFormat Hourformat=new SimpleDateFormat("HH:mm", Locale.CHINA);
         final boolean[] dateType = {true, true, true, false, false, false};
         final boolean[] timeType = {false, false, false, true, true, false};
+        current = Calendar.getInstance();
+        current.set(Calendar.YEAR,bundle.getInt("selectYear"));
+        current.set(Calendar.MONTH,bundle.getInt("selectMonth")-1);
+        current.set(Calendar.DATE,bundle.getInt("selectDay"));
+        startDate.setText(dateformat.format(current.getTime()));
         //开始日期选择工具
         startDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,11 +87,17 @@ public class EventAdder extends BaseActivity {
                         eventInformationHolder.Month_ = month;
                         eventInformationHolder.Date_ = datee;
                     }
-                }).setType(dateType).build();
+                }).setType(dateType).setDate(current).build();
                 pvTime.show();
             }
         });
         //为表单绑定时间选择工具
+        Calendar beginHour = Calendar.getInstance();
+        beginHour.set(Calendar.HOUR_OF_DAY,bundle.get("beginHour")==null?8:bundle.getInt("beginHour"));
+        beginHour.set(Calendar.MINUTE,bundle.get("beginMinute")==null?0:bundle.getInt("beginMinute"));
+        eventInformationHolder.startHour_=beginHour.get(Calendar.HOUR_OF_DAY);
+        eventInformationHolder.startMinute_=beginHour.get(Calendar.MINUTE);
+        startTime.setText(Hourformat.format(beginHour.getTime()));
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,18 +106,24 @@ public class EventAdder extends BaseActivity {
                     public void onTimeSelect(Date date, View v) {
                         java.util.Calendar c = java.util.Calendar.getInstance();
                         c.setTime(date);
-                        int hour = c.get(java.util.Calendar.HOUR);
+                        int hour = c.get(Calendar.HOUR_OF_DAY);
                         int minute = c.get(java.util.Calendar.MINUTE);
                         //滚动到指定日期
                         eventInformationHolder.startHour_=hour;
                         eventInformationHolder.startMinute_=minute;
                         startTime.setText(Hourformat.format(c.getTime()));
                     }
-                }).setType(timeType).build();
+                }).setType(timeType).setDate(beginHour).build();
                 pvTime.show();
             }
         });
         //结束时间
+        Calendar endHour = Calendar.getInstance();
+        endHour.set(Calendar.HOUR_OF_DAY,bundle.get("endHour")==null?12:bundle.getInt("endHour"));
+        endHour.set(Calendar.MINUTE,bundle.get("endMinute")==null?59:bundle.getInt("endMinute"));
+        eventInformationHolder.endHour_=endHour.get(Calendar.HOUR_OF_DAY);
+        eventInformationHolder.endMinute_=endHour.get(Calendar.MINUTE);
+        endTime.setText(Hourformat.format(endHour.getTime()));
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,31 +132,19 @@ public class EventAdder extends BaseActivity {
                     public void onTimeSelect(Date date, View v) {
                         java.util.Calendar c = java.util.Calendar.getInstance();
                         c.setTime(date);
-                        int hour = c.get(java.util.Calendar.HOUR);
+                        int hour = c.get(Calendar.HOUR_OF_DAY);
                         int minute = c.get(java.util.Calendar.MINUTE);
                         //滚动到指定日期
                         eventInformationHolder.endHour_=hour;
                         eventInformationHolder.endMinute_=minute;
                         endTime.setText(Hourformat.format(c.getTime()));
                     }
-                }).setType(timeType).build();
+                }).setType(timeType).setDate(endHour).build();
                 pvTime.show();
             }
         });
         //绑定全天选择按钮
         jtb_whetherAllday.setOnStateChangeListener(new JellyToggleButton.OnStateChangeListener() {
-            @Override
-            public void onStateChange(float process, State state, JellyToggleButton jtb) {
-                if (state.equals(State.LEFT)) {
-                    eventInformationHolder.allday=false;
-                }
-                if (state.equals(State.RIGHT)) {
-                    eventInformationHolder.allday=true;
-                }
-            }
-        });
-        //绑定是否process按钮
-        jtb_whethercontinue.setOnStateChangeListener(new JellyToggleButton.OnStateChangeListener() {
             @Override
             public void onStateChange(float process, State state, JellyToggleButton jtb) {
                 if (state.equals(State.LEFT)) {
@@ -150,7 +155,9 @@ public class EventAdder extends BaseActivity {
                 }
             }
         });
-        //
+        //描述content
+        TitleView.setText(bundle.get("title")==null?"":bundle.getString("title"));
+        DescriptionView.setText(bundle.get("description")==null?"":bundle.getString("description"));
         //绑定取消按钮
         findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override

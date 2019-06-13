@@ -52,20 +52,12 @@
                 android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:id="@+id/eventname"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_label_outline_black_24dp"/>
                 <TextView
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@id/eventname"
                     android:id="@+id/event_name"
                     android:gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
-                    android:textSize="22dp"
+                    android:textSize="25dp"
                     android:textColor="@color/black"
                     android:text="母亲节" />
             </RelativeLayout>
@@ -105,7 +97,7 @@
 
             </RelativeLayout>
             <RelativeLayout
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
@@ -125,7 +117,7 @@
                     android:textColor="@color/black"/>
             </RelativeLayout>
             <RelativeLayout
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
@@ -146,7 +138,7 @@
                     android:text="东上院101"/>
             </RelativeLayout>
             <RelativeLayout
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView

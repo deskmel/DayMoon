@@ -101,7 +101,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
-
+        <ImageButton
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/add_blue"
+            android:id="@+id/semantic_adder"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            />
 
         <ImageButton
             android:layout_alignParentRight="true"
@@ -110,10 +120,10 @@
             android:scaleType="fitCenter"
             android:src="@mipmap/add_blue"
             android:id="@+id/addbutton"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             />
     </RelativeLayout>
 </android.support.v4.widget.DrawerLayout>

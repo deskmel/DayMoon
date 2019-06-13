@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
 import re
+import  pyltp
 from datetime import *
+<<<<<<< HEAD
 LTP_DATA_DIR = '/Users/markdana/Downloads/ltp_data_v3.4.0'  # ltp模型目录的路径
+=======
+
+LTP_DATA_DIR = 'YOUR/PATH/TO/ltp_data_v3.4.0'  # ltp模型目录的路径
+>>>>>>> 6f5694e6e45fb4a867be43278710a45c75f1b255
 
 
 numdict={'一':'1','二':'2','两':'2','三':'3','四':'4','五':'5','六':'6','七':'7','八':'8','九':'9','十':'10','天':'7','十一':'11','十二':'12'}

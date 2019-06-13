@@ -216,6 +216,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CalendarActivity.this, GroupActivity.class);
+
                 startActivity(intent);
             }
         });
@@ -312,7 +313,6 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         java.util.Calendar c= java.util.Calendar.getInstance();
         TextView today=timeLine.findViewById(R.id.today);
         today.setText(timeformat.format(c.getTime()));
-
         eventaddbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -408,6 +408,19 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
             public void onClick(View view) {
                 Log.i("adder","touched");
                 Intent intent = new Intent(CalendarActivity.this,EventAdder.class);
+                Bundle bundle=new Bundle();
+                bundle.putInt("selectYear",selectYear);
+                bundle.putInt("selectMonth",selectMonth);
+                bundle.putInt("selectDay",selectDay);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, 0);
+            }
+        });
+        ImageButton btn_semantice_add=findViewById(R.id.semantic_adder);
+        btn_semantice_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CalendarActivity.this,CreateEventSemanticAnalyze.class);
                 Bundle bundle=new Bundle();
                 bundle.putInt("selectYear",selectYear);
                 bundle.putInt("selectMonth",selectMonth);

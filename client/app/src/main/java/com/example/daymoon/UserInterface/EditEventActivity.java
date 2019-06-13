@@ -23,7 +23,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-
 public class EditEventActivity extends BaseActivity {
     private JellyToggleButton jtb_whethercontinue;
     private TextView startTimeView,endTimeView,delete,back,complete;
@@ -86,8 +85,6 @@ public class EditEventActivity extends BaseActivity {
         endTimeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 TimePickerView pvTime = new TimePickerBuilder(EditEventActivity.this, new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(Date date, View v) {
@@ -98,7 +95,6 @@ public class EditEventActivity extends BaseActivity {
                         eventInformationHolder.startMinute_=c.get(Calendar.MINUTE);
                     }
                 }).setType(endTimeType).setDate(endTime).build();
-
                 pvTime.show();
             }
         });
@@ -155,6 +151,5 @@ public class EditEventActivity extends BaseActivity {
                 finish();
             }
         });
-
     }
 }
