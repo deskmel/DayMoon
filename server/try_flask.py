@@ -4,6 +4,7 @@ from flask import Response
 
 import os, sys, threading
 from sql_utils import *
+from word2event import *
 
 #f = open("err.log","w")
 #sys.stderr = f
@@ -17,6 +18,15 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 @app.route('/')
 def index():
     return render_template('home.html')
+
+@app.route('/word2event',methods=['GET', 'POST'])
+def word2event():
+    res=None
+    if request.method == 'POST':
+        sen = request.form.get('sen')
+        res = '转换结果：'+str(getRelationship(sen))
+    return render_template('word2event.html',res=res)
+
 
 @app.route('/signup',methods=['GET', 'POST'])
 def signup():
@@ -251,4 +261,4 @@ def joingroupbyqrcode():
 from flask import render_template, jsonify
 if __name__ == '__main__':
     app.debug = True
-    app.run(host = "0.0.0.0", port = 5000)
+    app.run(host="0.0.0.0", port=5000)

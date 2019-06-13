@@ -21,7 +21,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/menu_bg"
+                android:background="@color/white"
                 android:orientation="horizontal"
                 tools:layout_editor_absoluteX="97dp"
                 tools:layout_editor_absoluteY="0dp">
@@ -39,14 +39,15 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:gravity="center_vertical"
-                        android:textColor="@color/red"
+                        android:textColor="@color/black"
                         android:text="取消" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center|center_vertical"
-                        android:text="新建事件" />
+                        android:textColor="@color/red"
+                        android:text="新建个人事件" />
 
                     <TextView
                         android:id="@+id/complete"
@@ -55,7 +56,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:gravity="center_vertical"
-                        android:textColor="@color/red"
+                        android:textColor="@color/black"
                         android:text="完成" />
                 </RelativeLayout>
             </LinearLayout>
@@ -74,6 +75,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="标题"
+                    android:textColor="@color/black"
+                    app:met_hideUnderline="true"
                     />
             </LinearLayout>
             <LinearLayout
@@ -81,21 +84,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/white_bg">
+                android:background="@color/white">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/white_bg"
+                    android:background="@color/white"
                     android:orientation="horizontal">
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="left|center_vertical"
                             android:layout_marginLeft="10dp"
+                            android:textColor="@color/black"
                             android:text="全天"/>
                         <com.nightonke.jellytogglebutton.JellyToggleButton
                             android:id="@+id/whetherAllday"
@@ -114,12 +118,13 @@
                     android:layout_height="wrap_content">
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         >
                         <TextView
 
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:textColor="@color/black"
                             android:text="日期"
                             android:layout_marginLeft="10dp"
                             android:gravity="center_vertical"/>
@@ -130,49 +135,25 @@
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="10dp"
+                            android:textColor="@color/black"
                             android:text="2018年4年28日"
                             android:gravity="center_vertical"
                             />
                     </RelativeLayout>
                 </LinearLayout>
                 <LinearLayout
-                    android:background="@drawable/white_bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="left|center_vertical"
-                            android:layout_marginLeft="10dp"
-                            android:text="持续"/>
-                        <com.nightonke.jellytogglebutton.JellyToggleButton
-                            android:id="@+id/whethercontinue"
-                            app:jtbLeftBackgroundColor="@android:color/darker_gray"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            app:jtbEaseType="ease_in_out_circ"
-                            android:layout_alignParentRight="true"
-                            />
-                    </RelativeLayout>
-                </LinearLayout>
-                <LinearLayout
-                    android:background="@drawable/white_bg"
+                    android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         >
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="开始"
+                            android:textColor="@color/black"
                             android:layout_marginLeft="10dp"
                             android:gravity="center_vertical"/>
                         <TextView
@@ -181,6 +162,7 @@
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="10dp"
+                            android:textColor="@color/black"
                             android:text="4:00"
                             android:gravity="center_vertical"
                             />
@@ -192,11 +174,12 @@
                     android:layout_height="wrap_content">
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         >
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:textColor="@color/black"
                             android:text="结束"
                             android:layout_marginLeft="10dp"
                             android:gravity="center_vertical"/>
@@ -206,31 +189,8 @@
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="10dp"
+                            android:textColor="@color/black"
                             android:text="8:00"
-                            android:gravity="center_vertical"
-                            />
-                    </RelativeLayout>
-                </LinearLayout>
-                <LinearLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:text="提醒"
-                            android:layout_marginLeft="10dp"
-                            android:gravity="center_vertical"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="10dp"
-                            android:text="无"
                             android:gravity="center_vertical"
                             />
                     </RelativeLayout>
@@ -238,20 +198,56 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="30dp"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/black"
+                        android:text="提醒"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:text="无"
+                        android:gravity="center_vertical"
+                        />
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="30dp"
                 android:layout_width="match_parent"
-                android:background="@drawable/white_bg"
-                android:layout_height="150dp">
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:layout_height="180dp">
+                <TextView
+                    android:background="@drawable/white_bg"
+                    android:paddingLeft="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:text="描述"/>
                 <com.rengwuxian.materialedittext.MaterialEditText
                     android:paddingLeft="10dp"
                     android:id="@+id/DesEditView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="描述"
+                    android:textSize="12sp"
                     android:gravity="top"
                     android:inputType="textMultiLine"
                     android:minLines="8"
-                    android:maxLines="10"
+                    app:met_hideUnderline="true"
+                    android:maxLines="13"
                     />
             </LinearLayout>
         </LinearLayout>
