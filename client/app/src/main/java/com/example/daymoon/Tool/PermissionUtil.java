@@ -15,6 +15,9 @@ public class PermissionUtil {
             Manifest.permission.CAMERA,
             Manifest.permission.VIBRATE,
     };
+    private static  String[] PERMISSIONS_AUDIO ={
+            Manifest.permission.RECORD_AUDIO
+    };
     public static void verifyStoragePermissions(Activity activity) {
         // Check if we have write permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -35,6 +38,16 @@ public class PermissionUtil {
             ActivityCompat.requestPermissions(
                     activity,
                     PERMISSIONS_CAMERA,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
+    public static void verifyAudioPermission(Activity activity){
+        int permission = ActivityCompat.checkSelfPermission(activity,Manifest.permission.RECORD_AUDIO);
+        if (permission != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_AUDIO,
                     REQUEST_EXTERNAL_STORAGE
             );
         }
