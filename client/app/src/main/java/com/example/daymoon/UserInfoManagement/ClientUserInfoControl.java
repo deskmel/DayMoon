@@ -60,7 +60,7 @@ public class ClientUserInfoControl {
         });
     }
 
-    private static void getUserInfoFromServer(User user, int userID, Runnable success, Runnable failure){
+    public static void getUserInfoFromServer(User user, int userID, Runnable success, Runnable failure){
         Map<String,String> params = new HashMap<>();
         params.put("userID", String.valueOf(userID));
         HttpRequest.post(SERVER_IP+"getuserinfo",params, new HttpRequest.DataCallback(){
