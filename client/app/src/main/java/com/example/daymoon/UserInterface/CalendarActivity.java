@@ -127,6 +127,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         if (userId <0) System.out.println("no userID given");
         initProflie();
         initMenu();
+        LocalDatabaseHelper.setCurrentUserID(userId);
         ClientUserInfoControl.setCurrentUser(userId, new Runnable(){
             @Override
             public void run() {
@@ -149,7 +150,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 setSchemeDate();
                 flushCalendarListView();
             }
-        });
+        }, this);
         ClientEventControl.getGroupEventListFromServer(new Runnable() {
             @Override
             public void run() {
@@ -356,7 +357,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
 
                 GregorianCalendar c = new GregorianCalendar(calendar.getYear(),calendar.getMonth()-1,calendar.getDay());
                 //Log.d("week",String.valueOf(c.get(java.util.Calendar.WEEK_OF_YEAR)));
-               // Log.d("year",String.valueOf(c.get(java.util.Calendar.YEAR)));
+                // Log.d("year",String.valueOf(c.get(java.util.Calendar.YEAR)));
                 selectYear = calendar.getYear();
                 selectMonth = calendar.getMonth();
                 selectDay = calendar.getDay();
@@ -458,11 +459,11 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     }
 
     /**
-     * 事件列表更新 
+     * 事件列表更新
      * 进入页面时刷新
      * 返回页面时刷新
      * 日期更换时刷新
-     * 
+     *
      */
     private void flushView(){
         flushCalendarListView();
@@ -484,8 +485,8 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
             }
         });
     }
-    
-    
+
+
     private void flushTimeTableListView(){
         int size = 0;
         size += weekEventList==null? 0:weekEventList.size();
@@ -518,7 +519,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                     intent.putExtra("groupevent", todayGroupEventList.get(adapter.getEventIndex(Position)));
                     startActivityForResult(intent, 0);
                 }
-                }
+            }
         });
     }
     public void onViewChange(boolean isMonthView) {

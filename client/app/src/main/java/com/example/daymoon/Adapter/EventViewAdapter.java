@@ -113,10 +113,10 @@ public class EventViewAdapter extends RecyclerView.Adapter<EventViewAdapter.View
             holder.btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ClientEventControl.deleteEvent(eventList.get(holder.getAdapterPosition()).getEventID(), mContext, new Runnable() {
+                    ClientEventControl.deleteEvent(eventList.get(numlist[holder.getAdapterPosition()]).getEventID(), mContext, new Runnable() {
                         @Override
                         public void run() {
-                            eventList.remove(holder.getAdapterPosition());
+                            eventList.remove(numlist[holder.getAdapterPosition()]);
                             notifyItemRemoved(holder.getAdapterPosition());
                         }
                     }, new Runnable() {
