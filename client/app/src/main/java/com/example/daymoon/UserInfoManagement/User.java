@@ -31,7 +31,7 @@ public class User {
         description = user.description;
         mailAddress = user.mailAddress;
         phoneNumber = user.phoneNumber;
-        profilePhoto = user.profilePhoto;
+        profilePhotoName = user.profilePhotoName;
     }
 
     public void setId(int id) {

@@ -551,7 +551,19 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                     drawerProfile.setRoundedAvatar(CalendarActivity.this,image);
                     flushMenu();
                     String path = cameraUtils.saveImage("userHeader", image);
-                    cameraUtils.tempFile = new File(path);
+                    ClientUserInfoControl.updateProfilePhoto(ClientUserInfoControl.getCurrentUser().getId(), new File(path),
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(mainContext, "成功上传", Toast.LENGTH_LONG).show();
+                                }
+                            },
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(mainContext, "上传失败", Toast.LENGTH_LONG).show();
+                                }
+                            });
                 }
                 break;
         }

@@ -113,6 +113,19 @@ class DayMoonDB(object):
             self.db.rollback()
             return str(err)
 
+    def updateProfilePhoto(self, userID, imgName):
+        sql="UPDATE `users` SET `profilePhotoName` = '%s' WHERE `users`.`userID` = %d;" % (imgName, userID)
+        try:
+            self.lock.acquire()
+            self.cur.execute(sql)
+            self.lock.release()
+            self.db.commit()
+            return True
+        except Exception as err:
+            self.db.rollback()
+            return str(err)
+
+
     def getUserInfo(self,userID):
         '''
 
