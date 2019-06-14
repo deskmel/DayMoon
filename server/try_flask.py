@@ -4,7 +4,6 @@ from flask import Response
 
 import os, sys, threading
 from sql_utils import *
-from word2event import *
 
 #f = open("err.log","w")
 #sys.stderr = f
@@ -176,7 +175,8 @@ def submitgroupevent():
     res=None
     if request.method == 'POST':
 
-        groupID=int(request.form.get('groupID'))
+        groupID = int(request.form.get('groupID'))
+        userID = int(request.form.get('userID'))
         eventName = request.form.get('eventName')
         eventType = int(request.form.get('eventType'))
         whetherProcess = bool(request.form.get('whetherProcess'))
@@ -186,7 +186,7 @@ def submitgroupevent():
         description = request.form.get('description')
         remind=rem.str()
         print([groupID,eventName,eventType,whetherProcess,location,beginTime,endTime,description])
-        res=db.submitGroupEventInfo(groupID,eventName,eventType,whetherProcess,location,beginTime,endTime,description)
+        res=db.submitGroupEventInfo(userID,groupID,eventName,eventType,whetherProcess,location,beginTime,endTime,description)
     print(str(res))
     return str(res)
 
