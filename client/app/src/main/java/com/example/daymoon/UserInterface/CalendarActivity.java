@@ -85,7 +85,7 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
-
+import com.getbase.floatingactionbutton.FloatingActionButton;
 public class CalendarActivity extends DrawerActivity implements CalendarView.OnViewChangeListener{
 
     private CalendarView calendarView;
@@ -388,7 +388,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         //日期选择器
 
         //添加事件的按钮
-        ImageButton btn_add = findViewById(R.id.addbutton);
+        FloatingActionButton btn_add = findViewById(R.id.addbutton);
         calendarRecyclerView = calendarPager.findViewById(R.id.list_one); //绑定listview
         calendarRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         calendarRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -442,7 +442,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 startActivityForResult(intent, 0);
             }
         });
-        ImageButton btn_semantice_add=findViewById(R.id.semantic_adder);
+        FloatingActionButton btn_semantice_add=findViewById(R.id.semantic_adder);
         btn_semantice_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
