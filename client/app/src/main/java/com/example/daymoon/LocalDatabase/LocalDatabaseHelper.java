@@ -408,7 +408,8 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
                     "endTime CHAR(50)," +
                     "whetherProcess INTEGER," +
                     "remind INTEGER," +
-                    "eventType INTEGER )";
+                    "eventType INTEGER " +
+                    "creatorID INTEGER)";
             db.execSQL(SQL_CREATE_GROUPEVENTS);
 
             for (GroupEvent groupEvent : groupEventList){
@@ -467,7 +468,8 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
                     endTime.setTime(date2);
                     int whetherProcess = cursor.getInt(7);
                     int eventType = cursor.getInt(8);
-                    groupEventList.add(new GroupEvent(eventID, groupID, dutyUserIDs, eventName, description, beginTime, endTime, whetherProcess, eventType));
+                    int creatorID = cursor.getInt(9);
+                    groupEventList.add(new GroupEvent(eventID, groupID, dutyUserIDs, eventName, description, beginTime, endTime, whetherProcess, eventType,creatorID));
 
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -515,7 +517,8 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
                     endTime.setTime(date2);
                     int whetherProcess = cursor.getInt(7);
                     int eventType = cursor.getInt(8);
-                    groupEventList.add(new GroupEvent(eventID, groupID, dutyUserIDs, eventName, description, beginTime, endTime, whetherProcess, eventType));
+                    int creatorID = cursor.getInt(9);
+                    groupEventList.add(new GroupEvent(eventID, groupID, dutyUserIDs, eventName, description, beginTime, endTime, whetherProcess, eventType, creatorID));
 
                 } catch (Exception ex) {
                     ex.printStackTrace();

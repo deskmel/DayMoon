@@ -21,8 +21,8 @@ class Remind(object):
 
 class DayMoonDB(object):
     def __init__(self,lock,host='localhost',user="root",db="daymoon"):
-        # self.db = pymysql.connect(host=host, user=user, db=db, password="7UdiP3X8",charset="utf8",use_unicode=True)
-        self.db = pymysql.connect(host=host, user=user, db=db, password="", charset="utf8", use_unicode=True)
+        self.db = pymysql.connect(host=host, user=user, db=db, password="7UdiP3X8",charset="utf8",use_unicode=True)
+        #self.db = pymysql.connect(host=host, user=user, db=db, password="", charset="utf8", use_unicode=True)
         self.cur=self.db.cursor()
         self.lock=lock
 
