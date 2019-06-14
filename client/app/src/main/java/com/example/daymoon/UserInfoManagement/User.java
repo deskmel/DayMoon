@@ -9,7 +9,7 @@ public class User {
     private int[] groupIDs, eventIDs;
     private Bitmap profilePhoto;
 
-    User(){}
+    public User(){}
 
     public User(int id, String name, String description, String mailAddress, String phoneNumber, String profilePhotoName){
         this.id = id;

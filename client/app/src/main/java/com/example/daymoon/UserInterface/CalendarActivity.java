@@ -131,6 +131,8 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         ClientUserInfoControl.setCurrentUser(userId, new Runnable(){
             @Override
             public void run() {
+                if (ClientUserInfoControl.getCurrentUser().getProfilePhoto()==null)
+                    Log.d("okok", "run: yapiii");
                 drawerProfile.setRoundedAvatar(CalendarActivity.this,ClientUserInfoControl.getCurrentUser().getProfilePhoto());
                 flushMenu();
                 Log.d("kk", "run: wtf");
@@ -173,7 +175,6 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         initButton();
         //侧滑菜单实现
 
-
     }
 
     private  void initPage(){
@@ -206,7 +207,6 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 // TODO Auto-generated method stub
                 container.removeView(viewList.get(position));
             }
-
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
                 // TODO Auto-generated method stub
