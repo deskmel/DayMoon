@@ -67,7 +67,6 @@ import com.heinrichreimersoftware.materialdrawer.DrawerActivity;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerItem;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile;
 import com.heinrichreimersoftware.materialdrawer.theme.DrawerTheme;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,7 +82,6 @@ import java.util.Map;
 import android.view.GestureDetector;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-
 import androidx.annotation.NonNull;
 
 public class CalendarActivity extends DrawerActivity implements CalendarView.OnViewChangeListener{
