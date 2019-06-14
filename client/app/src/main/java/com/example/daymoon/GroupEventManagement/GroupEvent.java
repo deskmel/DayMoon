@@ -70,10 +70,11 @@ public class GroupEvent extends Event implements Serializable {
     /**
      * 为SQLite重载
      */
-    public GroupEvent(int eventID, int groupID, int[] MemberID, String eventName, String description, GregorianCalendar beginTime, GregorianCalendar endTime, int whetherProcess){
+    public GroupEvent(int eventID, int groupID, int[] MemberID, String eventName, String description, GregorianCalendar beginTime, GregorianCalendar endTime, int whetherProcess, int eventType){
         super(eventID, eventName,description, beginTime, endTime, whetherProcess );
         this.groupID = groupID;
         this.MemberID = MemberID;
+        this.eventType = eventType;
     }
 
     public String getLocation(){

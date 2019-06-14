@@ -1,5 +1,6 @@
 package com.example.daymoon.UserInterface;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
@@ -29,7 +30,6 @@ import com.example.daymoon.UserInfoManagement.UserInformationHolder;
 import java.io.IOException;
 
 import okhttp3.Request;
-
 //import cn.edu.gdmec.android.boxuegu.R;
 //import cn.edu.gdmec.android.boxuegu.utils.MD5Utils;
 // 加密算法？？？？
@@ -114,14 +114,18 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else {
                             Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                            saveLoginStatus(true, userName);
+                            /*saveLoginStatus(true, userName);
                             Intent data=new Intent();
                             data.putExtra("isLogin",true);
                             data.putExtra("userName",userName);
-                            setResult(RESULT_OK,data);
+                            setResult(RESULT_OK,data);*/
                             LoginActivity.this.finish();
                             Intent intent = new Intent();
                             intent.putExtra("userid", Integer.parseInt(result));
+                            SharedPreferences sharedPreferences = getSharedPreferences("UserCache", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt("userID", Integer.parseInt(result));
+                            editor.apply();
                             intent.setClass(LoginActivity.this,CalendarActivity.class);
                             startActivity(intent);
                         }
@@ -129,7 +133,19 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void requestFailure(Request request, IOException e) {
-                        Toast.makeText(LoginActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                        SharedPreferences sharedPreferences = getSharedPreferences("UserCache", Context.MODE_PRIVATE);
+                        int userID = sharedPreferences.getInt("userID",-1);
+                        if (userID == -1){
+                            Toast.makeText(LoginActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(LoginActivity.this, "网络错误 离线登录上一次账户", Toast.LENGTH_SHORT).show();
+                            LoginActivity.this.finish();
+                            Intent intent = new Intent();
+                            intent.putExtra("userid", userID);
+                            intent.setClass(LoginActivity.this,CalendarActivity.class);
+                            startActivity(intent);
+                        }
                     }
                 });
             }

@@ -1,6 +1,8 @@
 package com.example.daymoon.GroupInfoManagement;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.io.IOException;
@@ -16,6 +18,7 @@ import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.HttpUtil.HttpRequestThread;
+import com.example.daymoon.LocalDatabase.LocalDatabaseHelper;
 import com.example.daymoon.UserInfoManagement.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -55,7 +58,7 @@ public class ClientGroupInfoControl {
         return getInstance().groupList;
     }
 
-    public static void getGroupListFromServer(Runnable success, Runnable failure){
+    public static void getGroupListFromServer(Runnable callback, Context context){
         Map<String, String> params = new HashMap<>();
         params.put("userID", String.valueOf(getInstance().currentUserID));
         HttpRequest.post(SERVER_IP+"getallmygroups", params, new HttpRequest.DataCallback(){
@@ -65,12 +68,14 @@ public class ClientGroupInfoControl {
                         new CalendarSerializer()).create();
                 Type GroupRecordType = new TypeToken<GroupList>(){}.getType();
                 getInstance().groupList = gson.fromJson(result, GroupRecordType);
-                success.run();
+                LocalDatabaseHelper localDatabaseHelper = new LocalDatabaseHelper(context);
+                localDatabaseHelper.syncGroups(getInstance().groupList);
+                callback.run();
             }
             @Override
             public void requestFailure(Request request, IOException e) {
-                Log.e("shit", "oops! Something goes wrong");
-                failure.run();
+                getInstance().groupList = new LocalDatabaseHelper(context).queryGroupList();
+                callback.run();
             }
         });
     }

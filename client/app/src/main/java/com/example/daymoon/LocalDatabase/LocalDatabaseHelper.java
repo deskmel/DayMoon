@@ -263,7 +263,8 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
     /**
      * 同步groups（前端调用）
      */
-    public void syncGroups(SQLiteDatabase db, GroupList groupList){
+    public void syncGroups(GroupList groupList){
+        SQLiteDatabase db = getWritableDatabase();
         //判断表groups是否存在
         if (!tableExist(db, "groups" + String.valueOf(currentUserID))) {
             String SQL_CREATE_GROUPS = "create table groups" + String.valueOf(currentUserID) +
@@ -305,10 +306,10 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * 查询当前user的个人所有group，返回一个groupList（前端调用）
-     * @param db
      * @return
      */
-    public GroupList queryGroupList(SQLiteDatabase db){
+    public GroupList queryGroupList(){
+        SQLiteDatabase db = getWritableDatabase();
         GroupList groupList = new GroupList();
         Gson gson = new Gson();
 
@@ -325,7 +326,6 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
                     int [] eventIDs = gson.fromJson(cursor.getString(4), int[].class);
                     int leaderID = cursor.getInt(5);
                     String imgName = cursor.getString(6);
-
                     groupList.add(new Group(groupID, groupName, description, memberIDs, eventIDs, leaderID, imgName));
 
                 } catch (Exception ex) {
@@ -361,7 +361,8 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
         groupEventValues.put("beginTime", formatter.format(groupEvent.getBeginTime().getTime()));
         groupEventValues.put("endTime", formatter.format(groupEvent.getEndTime().getTime()));
         groupEventValues.put("whetherProcess", groupEvent.getWhetherProcess());
-        groupEventValues.put("remind",0); //存疑
+        groupEventValues.put("remind",0);//存疑
+        groupEventValues.put("eventType", groupEvent.getEventType());
         db.insert("groupevents" + String.valueOf(currentUserID), null, groupEventValues);
 
     }
@@ -386,16 +387,18 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
         groupEventValues.put("endTime", formatter.format(groupEvent.getEndTime().getTime()));
         groupEventValues.put("whetherProcess", groupEvent.getWhetherProcess());
         groupEventValues.put("remind",0); //存疑
+        groupEventValues.put("eventType", groupEvent.getEventType());
         db.update("groupevents"+ String.valueOf(currentUserID),groupEventValues,"groupID=? and eventID=?",new String[]{String.valueOf(groupEvent.getGroupID()), String.valueOf(groupEvent.getEventID())});
     }
 
     /**
      * 同步groupevents
      */
-    public void syncGroupEvents(SQLiteDatabase db, GroupEventList groupEventList){
+    public void syncGroupEvents(GroupEventList groupEventList){
+        SQLiteDatabase db = getWritableDatabase();
         //判断表groupevents是否存在
-        if (tableExist(db, "groupevents" + String.valueOf(currentUserID))) {
-            String SQL_CREATE_GROUPEVENTS = "create table groupevents " + String.valueOf(currentUserID) +
+        if (!tableExist(db, "groupevents" + String.valueOf(currentUserID))) {
+            String SQL_CREATE_GROUPEVENTS = "create table groupevents" + String.valueOf(currentUserID) +
                     "(eventID INTEGER PRIMARY KEY," +
                     "groupID INTEGER," +
                     "dutyUserIDs VARCHAR(500)," +
@@ -404,7 +407,8 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
                     "beginTime CHAR(50)," +
                     "endTime CHAR(50)," +
                     "whetherProcess INTEGER," +
-                    "remind INTEGER )";
+                    "remind INTEGER," +
+                    "eventType INTEGER )";
             db.execSQL(SQL_CREATE_GROUPEVENTS);
 
             for (GroupEvent groupEvent : groupEventList){
@@ -435,13 +439,55 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
             }
         }
     }
+    public GroupEventList queryGroupEventList(){
+        SQLiteDatabase db = getWritableDatabase();
+        GroupEventList groupEventList = new GroupEventList();
+        SimpleDateFormat formatter = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        Gson gson = new Gson();
 
+        Cursor cursor = null;
+        if (tableExist(db, "groupevents"+ String.valueOf(currentUserID) )) {
+            cursor = db.rawQuery("SELECT * FROM groupevents" + String.valueOf(currentUserID),null);
+            while (cursor.moveToNext()) {
+                try {
+                    //整理取到的表格信息。出错可能性较大
+                    int eventID = cursor.getInt(0);
+                    int groupID = cursor.getInt(1);
+                    int [] dutyUserIDs = gson.fromJson(cursor.getString(2), int[].class);
+                    String eventName = cursor.getString(3);
+                    String description = cursor.getString(4);
+                    Date date1 = formatter.parse(cursor.getString(5));
+                    date1 = new Date(date1.getTime());
+                    GregorianCalendar beginTime = new GregorianCalendar();
+                    beginTime.setTime(date1);
+                    Date date2 = formatter.parse(cursor.getString(6));
+                    date2 = new Date(date2.getTime());
+                    GregorianCalendar endTime = new GregorianCalendar();
+                    endTime.setTime(date2);
+                    int whetherProcess = cursor.getInt(7);
+                    int eventType = cursor.getInt(8);
+                    groupEventList.add(new GroupEvent(eventID, groupID, dutyUserIDs, eventName, description, beginTime, endTime, whetherProcess, eventType));
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    System.out.println("Error in queryGroupEventList");
+                }
+            }
+        }
+        else{
+            System.out.println("There is no table called groupevents" + String.valueOf(currentUserID));
+        }
+
+        cursor.close();
+        return groupEventList;
+    }
     /**
      * 查询当前user给定targetGroupID组的所有groupevents，返回一个groupEventList（前端调用）
-     * @param db
      * @return
      */
-    public GroupEventList queryGroupEventList(SQLiteDatabase db, int targetGroupID ){
+    public GroupEventList queryGroupEventList(int targetGroupID ){
+        SQLiteDatabase db = getWritableDatabase();
         GroupEventList groupEventList = new GroupEventList();
         SimpleDateFormat formatter = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.CHINA);
@@ -468,8 +514,8 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
                     GregorianCalendar endTime = new GregorianCalendar();
                     endTime.setTime(date2);
                     int whetherProcess = cursor.getInt(7);
-
-                    groupEventList.add(new GroupEvent(eventID, groupID, dutyUserIDs, eventName, description, beginTime, endTime, whetherProcess));
+                    int eventType = cursor.getInt(8);
+                    groupEventList.add(new GroupEvent(eventID, groupID, dutyUserIDs, eventName, description, beginTime, endTime, whetherProcess, eventType));
 
                 } catch (Exception ex) {
                     ex.printStackTrace();

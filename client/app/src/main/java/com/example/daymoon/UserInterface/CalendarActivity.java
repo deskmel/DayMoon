@@ -155,7 +155,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 setSchemeDate();
                 flushCalendarListView();
             }
-        });
+        }, this);
         ClientGroupInfoControl.setCurrentUserID(userId);
         ClientGroupEventControl.setCurrentUserID(userId);
         setContentView(R.layout.activity_canlendar);//绑定界面

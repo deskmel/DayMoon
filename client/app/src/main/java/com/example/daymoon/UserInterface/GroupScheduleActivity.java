@@ -106,6 +106,8 @@ public class GroupScheduleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         groupID = getIntent().getIntExtra("groupID",-1);
         group = (Group) getIntent().getSerializableExtra("group");
+        groupEventList = group.getEventList();
+
         setContentView(R.layout.activity_group_schedule);
         context = this.getApplicationContext();
         StatusBarUtil.setRootViewFitsSystemWindows(this,true);
@@ -119,9 +121,10 @@ public class GroupScheduleActivity extends AppCompatActivity {
         TextView groupName = findViewById(R.id.group_name);
         groupName.setText(group.getGroupName());
         initButton();
-        initData();
         initaddeventbutton();
+
         initPage();
+        initData();
         initMaterialDialog();
 
         final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
@@ -387,29 +390,12 @@ public class GroupScheduleActivity extends AppCompatActivity {
         });
     }
     private void initData(){
-
-        groupEventList=new GroupEventList();
-        ClientGroupEventControl.getGroupEventListFromServer(groupID, new HttpRequest.DataCallback() {
-            @Override
-            public void requestSuccess(String result) throws Exception {
-                Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
-                        new CalendarSerializer()).create();
-                Type GroupEventRecordType = new TypeToken<GroupEventList>(){}.getType();
-                groupEventList = gson.fromJson(result, GroupEventRecordType);
-
-                if (groupEventList.size()==0)
-                    noneEvent.setText("~这个小组的事件空空如也~");
-                else noneEvent.setText("");
-                flushTimeLineList();
-                flushNotificationList();
-                flushTimeTableList();
-
-            }
-            @Override
-            public void requestFailure(Request request, IOException e) {
-                Toast.makeText(getApplicationContext(),"oops something goes wrong", Toast.LENGTH_LONG).show();
-            }
-        });
+        if (groupEventList.size()==0)
+            noneEvent.setText("~这个小组的事件空空如也~");
+        else noneEvent.setText("");
+        flushTimeLineList();
+        flushNotificationList();
+        flushTimeTableList();
     }
     private void initaddeventbutton(){
         LinearLayout addeventtime=findViewById(R.id.addeventtime);
