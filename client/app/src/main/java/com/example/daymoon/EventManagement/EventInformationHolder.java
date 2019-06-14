@@ -17,7 +17,10 @@ public class EventInformationHolder {
     public boolean process;
     public String descriptions;
     public String title;
-
+    //新增加内容
+    public String location;
+    public boolean whetherRemind;
+    public GregorianCalendar remindTime;
     public EventInformationHolder(Event event)
     {
         GregorianCalendar beginTime=event.getBeginTime();

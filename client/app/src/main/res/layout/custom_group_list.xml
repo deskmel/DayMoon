@@ -50,6 +50,7 @@
         <ImageView
             android:id="@+id/groupimage"
             android:layout_marginLeft="10dp"
+            android:padding="2dp"
             android:src="@mipmap/group"
             android:background="@drawable/imagebackground"
             android:layout_width="40dp"

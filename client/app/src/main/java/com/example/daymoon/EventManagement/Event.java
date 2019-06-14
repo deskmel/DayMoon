@@ -15,9 +15,13 @@ import java.util.Locale;
 public class Event implements Comparable<Event>, Serializable {
     protected String eventName;
     protected String description;
+    protected String location;
+    protected GregorianCalendar remindTime;
+    protected boolean whetherRemind;
     protected int eventID;
     protected GregorianCalendar beginTime, endTime;
     boolean whetherProcess;
+
     // Reminder reminder;
     public Event(String name, String des,int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
                  int endYear, int endMonth, int endDate, int endHour, int endMin, boolean wProcess) {
@@ -28,6 +32,30 @@ public class Event implements Comparable<Event>, Serializable {
             //需要修改
             eventName = name;
     }
+
+    //加 location的初始化
+    /*
+    TODO 全部修改完成，替换旧的初始化函数
+     */
+    public Event(String name, String des,int eID,int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
+                 int endYear, int endMonth, int endDate, int endHour, int endMin, boolean wProcess,String location,boolean whetherRemind,GregorianCalendar remindTime) throws Exception{
+
+        if (validEventInfo(des, beginYear, beginMonth, beginDate, beginHour, beginMin, endYear, endMonth, endDate, endHour, endMin)) {
+            this.description = des;
+            this.beginTime = new GregorianCalendar(beginYear, beginMonth - 1, beginDate, beginHour, beginMin);
+            this.endTime = new GregorianCalendar(endYear, endMonth - 1, endDate, endHour, endMin);
+            this.whetherProcess = wProcess;
+            this.eventName = name;
+            //添加的内容
+            this.whetherRemind= whetherRemind;
+            this.remindTime = remindTime;
+            this.location = location;
+        }
+        else{
+            throw new Exception("Fail to construct event");
+        }
+    }
+
 
     public Event(String name, String des, int eID, int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
                  int endYear, int endMonth, int endDate, int endHour, int endMin, boolean wProcess) throws Exception{
@@ -153,7 +181,7 @@ public class Event implements Comparable<Event>, Serializable {
 
     }
 
-
+    public String getLocation(){return location;}
 
     public String getDescription(){
         return description;
