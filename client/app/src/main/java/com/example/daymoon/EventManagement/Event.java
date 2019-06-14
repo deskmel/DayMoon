@@ -15,7 +15,7 @@ import java.util.Locale;
 public class Event implements Comparable<Event>, Serializable {
     protected String eventName;
     protected String description;
-    protected String location;
+    protected String eventLocation;
     protected GregorianCalendar remindTime;
     protected boolean whetherRemind;
     protected int eventID;
@@ -33,12 +33,12 @@ public class Event implements Comparable<Event>, Serializable {
             eventName = name;
     }
 
-    //加 location的初始化
+    //加 eventLocation的初始化
     /*
     TODO 全部修改完成，替换旧的初始化函数
      */
     public Event(String name, String des,int eID,int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
-                 int endYear, int endMonth, int endDate, int endHour, int endMin, boolean wProcess,String location,boolean whetherRemind,GregorianCalendar remindTime) throws Exception{
+                 int endYear, int endMonth, int endDate, int endHour, int endMin, boolean wProcess,String eventLocation,boolean whetherRemind,GregorianCalendar remindTime) throws Exception{
 
         if (validEventInfo(des, beginYear, beginMonth, beginDate, beginHour, beginMin, endYear, endMonth, endDate, endHour, endMin)) {
             this.description = des;
@@ -49,7 +49,7 @@ public class Event implements Comparable<Event>, Serializable {
             //添加的内容
             this.whetherRemind= whetherRemind;
             this.remindTime = remindTime;
-            this.location = location;
+            this.eventLocation = eventLocation;
         }
         else{
             throw new Exception("Fail to construct event");
@@ -181,7 +181,7 @@ public class Event implements Comparable<Event>, Serializable {
 
     }
 
-    public String getLocation(){return location;}
+    public String geteventLocation(){return eventLocation;}
 
     public String getDescription(){
         return description;
