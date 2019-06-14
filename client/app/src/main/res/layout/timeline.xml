@@ -78,7 +78,7 @@
             android:text="您发布的帖子标题已被取消置顶"
             android:gravity="center_horizontal"
             android:textSize="15sp" />
-        <ImageView
+        <com.example.daymoon.Layout.CircularImage
             android:id="@+id/creatorimage"
             android:layout_width="30dp"
             android:layout_height="30dp"

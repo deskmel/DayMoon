@@ -2,11 +2,15 @@ package com.example.daymoon.UserInterface;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.daymoon.GroupEventManagement.GroupEvent;
+import com.example.daymoon.Layout.CircularImage;
 import com.example.daymoon.R;
 import com.example.daymoon.Tool.StatusBarUtil;
+import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
+import com.example.daymoon.UserInfoManagement.User;
 
 public class GroupEventDetailActivity extends AppCompatActivity {
     private TextView starttime;
@@ -43,5 +47,19 @@ public class GroupEventDetailActivity extends AppCompatActivity {
         starttime.setText(String.format("%s %s %s","",event.getBeginDate(),event.getBeginHour()));
         if (event.getBeginDate().equals(event.getEndDate()))endtime.setText(String.format("%s %s %s","-","",event.getEndHour()));
         else endtime.setText(String.format("%s %s %s","-",event.getEndDate(),event.getEndHour()));
+
+        CircularImage groupcreatorimage= (CircularImage)findViewById(R.id.creatorimage);
+        User user = new User();
+        ClientUserInfoControl.getUserInfoFromServer(user, event.getCreatorID(), new Runnable() {
+            @Override
+            public void run() {
+                groupcreatorimage.setImageBitmap(user.getProfilePhoto());
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
     }
 }

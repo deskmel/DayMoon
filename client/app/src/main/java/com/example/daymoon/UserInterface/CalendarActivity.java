@@ -327,21 +327,9 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
      */
     private void initTimeLinePage(){
         timeLine = View.inflate(this,R.layout.timeline_layout,null);
-        ImageView eventaddbutton=timeLine.findViewById(R.id.add_event_image);
-        timelineRecyclerView=timeLine.findViewById(R.id.event_list);
-        timelineRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
-        java.util.Calendar c= java.util.Calendar.getInstance();
-        TextView today=timeLine.findViewById(R.id.today);
-        today.setText(timeformat.format(c.getTime()));
-        eventaddbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(CalendarActivity.this,EventAdder.class);
-                startActivityForResult(intent,0);
-            }
-        });
-        flushTimeLineListView();
+        /**
+         * 未完成 置位
+         */
     }
     /**
      * 周视图形式界面，以事件块的形式表现事件
@@ -468,9 +456,8 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     private void flushView(){
         flushCalendarListView();
         flushTimeTableListView();
-        flushTimeLineListView();
     }
-
+    /*
     private void flushTimeLineListView(){
         NewTimeLineAdapter timeLineAdapter=new NewTimeLineAdapter(ClientEventControl.getEventList(),this);
         timelineRecyclerView = timeLine.findViewById(R.id.event_list);; //绑定listview
@@ -484,7 +471,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 startActivityForResult(intent,0);
             }
         });
-    }
+    }*/
 
 
     private void flushTimeTableListView(){
