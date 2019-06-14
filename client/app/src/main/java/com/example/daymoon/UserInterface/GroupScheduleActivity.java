@@ -127,7 +127,6 @@ public class GroupScheduleActivity extends AppCompatActivity {
         initPage();
         initData();
         initMaterialDialog();
-
         final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
         Calendar c=Calendar.getInstance();
         TextView today = findViewById(R.id.today);
