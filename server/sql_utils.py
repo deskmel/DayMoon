@@ -769,7 +769,7 @@ class DayMoonDB(object):
                            'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
                            'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]],
                            'AllMember': str(realusers == []), 'MemberID': realusers, 'location': info[9],
-                           'eventType': info[10]}
+                           'eventType': info[10], 'creatorID': info[11]}
                 allMyGroupEvents.append(infodict)
         return allMyGroupEvents
 
@@ -799,7 +799,7 @@ class DayMoonDB(object):
                                 'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
                                 'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]],
                                 'AllMember': str(realusers == []), 'MemberID': realusers, 'location': info[9],
-                                'eventType': info[10]}
+                                'eventType': info[10], 'creatorID': info[11]}
                     allMyGroupEvents.append(infodict)
         return allMyGroupEvents
 
