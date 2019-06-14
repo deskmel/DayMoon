@@ -183,7 +183,7 @@ public class ClientEventControl {//施工
     public static void editEvent(int eventID, EventInformationHolder eventInformationHolder,  Context context, Runnable success, Runnable failure){
         Event event;
         try {
-            event = new Event(eventInformationHolder.title, eventInformationHolder.descriptions, eventID, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.startHour_, eventInformationHolder.startMinute_, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.endHour_, eventInformationHolder.endMinute_, eventInformationHolder.process);
+            event = new Event(eventInformationHolder.title, eventInformationHolder.descriptions, eventID, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.startHour_, eventInformationHolder.startMinute_, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.endHour_, eventInformationHolder.endMinute_, eventInformationHolder.process,eventInformationHolder.location,eventInformationHolder.whetherRemind,eventInformationHolder.remindTime);
         }catch(Exception e){
             return;
         }

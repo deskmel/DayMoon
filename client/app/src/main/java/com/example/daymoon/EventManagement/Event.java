@@ -57,45 +57,7 @@ public class Event implements Comparable<Event>, Serializable {
     }
 
 
-    public Event(String name, String des, int eID, int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
-                 int endYear, int endMonth, int endDate, int endHour, int endMin, boolean wProcess) throws Exception{
 
-        if (validEventInfo(des, beginYear, beginMonth, beginDate, beginHour, beginMin, endYear, endMonth, endDate, endHour, endMin)) {
-            description = des;
-            eventID = eID;
-            beginTime = new GregorianCalendar(beginYear, beginMonth - 1, beginDate, beginHour, beginMin);
-            endTime = new GregorianCalendar(endYear, endMonth - 1, endDate, endHour, endMin);
-            whetherProcess = wProcess;
-            //需要修改
-            eventName = name;
-        }
-        else{
-            throw new Exception("Fail to construct event");
-        }
-    }
-
-
-
-    // 默认当天的年月日初始化
-    public Event(String str, int eID, int beginHour, int beginMin,
-                 int endHour, int endMin, boolean wProcess) throws Exception{
-
-        Calendar today = Calendar.getInstance();
-        int year = today.get(Calendar.YEAR);
-        int month = today.get(Calendar.MONTH);
-        int date = today.get(Calendar.DATE);
-        if (validEventInfo(str, year, month + 1, date, beginHour, beginMin, year, month + 1, date, endHour, endMin)) {
-            description = str;
-            eventID = eID;
-            beginTime = new GregorianCalendar(year, month, date, beginHour, beginMin);
-            endTime = new GregorianCalendar(year, month, date, endHour, endMin);
-            whetherProcess = wProcess;
-        }
-        else{
-            throw new Exception("Fail to construct event");
-        }
-
-    }
 
     /**
      * 为SQLite重载一下
@@ -181,7 +143,7 @@ public class Event implements Comparable<Event>, Serializable {
 
     }
 
-    public String geteventLocation(){return eventLocation;}
+    public String geteventLocation(){return eventLocation==null?"":eventLocation;}
 
     public String getDescription(){
         return description;
