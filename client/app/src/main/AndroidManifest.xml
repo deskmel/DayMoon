@@ -14,7 +14,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.hardware.camera.autofocus" />
-
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="19"/>
     <application
         android:allowBackup="true"
         android:appComponentFactory="s"
@@ -36,6 +39,7 @@
         <activity android:name=".UserInterface.EventDetailActivity" />
         <activity android:name=".UserInterface.EventAdder" />
         <activity android:name=".UserInterface.QRCodeActivity" />
+        <activity android:name=".UserInterface.NotificationActivity"/>
         <activity
             android:name=".UserInterface.LoginActivity"
             android:label="DayMoon">
@@ -47,7 +51,9 @@
         </activity>
         <activity
             android:name=".UserInterface.CalendarActivity"
-            android:label="DayMoon"></activity>
+            android:label="DayMoon">
+
+        </activity>
         <activity
             android:name=".UserInterface.RegisterActivity"
             android:label="DayMoon"></activity>
@@ -61,6 +67,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+        <service android:name="com.example.daymoon.Tool.TimerNotificationService" >
+            <intent-filter>
+                <action android:name="com.example.daymoon.Tool.TimerNotificationService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

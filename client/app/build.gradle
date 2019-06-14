@@ -26,6 +26,7 @@ android {
         exclude "META-INF/androidx.vectordrawable_vectordrawable.version"
         exclude 'META-INF/androidx.loader_loader.version'
         exclude 'META-INF/android.support.design_material.version'
+        exclude 'META-INF/proguard/androidx-annotations.pro'
     }
 }
 
