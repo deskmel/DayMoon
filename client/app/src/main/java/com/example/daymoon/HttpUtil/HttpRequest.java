@@ -48,6 +48,7 @@ public class HttpRequest {
     public static void post(String url, Map<String, String> params, DataCallback dataCallback) {
         getInstance().innerPost(url, params, dataCallback);
     }
+
     public static void postFile(String url, String name, String fileName, File file, Map<String,String> params, DataCallback dataCallback){
         getInstance().innerPostFile(url, name, fileName, file, params, dataCallback);
     }

@@ -83,7 +83,7 @@ import android.view.GestureDetector;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import androidx.annotation.NonNull;
-
+import com.getbase.floatingactionbutton.FloatingActionButton;
 public class CalendarActivity extends DrawerActivity implements CalendarView.OnViewChangeListener{
 
     private CalendarView calendarView;
@@ -129,6 +129,8 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         ClientUserInfoControl.setCurrentUser(userId, new Runnable(){
             @Override
             public void run() {
+                if (ClientUserInfoControl.getCurrentUser().getProfilePhoto()==null)
+                    Log.d("okok", "run: yapiii");
                 drawerProfile.setRoundedAvatar(CalendarActivity.this,ClientUserInfoControl.getCurrentUser().getProfilePhoto());
                 flushMenu();
                 Log.d("kk", "run: wtf");
@@ -153,7 +155,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 setSchemeDate();
                 flushCalendarListView();
             }
-        });
+        }, this);
         ClientGroupInfoControl.setCurrentUserID(userId);
         ClientGroupEventControl.setCurrentUserID(userId);
         setContentView(R.layout.activity_canlendar);//绑定界面
@@ -170,7 +172,6 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         //按钮
         initButton();
         //侧滑菜单实现
-
 
     }
 
@@ -204,7 +205,6 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 // TODO Auto-generated method stub
                 container.removeView(viewList.get(position));
             }
-
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
                 // TODO Auto-generated method stub
@@ -325,21 +325,9 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
      */
     private void initTimeLinePage(){
         timeLine = View.inflate(this,R.layout.timeline_layout,null);
-        ImageView eventaddbutton=timeLine.findViewById(R.id.add_event_image);
-        timelineRecyclerView=timeLine.findViewById(R.id.event_list);
-        timelineRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
-        java.util.Calendar c= java.util.Calendar.getInstance();
-        TextView today=timeLine.findViewById(R.id.today);
-        today.setText(timeformat.format(c.getTime()));
-        eventaddbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(CalendarActivity.this,EventAdder.class);
-                startActivityForResult(intent,0);
-            }
-        });
-        flushTimeLineListView();
+        /**
+         * 未完成 置位
+         */
     }
     /**
      * 周视图形式界面，以事件块的形式表现事件
@@ -386,7 +374,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         //日期选择器
 
         //添加事件的按钮
-        ImageButton btn_add = findViewById(R.id.addbutton);
+        FloatingActionButton btn_add = findViewById(R.id.addbutton);
         calendarRecyclerView = calendarPager.findViewById(R.id.list_one); //绑定listview
         calendarRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         calendarRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -440,7 +428,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 startActivityForResult(intent, 0);
             }
         });
-        ImageButton btn_semantice_add=findViewById(R.id.semantic_adder);
+        FloatingActionButton btn_semantice_add=findViewById(R.id.semantic_adder);
         btn_semantice_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -466,9 +454,8 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     private void flushView(){
         flushCalendarListView();
         flushTimeTableListView();
-        flushTimeLineListView();
     }
-
+    /*
     private void flushTimeLineListView(){
         NewTimeLineAdapter timeLineAdapter=new NewTimeLineAdapter(ClientEventControl.getEventList(),this);
         timelineRecyclerView = timeLine.findViewById(R.id.event_list);; //绑定listview
@@ -482,7 +469,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 startActivityForResult(intent,0);
             }
         });
-    }
+    }*/
 
 
     private void flushTimeTableListView(){
@@ -549,7 +536,19 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                     drawerProfile.setRoundedAvatar(CalendarActivity.this,image);
                     flushMenu();
                     String path = cameraUtils.saveImage("userHeader", image);
-                    cameraUtils.tempFile = new File(path);
+                    ClientUserInfoControl.updateProfilePhoto(ClientUserInfoControl.getCurrentUser().getId(), new File(path),
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(mainContext, "成功上传", Toast.LENGTH_LONG).show();
+                                }
+                            },
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(mainContext, "上传失败", Toast.LENGTH_LONG).show();
+                                }
+                            });
                 }
                 break;
         }

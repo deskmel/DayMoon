@@ -51,6 +51,7 @@ import com.example.daymoon.Layout.ViewPagerSlide;
 import com.example.daymoon.R;
 import com.example.daymoon.Tool.StatusBarUtil;
 import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -106,6 +107,8 @@ public class GroupScheduleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         groupID = getIntent().getIntExtra("groupID",-1);
         group = (Group) getIntent().getSerializableExtra("group");
+        groupEventList = group.getEventList();
+
         setContentView(R.layout.activity_group_schedule);
         context = this.getApplicationContext();
         StatusBarUtil.setRootViewFitsSystemWindows(this,true);
@@ -119,11 +122,11 @@ public class GroupScheduleActivity extends AppCompatActivity {
         TextView groupName = findViewById(R.id.group_name);
         groupName.setText(group.getGroupName());
         initButton();
-        initData();
-        initaddeventbutton();
-        initPage();
-        initMaterialDialog();
+        //initaddeventbutton();
 
+        initPage();
+        initData();
+        initMaterialDialog();
         final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
         Calendar c=Calendar.getInstance();
         TextView today = findViewById(R.id.today);
@@ -147,7 +150,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 finish();
             }
         });
-        ImageView eventaddbutton = findViewById(R.id.add_event_button);
+        FloatingActionButton eventaddbutton = findViewById(R.id.add_event_button);
         eventaddbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,7 +159,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 startActivityForResult(intent,ADD_EVENT);
             }
         });
-        ImageButton notificationaddbutton = findViewById(R.id.add_notification_button);
+        FloatingActionButton notificationaddbutton = findViewById(R.id.add_notification_button);
         notificationaddbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,7 +167,6 @@ public class GroupScheduleActivity extends AppCompatActivity {
             }
         });
         ViewFlipper viewFlipper = findViewById(R.id.flipper);
-        ViewFlipper viewFlipper2 = findViewById(R.id.flipper2);
         ViewFlipper viewFlipper3 = findViewById(R.id.flipper3);
         ImageButton notification = findViewById(R.id.notification);
         notification.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +174,6 @@ public class GroupScheduleActivity extends AppCompatActivity {
             public void onClick(View v) {
                 viewPager.setCurrentItem(1);
                 viewFlipper.showNext();
-                viewFlipper2.showNext();
                 TextView today = findViewById(R.id.today);
                 today.setText("公告");
             }
@@ -183,7 +184,6 @@ public class GroupScheduleActivity extends AppCompatActivity {
             public void onClick(View v) {
                 viewPager.setCurrentItem(0);
                 viewFlipper.showNext();
-                viewFlipper2.showNext();
                 Calendar c=Calendar.getInstance();
                 final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
                 TextView today = findViewById(R.id.today);
@@ -387,33 +387,17 @@ public class GroupScheduleActivity extends AppCompatActivity {
         });
     }
     private void initData(){
-
-        groupEventList=new GroupEventList();
-        ClientGroupEventControl.getGroupEventListFromServer(groupID, new HttpRequest.DataCallback() {
-            @Override
-            public void requestSuccess(String result) throws Exception {
-                Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
-                        new CalendarSerializer()).create();
-                Type GroupEventRecordType = new TypeToken<GroupEventList>(){}.getType();
-                groupEventList = gson.fromJson(result, GroupEventRecordType);
-
-                if (groupEventList.size()==0)
-                    noneEvent.setText("~这个小组的事件空空如也~");
-                else noneEvent.setText("");
-                flushTimeLineList();
-                flushNotificationList();
-                flushTimeTableList();
-
-            }
-            @Override
-            public void requestFailure(Request request, IOException e) {
-                Toast.makeText(getApplicationContext(),"oops something goes wrong", Toast.LENGTH_LONG).show();
-            }
-        });
+        if (groupEventList.size()==0)
+            noneEvent.setText("~这个小组的事件空空如也~");
+        else noneEvent.setText("");
+        flushTimeLineList();
+        flushNotificationList();
+        flushTimeTableList();
     }
+    /*
     private void initaddeventbutton(){
         LinearLayout addeventtime=findViewById(R.id.addeventtime);
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

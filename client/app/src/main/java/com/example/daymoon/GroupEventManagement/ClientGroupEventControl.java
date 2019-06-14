@@ -50,8 +50,6 @@ public class ClientGroupEventControl {
         Map<String, String> params = new HashMap<>();
         params.put("userID", String.valueOf(getInstance().currentUserID));
         params.put("groupID", String.valueOf(groupID));
-        System.out.println(getInstance().currentUserID);
-        System.out.println(groupID);
         HttpRequest.post(SERVER_IP+"getallmygroupevents", params, dataCallback);
     }
 

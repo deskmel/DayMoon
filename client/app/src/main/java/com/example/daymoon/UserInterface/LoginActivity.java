@@ -1,5 +1,6 @@
 package com.example.daymoon.UserInterface;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
@@ -29,7 +30,6 @@ import com.example.daymoon.UserInfoManagement.UserInformationHolder;
 import java.io.IOException;
 
 import okhttp3.Request;
-
 //import cn.edu.gdmec.android.boxuegu.R;
 //import cn.edu.gdmec.android.boxuegu.utils.MD5Utils;
 // 加密算法？？？？
@@ -38,6 +38,8 @@ public class LoginActivity extends AppCompatActivity {
     private TextView tv_main_title;
     //返回键,显示的注册，找回密码
     private TextView tv_back,tv_register,tv_find_psw;
+    //离线登录
+    private TextView tv_offline_login;
     //登录按钮
     private Button btn_login;
     //获取的用户名，密码，加密密码
@@ -64,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         tv_back=findViewById(R.id.tv_back);
         //从activity_login.xml中获取的
         tv_register=findViewById(R.id.tv_register);
-        tv_find_psw=findViewById(R.id.tv_find_psw);
+        tv_offline_login=findViewById(R.id.tv_offline_login);
         btn_login=findViewById(R.id.btn_login);
         et_user_name=findViewById(R.id.et_user_name);
         et_psw=findViewById(R.id.et_psw);
@@ -85,13 +87,23 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
-        //找回密码控件的点击事件
-        tv_find_psw.setOnClickListener(new View.OnClickListener() {
+        //离线登录
+        tv_offline_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //跳转到找回密码界面（此页面暂未创建）
-                /*Intent intent=new Intent(LoginActivity.this,FindPwdActivity.class);
-                startActivity(intent);*/
+                SharedPreferences sharedPreferences = getSharedPreferences("UserCache", Context.MODE_PRIVATE);
+                int userID = sharedPreferences.getInt("userID",-1);
+                if (userID == -1){
+                    Toast.makeText(LoginActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(LoginActivity.this, "离线登录上一次账户", Toast.LENGTH_SHORT).show();
+                    LoginActivity.this.finish();
+                    Intent intent = new Intent();
+                    intent.putExtra("userid", userID);
+                    intent.setClass(LoginActivity.this,CalendarActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         //登录按钮的点击事件
@@ -114,14 +126,18 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else {
                             Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                            saveLoginStatus(true, userName);
+                            /*saveLoginStatus(true, userName);
                             Intent data=new Intent();
                             data.putExtra("isLogin",true);
                             data.putExtra("userName",userName);
-                            setResult(RESULT_OK,data);
+                            setResult(RESULT_OK,data);*/
                             LoginActivity.this.finish();
                             Intent intent = new Intent();
                             intent.putExtra("userid", Integer.parseInt(result));
+                            SharedPreferences sharedPreferences = getSharedPreferences("UserCache", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt("userID", Integer.parseInt(result));
+                            editor.apply();
                             intent.setClass(LoginActivity.this,CalendarActivity.class);
                             startActivity(intent);
                         }
@@ -129,7 +145,19 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void requestFailure(Request request, IOException e) {
-                        Toast.makeText(LoginActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                        SharedPreferences sharedPreferences = getSharedPreferences("UserCache", Context.MODE_PRIVATE);
+                        int userID = sharedPreferences.getInt("userID",-1);
+                        if (userID == -1){
+                            Toast.makeText(LoginActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(LoginActivity.this, "网络错误 离线登录上一次账户", Toast.LENGTH_SHORT).show();
+                            LoginActivity.this.finish();
+                            Intent intent = new Intent();
+                            intent.putExtra("userid", userID);
+                            intent.setClass(LoginActivity.this,CalendarActivity.class);
+                            startActivity(intent);
+                        }
                     }
                 });
             }

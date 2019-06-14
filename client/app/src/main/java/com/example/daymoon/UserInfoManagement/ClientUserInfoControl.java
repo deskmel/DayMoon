@@ -11,10 +11,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import okhttp3.Request;
 
@@ -60,7 +62,25 @@ public class ClientUserInfoControl {
         });
     }
 
-    private static void getUserInfoFromServer(User user, int userID, Runnable success, Runnable failure){
+    public static void updateProfilePhoto(int userID, File img, Runnable success, Runnable failure){
+        Map<String, String> params = new HashMap<>();
+        params.put("userID", String.valueOf(userID));
+        final String uuid = UUID.randomUUID().toString();
+        params.put("imgName", uuid);
+        HttpRequest.postFile(SERVER_IP + "updateProfilePhoto", "image", uuid, img, params, new HttpRequest.DataCallback() {
+            @Override
+            public void requestSuccess(String result) throws Exception {
+                success.run();
+            }
+
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                failure.run();
+            }
+        });
+    }
+
+    public static void getUserInfoFromServer(User user, int userID, Runnable success, Runnable failure){
         Map<String,String> params = new HashMap<>();
         params.put("userID", String.valueOf(userID));
         HttpRequest.post(SERVER_IP+"getuserinfo",params, new HttpRequest.DataCallback(){

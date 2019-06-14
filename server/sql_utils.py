@@ -21,8 +21,8 @@ class Remind(object):
 
 class DayMoonDB(object):
     def __init__(self,lock,host='localhost',user="root",db="daymoon"):
-        # self.db = pymysql.connect(host=host, user=user, db=db, password="7UdiP3X8",charset="utf8",use_unicode=True)
-        self.db = pymysql.connect(host=host, user=user, db=db, password="", charset="utf8", use_unicode=True)
+        self.db = pymysql.connect(host=host, user=user, db=db, password="7UdiP3X8",charset="utf8",use_unicode=True)
+        #self.db = pymysql.connect(host=host, user=user, db=db, password="", charset="utf8", use_unicode=True)
         self.cur=self.db.cursor()
         self.lock=lock
 
@@ -112,6 +112,19 @@ class DayMoonDB(object):
         except Exception as err:
             self.db.rollback()
             return str(err)
+
+    def updateProfilePhoto(self, userID, imgName):
+        sql="UPDATE `users` SET `profilePhotoName` = '%s' WHERE `users`.`userID` = %d;" % (imgName, userID)
+        try:
+            self.lock.acquire()
+            self.cur.execute(sql)
+            self.lock.release()
+            self.db.commit()
+            return True
+        except Exception as err:
+            self.db.rollback()
+            return str(err)
+
 
     def getUserInfo(self,userID):
         '''
@@ -490,7 +503,7 @@ class DayMoonDB(object):
     # -----------group的创、删、进、退、查-----------#
 
     # -----------groupEvent的增、改、查、删-----------#
-    def submitGroupEventInfo(self, groupID, eventName, eventType, whetherProcess, location, beginTime, endTime='', description='', remind='{}', dutyUserIDs=None):
+    def submitGroupEventInfo(self, userID, groupID, eventName, eventType, whetherProcess, location, beginTime, endTime='', description='', remind='{}', dutyUserIDs=None):
         '''
         依附于已经存在的groupID，创建小组事件
         :param groupID: int
@@ -516,11 +529,11 @@ class DayMoonDB(object):
                 if not dutyUserIDs:dutyUserIDs=members
 
             if whetherProcess:
-                sql = '''INSERT INTO `groupEvents` (`eventID`, `groupID`, `dutyUserIDs`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`, `location`, `eventType`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '%s', '1', '%s' , '%s', '%d');''' % (
-                groupID, json.dumps(dutyUserIDs,ensure_ascii=False), eventName, description, beginTime, endTime, remind, location, eventType)
+                sql = '''INSERT INTO `groupEvents` (`eventID`, `groupID`, `dutyUserIDs`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`, `location`, `eventType`, `creatorID`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '%s', '1', '%s' , '%s', '%d', '%d');''' % (
+                groupID, json.dumps(dutyUserIDs,ensure_ascii=False), eventName, description, beginTime, endTime, remind, location, eventType,userID)
             else:
-                sql = '''INSERT INTO `groupEvents` (`eventID`, `groupID`, `dutyUserIDs`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`,`location`,`eventType`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '1970-01-01 00:00:00', '0', '%s' ,'%s', '%d');''' % (
-                    groupID, json.dumps(dutyUserIDs, ensure_ascii=False), eventName, description, beginTime,remind, location,eventType)
+                sql = '''INSERT INTO `groupEvents` (`eventID`, `groupID`, `dutyUserIDs`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`,`location`,`eventType`, `creatorID`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '1970-01-01 00:00:00', '0', '%s' ,'%s', '%d','%d');''' % (
+                    groupID, json.dumps(dutyUserIDs, ensure_ascii=False), eventName, description, beginTime,remind, location,eventType,creatorID)
             self.lock.acquire()
             self.cur.execute(sql)
             self.lock.release()
@@ -628,7 +641,7 @@ class DayMoonDB(object):
             if userID!=leader:return 'NO ACCESS'
 
         infodict = {'eventID': info[0], 'groupID': info[1], 'eventName': info[3], 'description': info[4], 'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
-                    'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]], 'AllMember': str(realusers==[]),'MemberID':realusers,'location': info[9], 'eventType': info[10]}
+                    'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]], 'AllMember': str(realusers==[]),'MemberID':realusers,'location': info[9], 'eventType': info[10],'creatorID': info[11]}
         '''infodict = {'eventID': info[0], 'groupID': info[1], 'dutyUserIDs': realusers, 'eventName': info[3],'description':info[4],
                     'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
                     'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'whetherProcess': info[7], 'remind': json.loads(info[8])}'''
@@ -769,7 +782,7 @@ class DayMoonDB(object):
                            'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
                            'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]],
                            'AllMember': str(realusers == []), 'MemberID': realusers, 'location': info[9],
-                           'eventType': info[10]}
+                           'eventType': info[10], 'creatorID': info[11]}
                 allMyGroupEvents.append(infodict)
         return allMyGroupEvents
 
@@ -799,7 +812,7 @@ class DayMoonDB(object):
                                 'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
                                 'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]],
                                 'AllMember': str(realusers == []), 'MemberID': realusers, 'location': info[9],
-                                'eventType': info[10]}
+                                'eventType': info[10], 'creatorID': info[11]}
                     allMyGroupEvents.append(infodict)
         return allMyGroupEvents
 

@@ -4,7 +4,6 @@ from flask import Response
 
 import os, sys, threading
 from sql_utils import *
-from word2event import *
 
 #f = open("err.log","w")
 #sys.stderr = f
@@ -18,15 +17,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 @app.route('/')
 def index():
     return render_template('home.html')
-
-@app.route('/word2event',methods=['GET', 'POST'])
-def word2event():
-    res=None
-    if request.method == 'POST':
-        sen = request.form.get('sen')
-        res = '转换结果：'+str(getRelationship(sen))
-    return render_template('word2event.html',res=res)
-
 
 @app.route('/signup',methods=['GET', 'POST'])
 def signup():
@@ -176,7 +166,8 @@ def submitgroupevent():
     res=None
     if request.method == 'POST':
 
-        groupID=int(request.form.get('groupID'))
+        groupID = int(request.form.get('groupID'))
+        userID = int(request.form.get('userID'))
         eventName = request.form.get('eventName')
         eventType = int(request.form.get('eventType'))
         whetherProcess = bool(request.form.get('whetherProcess'))
@@ -186,7 +177,7 @@ def submitgroupevent():
         description = request.form.get('description')
         remind=rem.str()
         print([groupID,eventName,eventType,whetherProcess,location,beginTime,endTime,description])
-        res=db.submitGroupEventInfo(groupID,eventName,eventType,whetherProcess,location,beginTime,endTime,description)
+        res=db.submitGroupEventInfo(userID,groupID,eventName,eventType,whetherProcess,location,beginTime,endTime,description)
     print(str(res))
     return str(res)
 
@@ -227,6 +218,20 @@ def creategroup():
         file_path = path + f.filename + ".png"
         f.save(file_path)
         res = db.createGroup(leaderID, groupName, imgName)
+    return str(res)
+
+@app.route('/updateProfilePhoto',methods=['GET', 'POST'])
+def updateProfilePhoto():
+    res=None
+    if request.method == 'POST':
+        userID = int(request.form.get('userID'))
+        imgName = request.form.get('imgName')
+        f = request.files['file']
+        path = basedir + "/static/uploads/"
+        file_path = path + f.filename + ".png"
+        f.save(file_path)
+        print(userID, imgName)
+        res = db.updateProfilePhoto(userID, imgName)
     return str(res)
 
 @app.route("/image/<imageName>")

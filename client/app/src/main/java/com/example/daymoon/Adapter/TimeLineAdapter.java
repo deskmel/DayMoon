@@ -19,6 +19,8 @@ import com.example.daymoon.GroupEventManagement.ClientGroupEventControl;
 import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.R;
+import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
+import com.example.daymoon.UserInfoManagement.User;
 
 import java.util.Collections;
 
@@ -174,6 +176,19 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
                 bottomline.setBackground(ContextCompat.getDrawable(mContext,R.drawable.dashline));
 
             }
+            User user=new User();
+            Log.d("creatorID", String.valueOf(groupEventList.get(position).getCreatorID()));
+            ClientUserInfoControl.getUserInfoFromServer(user, groupEventList.get(position).getCreatorID(), new Runnable() {
+                @Override
+                public void run() {
+                    groupcreatorimage.setImageBitmap(user.getProfilePhoto());
+                }
+            }, new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            });
 
         }
         public int dip2px(Context context, float dpValue) {

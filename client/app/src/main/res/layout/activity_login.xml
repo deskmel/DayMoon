@@ -85,13 +85,13 @@
             android:textSize="14sp" />
         <!--layout_weight="1" layout_width="0dp"实现均分效果-->
         <TextView
-            android:id="@+id/tv_find_psw"
+            android:id="@+id/tv_offline_login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:padding="8dp"
-            android:text="找回密码?"
+            android:text="离线登陆"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
     </LinearLayout>

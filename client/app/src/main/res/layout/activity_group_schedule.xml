@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -152,31 +153,43 @@
         </LinearLayout>
     </LinearLayout>
         </com.yalantis.phoenix.PullToRefreshView>
-        <ViewFlipper
-            android:id="@+id/flipper2"
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/right_labels"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp">
-        <ImageButton
-            android:background="@color/white"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/add_blue"
-            android:id="@+id/add_event_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            />
-        <ImageButton
-            android:background="@color/white"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/add_blue"
-            android:id="@+id/add_notification_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            />
-        </ViewFlipper>
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            fab:fab_addButtonColorNormal="@color/white"
+            fab:fab_addButtonColorPressed="@color/white_pressed"
+            fab:fab_addButtonPlusIconColor="@color/half_black"
+            fab:fab_addButtonSize="mini"
+            fab:fab_labelStyle="@style/menu_labels_style"
+            fab:fab_labelsPosition="left">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_notification_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_size="mini"
+                fab:fab_colorNormal="@color/white"
+                fab:fab_title="notification"
+                fab:fab_icon="@drawable/ic_star_black_24dp"
+                fab:fab_colorPressed="@color/white_pressed"/>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_event_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/white"
+                fab:fab_size="mini"
+                fab:fab_title="event"
+                fab:fab_icon="@drawable/ic_star_accent_24dp"
+                fab:fab_colorPressed="@color/white_pressed"/>
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
     </RelativeLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

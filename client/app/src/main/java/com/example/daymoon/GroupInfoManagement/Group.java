@@ -2,6 +2,7 @@ package com.example.daymoon.GroupInfoManagement;
 
 import android.graphics.Bitmap;
 
+import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.GroupEventManagement.GroupEvent;
 import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.UserInfoManagement.User;
@@ -18,7 +19,7 @@ public class Group implements Serializable {
     private int[] memberIDs, eventIDs; //临时使用一下
     private List<User> groupMember;
     private String imgName;
-    private LinkedList<GroupEvent> eventList;
+    private GroupEventList eventList;
 
     public Group(String groupName,String groupDescription)
     {
@@ -37,6 +38,11 @@ public class Group implements Serializable {
         this.eventIDs = eventIDs;
         this.leaderID = leaderID;
         this.imgName = imgName;
+        this.eventList = new GroupEventList();
+        GroupEventList groupEventList = ClientEventControl.getGroupEventList();
+        for (int eventID:eventIDs) {
+            this.eventList.add(groupEventList.get(groupEventList.findByID(eventID)));
+        }
     }
 
     public void addGroupMember(User user){
@@ -63,7 +69,7 @@ public class Group implements Serializable {
         return groupMember;
     }
 
-    public LinkedList<GroupEvent> getEventList() {
+    public GroupEventList getEventList() {
         return eventList;
     }
 

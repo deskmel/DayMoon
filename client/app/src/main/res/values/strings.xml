@@ -18,4 +18,11 @@
     <string name="menu_item_group">"小组"</string>
     <string name="group_description">"这个组长很懒，什么都没留下"</string>
     <string name="group_nonoevent_description">"~这个小组的事件空空如也~"</string>
+    <string name="view_record_wav">录音WAV文件</string>
+    <string name="view_record_amr">录音AMR文件</string>
+    <string name="view_stop">停止录音</string>
+
+    <string name="error_no_sdcard">没有SD卡，无法存储录音数据</string>
+    <string name="error_state_record">正在录音中，请先停止录音</string>
+    <string name="error_unknown">无法识别的错误</string>
 </resources>
