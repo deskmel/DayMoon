@@ -145,8 +145,8 @@ def submitevent():
         endTime = request.form.get('endTime')
         description = request.form.get('description')
         remind=rem.str()
-        print(description, eventName)
-        res=db.submitEventInfo(userID,eventName,whetherProcess,beginTime,endTime,description,remind)
+        location = request.form.get('location')
+        res=db.submitEventInfo(userID,eventName,whetherProcess,beginTime,endTime,description,remind,location)
     return str(res)
 
 @app.route('/submitnotification',methods=['GET', 'POST'])
@@ -202,7 +202,8 @@ def editevent():
         endTime = request.form.get('endTime')
         description = request.form.get('description')
         remind = rem.str()
-        res=db.editEventInfo(eventID, userID, eventName, beginTime, endTime, description, remind)
+        location = request.form.get('location')
+        res=db.editEventInfo(eventID, userID, eventName, beginTime, endTime, description, remind, location)
     return str(res)
 
 @app.route('/creategroup',methods=['GET', 'POST'])
