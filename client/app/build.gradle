@@ -28,6 +28,7 @@ android {
         exclude 'META-INF/android.support.design_material.version'
         exclude 'META-INF/proguard/androidx-annotations.pro'
     }
+    sourceSets.main.jniLibs.srcDirs = ['libs']
 }
 
 repositories {
@@ -35,7 +36,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
@@ -59,4 +60,5 @@ dependencies {
     implementation 'com.github.alamkanak:android-week-view:1.2.6'
     implementation 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
+    implementation files('libs/Msc.jar')
 }
