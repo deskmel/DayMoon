@@ -143,7 +143,7 @@ public class Event implements Comparable<Event>, Serializable {
 
     }
 
-    public String geteventLocation(){return eventLocation==null?"":eventLocation;}
+    public String getEventLocation(){return eventLocation==null?"":eventLocation;}
 
     public String getDescription(){
         return description;

@@ -120,7 +120,7 @@ public class ClientEventControl {//施工
         params.put("beginTime", event.getBeginTimeFormat());
         params.put("endTime", event.getEndTimeFormat());
         params.put("description", event.getDescription());
-
+        params.put("location", event.getEventLocation());
         HttpRequest.post(SERVER_IP+"submitevent", params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
@@ -198,6 +198,7 @@ public class ClientEventControl {//施工
         params.put("beginTime", event.getBeginTimeFormat());
         params.put("endTime", event.getEndTimeFormat());
         params.put("description", event.getDescription());
+        params.put("location", event.getEventLocation());
 
         if (index == -1) return;
         HttpRequest.post(SERVER_IP+"editevent", params, new HttpRequest.DataCallback(){

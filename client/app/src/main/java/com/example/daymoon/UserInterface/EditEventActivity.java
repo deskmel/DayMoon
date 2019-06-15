@@ -64,7 +64,7 @@ public class EditEventActivity extends BaseActivity {
         endTimeView.setText(EndTime.format(endTime.getTime()));
         title.setText(event.getTitle());
         description.setText(event.getDescription());
-        location.setText(event.geteventLocation());
+        location.setText(event.getEventLocation());
         remindTimeLayout=findViewById(R.id.remindTime_layout);
         jtb_whetherRemind=findViewById(R.id.whetherRemind);
 
