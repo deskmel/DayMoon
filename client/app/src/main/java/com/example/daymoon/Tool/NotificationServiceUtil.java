@@ -43,7 +43,7 @@ public class NotificationServiceUtil {
      * @param content 推送内容
      * @param id 推送id
      */
-    public static void invokeTimerNotification(Context context,int time , String content , int id){
+    public static void invokeTimerNotification(Context context,long time , String content , int id){
         Log.i("Tool-AlarmManager", "invokeTimerPOIService wac called.." );
         PendingIntent alarmSender = null;
         Intent startIntent = new Intent(context, TimerNotificationService.class);

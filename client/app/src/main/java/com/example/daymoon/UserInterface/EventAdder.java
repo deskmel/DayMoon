@@ -15,6 +15,7 @@ import com.example.daymoon.Adapter.UMExpandLayout;
 import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.EventManagement.EventInformationHolder;
 import com.example.daymoon.R;
+import com.example.daymoon.Tool.NotificationServiceUtil;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.nightonke.jellytogglebutton.State;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -229,7 +230,14 @@ public class EventAdder extends BaseActivity {
                 //Log.d("endtime",String.format("%d %d %d %d %d\n",eventInformationHolder.Year_,eventInformationHolder.Month_,eventInformationHolder.Date_,eventInformationHolder.endHour_,eventInformationHolder.endMinute_));
                 ClientEventControl.addEvent(eventInformationHolder, getApplicationContext(), new Runnable() {
                     @Override
-                    public void run() { finish(); }
+                    public void run() {
+                        if (eventInformationHolder.whetherRemind)
+                        {
+                            long time =eventInformationHolder.remindTime.getTimeInMillis()-System.currentTimeMillis();
+                            //Log.d("SB", String.valueOf(time));
+                            NotificationServiceUtil.invokeTimerNotification(EventAdder.this,time,eventInformationHolder.title,0);
+                        }
+                        finish(); }
                 }, new Runnable() {
                     @Override
                     public void run() {

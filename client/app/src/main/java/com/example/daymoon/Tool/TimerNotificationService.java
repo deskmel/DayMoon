@@ -20,11 +20,12 @@ public class TimerNotificationService extends Service implements Runnable {
     private String TAG = TimerNotificationService.class.getSimpleName();
     private String content = "";
     private int id = 1;
+    private int time;
 
     @Override
     public void onCreate(){
         super.onCreate();
-        run();
+//        run();
     }
 
     @Override
@@ -32,6 +33,7 @@ public class TimerNotificationService extends Service implements Runnable {
         try{
             content = intent.getExtras().getString("content");
             id = intent.getExtras().getInt("id");
+            time = intent.getExtras().getInt("time");
             uploadPOIInfo();
         } catch (Exception e){
             Log.e("content接受","Error!!!!!!1");
@@ -68,8 +70,6 @@ public class TimerNotificationService extends Service implements Runnable {
 
     @Override
     public void run(){
-        Log.i("AWSL","好像被调用了");
-
         String ns = Context.NOTIFICATION_SERVICE;
         NotificationManager nm  =(NotificationManager) getSystemService(ns);
         long when = System.currentTimeMillis();
@@ -78,10 +78,8 @@ public class TimerNotificationService extends Service implements Runnable {
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,
                 new Intent(this,CalendarActivity.class),0);
         Notification notification;
-        builder.setContentTitle("状态栏通知")
-                .setContentText("状态栏会显示一个通知栏的图标")
-                .setSubText("丰富你的程序，运行手机多媒体")
-                .setTicker("收到Notification信息")
+        builder.setContentTitle("事件通知")
+                .setContentText(content)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setDefaults(Notification.DEFAULT_LIGHTS)
