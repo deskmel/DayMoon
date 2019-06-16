@@ -48,8 +48,8 @@ public class TestUserInterfaceControl implements UserInterfaceControl{
         //test
         EventList eventList=new EventList();
         try {
-            Event today = new Event("today", "shit", 0, year, month, date, 0, 0, year, month, date, 1, 1, true);
-            eventList.add(today);
+            //Event today = new Event("today", "shit", 0, year, month, date, 0, 0, year, month, date, 1, 1, true);
+            //eventList.add(today);
 
         }
         catch (Exception ex)

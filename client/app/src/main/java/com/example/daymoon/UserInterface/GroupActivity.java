@@ -72,9 +72,6 @@ public class GroupActivity extends AppCompatActivity {
     private TextView today;
     private PullToRefreshView mPullToRefreshView;
 
-    private Cursor cursor;
-    private SQLiteDatabase db;
-
     private ArrayList<View> viewList;
     private ImageButton notification;
     private ImageButton groupback;
@@ -198,12 +195,7 @@ public class GroupActivity extends AppCompatActivity {
                 groupList = ClientGroupInfoControl.getGroupList();
                 flushGroupList();
             }
-        }, new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), "something goes wrong when getGroupListFromServer", Toast.LENGTH_LONG).show();
-            }
-        });
+        }, this);
 
         ClientGroupEventControl.getNotificationListFromServer(new Runnable() {
             @Override

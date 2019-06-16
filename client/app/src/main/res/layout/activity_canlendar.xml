@@ -2,6 +2,7 @@
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
@@ -101,29 +102,42 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
-        <ImageButton
-            android:layout_alignParentBottom="true"
-            android:background="@color/white"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/add_blue"
-            android:id="@+id/semantic_adder"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            />
-
-        <ImageButton
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/right_labels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:background="@color/white"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/add_blue"
-            android:id="@+id/addbutton"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            />
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            fab:fab_addButtonColorNormal="@color/white"
+            fab:fab_addButtonColorPressed="@color/white_pressed"
+            fab:fab_addButtonPlusIconColor="@color/half_black"
+            fab:fab_addButtonSize="mini"
+            fab:fab_labelStyle="@style/menu_labels_style"
+            fab:fab_labelsPosition="left">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_size="mini"
+                fab:fab_colorNormal="@color/white"
+                fab:fab_title="normal"
+                fab:fab_icon="@drawable/ic_star_black_24dp"
+                fab:fab_colorPressed="@color/white_pressed"/>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/semantic_adder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/white"
+                fab:fab_size="mini"
+                fab:fab_title="semantic"
+                app:fab_icon="@drawable/ic_star_accent_24dp"
+                fab:fab_colorPressed="@color/white_pressed"/>
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
     </RelativeLayout>
 </android.support.v4.widget.DrawerLayout>

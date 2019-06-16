@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.example.daymoon.Adapter.UMExpandLayout;
 import com.example.daymoon.EventManagement.ClientEventControl;
 import com.example.daymoon.EventManagement.Event;
 import com.example.daymoon.EventManagement.EventInformationHolder;
@@ -26,12 +27,14 @@ import java.util.Locale;
 public class EditEventActivity extends BaseActivity {
     private JellyToggleButton jtb_whethercontinue;
     private TextView startTimeView,endTimeView,delete,back,complete;
-    private MaterialEditText title,description;
+    private MaterialEditText title,description,location;
     private Event event;
     final SimpleDateFormat BeginTime=new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA);
     final SimpleDateFormat EndTime=new SimpleDateFormat("HH:mm", Locale.CHINA);
     final boolean[] startTimeType = {true, true, true, true, true, false};
     final boolean[] endTimeType = {false, false, false, true, true, false};
+    private UMExpandLayout remindTimeLayout;
+    private JellyToggleButton jtb_whetherRemind;
     Intent intent;
 
     private EventInformationHolder eventInformationHolder;
@@ -53,6 +56,7 @@ public class EditEventActivity extends BaseActivity {
         complete=findViewById(R.id.complete);
         title=findViewById(R.id.title);
         description=findViewById(R.id.DesEditView);
+        location=findViewById(R.id.location);
         //初始化页面
         GregorianCalendar beginTime=event.getBeginTime();
         GregorianCalendar endTime=event.getEndTime();
@@ -60,7 +64,9 @@ public class EditEventActivity extends BaseActivity {
         endTimeView.setText(EndTime.format(endTime.getTime()));
         title.setText(event.getTitle());
         description.setText(event.getDescription());
-
+        location.setText(event.getEventLocation());
+        remindTimeLayout=findViewById(R.id.remindTime_layout);
+        jtb_whetherRemind=findViewById(R.id.whetherRemind);
 
         //绑定时间选择
         startTimeView.setOnClickListener(new View.OnClickListener() {
@@ -111,18 +117,32 @@ public class EditEventActivity extends BaseActivity {
                 }
             }
         });
-
+        jtb_whetherRemind.setOnStateChangeListener(new JellyToggleButton.OnStateChangeListener() {
+            @Override
+            public void onStateChange(float process, State state, JellyToggleButton jtb) {
+                if (state.equals(State.LEFT)) {
+                    eventInformationHolder.whetherRemind=false;
+                    remindTimeLayout.collapse();
+                }
+                if (state.equals(State.RIGHT)) {
+                    eventInformationHolder.whetherRemind=true;
+                    remindTimeLayout.expand();
+                }
+            }
+        });
         //绑定完成界面
         complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 eventInformationHolder.title=title.getText().toString();
                 eventInformationHolder.descriptions=description.getText().toString();
+                eventInformationHolder.location= location.getText().toString();
                 ClientEventControl.editEvent(event.getEventID(), eventInformationHolder, getApplicationContext(), new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            event = new Event(eventInformationHolder.title, eventInformationHolder.descriptions, event.getEventID(), eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.startHour_, eventInformationHolder.startMinute_, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.endHour_, eventInformationHolder.endMinute_, eventInformationHolder.process);
+                            event = new Event(eventInformationHolder.title, eventInformationHolder.descriptions, event.getEventID(), eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.startHour_, eventInformationHolder.startMinute_, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.endHour_, eventInformationHolder.endMinute_, eventInformationHolder.process
+                            ,eventInformationHolder.location,eventInformationHolder.whetherRemind,eventInformationHolder.remindTime);
                         } catch (Exception e) {
                             finish();
                         }

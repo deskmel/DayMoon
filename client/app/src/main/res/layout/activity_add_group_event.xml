@@ -17,7 +17,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/menu_bg"
+                android:background="@color/white"
                 android:orientation="horizontal"
                 tools:layout_editor_absoluteX="97dp"
                 tools:layout_editor_absoluteY="0dp">

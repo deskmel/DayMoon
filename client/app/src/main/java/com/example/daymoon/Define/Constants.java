@@ -11,7 +11,7 @@ public class Constants {
      */
     public static final int ERROR = 1;
     //413
-    //public static final String SERVER_IP = "http://192.168.1.103:5000/";
+    //public static final String SERVER_IP = "http://192.168.1.110:5000/";
     //cloud
     public static final String SERVER_IP = "http://47.102.102.52:8080/";
     //other

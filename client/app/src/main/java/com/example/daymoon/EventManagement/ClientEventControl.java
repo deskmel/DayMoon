@@ -31,8 +31,8 @@ public class ClientEventControl {//施工
 
     private int currentUserID, currentEventID; // 下一个event的ID，即当前event总数+1，这样可以保证eventID不重复
 
-    private EventList eventList;
-    private GroupEventList groupEventList;
+    private EventList eventList = new EventList();
+    private GroupEventList groupEventList = new GroupEventList();
     private static ClientEventControl clientEventControl;
 
     public static void setCurrentUserID(int currentUserID){
@@ -51,8 +51,12 @@ public class ClientEventControl {//施工
         return getInstance().eventList;
     }
 
+    public static GroupEventList getGroupEventList(){
+        return getInstance().groupEventList;
+    }
+
     // 通过currentUserID向服务器找到当前user的eventList
-    public static void getEventListFromServer(Runnable callback){
+    public static void getEventListFromServer(Runnable callback, Context context){
         Map<String,String> params = new HashMap<>();
         params.put("userID",String.valueOf(getInstance().currentUserID));
         HttpRequest.post(SERVER_IP+"getallmyevents",params, new HttpRequest.DataCallback(){
@@ -60,20 +64,22 @@ public class ClientEventControl {//施工
             public void requestSuccess(String result) {
                 Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
                         new CalendarSerializer()).create();
-                System.out.println(result);
                 Type EventRecordType = new TypeToken<EventList>(){}.getType();
                 getInstance().eventList = gson.fromJson(result, EventRecordType);
-
+                LocalDatabaseHelper localDatabaseHelper = new LocalDatabaseHelper(context);
+                localDatabaseHelper.syncEvents(getInstance().eventList);
                 callback.run();
             }
             @Override
             public void requestFailure(Request request, IOException e) {
-                Log.e("shit", "oops! Something goes wrong");
+                getInstance().eventList = new LocalDatabaseHelper(context).queryEventList();
+                System.out.println(getInstance().eventList.size());
+                callback.run();
             }
         });
     }
 
-    public static void getGroupEventListFromServer(Runnable callback){
+    public static void getGroupEventListFromServer(Runnable callback, Context context){
         Map<String,String> params = new HashMap<>();
         params.put("userID",String.valueOf(getInstance().currentUserID));
         HttpRequest.post(SERVER_IP+"getallmygroupeventlists",params, new HttpRequest.DataCallback(){
@@ -84,11 +90,14 @@ public class ClientEventControl {//施工
                 System.out.println(result);
                 Type GroupEventRecordType = new TypeToken<GroupEventList>(){}.getType();
                 getInstance().groupEventList = gson.fromJson(result, GroupEventRecordType);
+                LocalDatabaseHelper localDatabaseHelper = new LocalDatabaseHelper(context);
+                localDatabaseHelper.syncGroupEvents(getInstance().groupEventList);
                 callback.run();
             }
             @Override
             public void requestFailure(Request request, IOException e) {
-                Log.e("shit", "oops! Something goes wrong");
+                getInstance().groupEventList = new LocalDatabaseHelper(context).queryGroupEventList();
+                callback.run();
             }
         });
     }
@@ -98,7 +107,7 @@ public class ClientEventControl {//施工
     public static void addEvent(EventInformationHolder eventInformationHolder, Context context, Runnable success, Runnable failure){
         Event event;
         try {
-            event = new Event(eventInformationHolder.title, eventInformationHolder.descriptions, 0, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.startHour_, eventInformationHolder.startMinute_, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.endHour_, eventInformationHolder.endMinute_, eventInformationHolder.process);
+            event = new Event(eventInformationHolder.title, eventInformationHolder.descriptions, 0, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.startHour_, eventInformationHolder.startMinute_, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.endHour_, eventInformationHolder.endMinute_, eventInformationHolder.process,eventInformationHolder.location,eventInformationHolder.whetherRemind,eventInformationHolder.remindTime);
         }catch(Exception e){
             return;
         }
@@ -111,7 +120,7 @@ public class ClientEventControl {//施工
         params.put("beginTime", event.getBeginTimeFormat());
         params.put("endTime", event.getEndTimeFormat());
         params.put("description", event.getDescription());
-
+        params.put("location", event.getEventLocation());
         HttpRequest.post(SERVER_IP+"submitevent", params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
@@ -174,7 +183,7 @@ public class ClientEventControl {//施工
     public static void editEvent(int eventID, EventInformationHolder eventInformationHolder,  Context context, Runnable success, Runnable failure){
         Event event;
         try {
-            event = new Event(eventInformationHolder.title, eventInformationHolder.descriptions, eventID, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.startHour_, eventInformationHolder.startMinute_, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.endHour_, eventInformationHolder.endMinute_, eventInformationHolder.process);
+            event = new Event(eventInformationHolder.title, eventInformationHolder.descriptions, eventID, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.startHour_, eventInformationHolder.startMinute_, eventInformationHolder.Year_, eventInformationHolder.Month_, eventInformationHolder.Date_, eventInformationHolder.endHour_, eventInformationHolder.endMinute_, eventInformationHolder.process,eventInformationHolder.location,eventInformationHolder.whetherRemind,eventInformationHolder.remindTime);
         }catch(Exception e){
             return;
         }
@@ -189,6 +198,7 @@ public class ClientEventControl {//施工
         params.put("beginTime", event.getBeginTimeFormat());
         params.put("endTime", event.getEndTimeFormat());
         params.put("description", event.getDescription());
+        params.put("location", event.getEventLocation());
 
         if (index == -1) return;
         HttpRequest.post(SERVER_IP+"editevent", params, new HttpRequest.DataCallback(){
@@ -255,7 +265,6 @@ public class ClientEventControl {//施工
         //
         if (getInstance().groupEventList!=null)
         {
-            Log.d("hahagroupevent",String.valueOf(getInstance().groupEventList.size()));
             for (GroupEvent event:getInstance().groupEventList){
                 if (event.getBeginTime().get(GregorianCalendar.YEAR) == year
                         && event.getBeginTime().get(GregorianCalendar.MONTH ) + 1 == month
@@ -269,10 +278,12 @@ public class ClientEventControl {//施工
 
     public  static  GroupEventList findGroupEventListByWeek(int year,int weekOfYear){
         GroupEventList resultList = new GroupEventList();
-        for (GroupEvent event:getInstance().groupEventList){
-            if (event.getBeginTime().get(java.util.Calendar.WEEK_OF_YEAR) == weekOfYear
-                    && year == event.getBeginTime().get(java.util.Calendar.YEAR) ){
-                resultList.add(event);
+        if (getInstance().groupEventList!=null) {
+            for (GroupEvent event : getInstance().groupEventList) {
+                if (event.getBeginTime().get(java.util.Calendar.WEEK_OF_YEAR) == weekOfYear
+                        && year == event.getBeginTime().get(java.util.Calendar.YEAR)) {
+                    resultList.add(event);
+                }
             }
         }
         return resultList;

@@ -70,6 +70,22 @@
                 app:met_hideUnderline="true"
                 />
         </LinearLayout>
-    </LinearLayout>
 
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageButton
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitCenter"
+            android:background="@color/white"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/audio_input"
+            android:src="@drawable/ic_keyboard_voice_black_24dp"
+            />
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

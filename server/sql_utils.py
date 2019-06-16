@@ -21,8 +21,8 @@ class Remind(object):
 
 class DayMoonDB(object):
     def __init__(self,lock,host='localhost',user="root",db="daymoon"):
-        # self.db = pymysql.connect(host=host, user=user, db=db, password="7UdiP3X8",charset="utf8",use_unicode=True)
-        self.db = pymysql.connect(host=host, user=user, db=db, password="", charset="utf8", use_unicode=True)
+        self.db = pymysql.connect(host=host, user=user, db=db, password="7UdiP3X8",charset="utf8",use_unicode=True)
+        #self.db = pymysql.connect(host=host, user=user, db=db, password="", charset="utf8", use_unicode=True)
         self.cur=self.db.cursor()
         self.lock=lock
 
@@ -113,6 +113,19 @@ class DayMoonDB(object):
             self.db.rollback()
             return str(err)
 
+    def updateProfilePhoto(self, userID, imgName):
+        sql="UPDATE `users` SET `profilePhotoName` = '%s' WHERE `users`.`userID` = %d;" % (imgName, userID)
+        try:
+            self.lock.acquire()
+            self.cur.execute(sql)
+            self.lock.release()
+            self.db.commit()
+            return True
+        except Exception as err:
+            self.db.rollback()
+            return str(err)
+
+
     def getUserInfo(self,userID):
         '''
 
@@ -132,7 +145,7 @@ class DayMoonDB(object):
     # -----------user的增、改、查-----------#
 
     # -----------personalEvent的增、改、查、删-----------#
-    def submitEventInfo(self,userID,eventName,whetherProcess,beginTime,endTime='',description='',remind='{}'):
+    def submitEventInfo(self,userID,eventName,whetherProcess,beginTime,endTime='',description='',remind='{}',location=''):
         '''
         增加个人事件
         :param userID: int
@@ -146,9 +159,9 @@ class DayMoonDB(object):
         '''
         try:
             if whetherProcess:
-                sql='''INSERT INTO `events` (`eventID`, `userID`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '1', '%s');'''%(userID,eventName,description,beginTime,endTime,remind)
+                sql='''INSERT INTO `events` (`eventID`, `userID`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`, `location`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '1', '%s', '%s');'''%(userID,eventName,description,beginTime,endTime,remind,location)
             else:
-                sql='''INSERT INTO `events` (`eventID`, `userID`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`) VALUES (NULL, '%d', '%s', '%s', '%s', '1970-01-01 00:00:00', '0', '%s');'''%(userID,eventName,description,beginTime,remind)
+                sql='''INSERT INTO `events` (`eventID`, `userID`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`, `location`) VALUES (NULL, '%d', '%s', '%s', '%s', '1970-01-01 00:00:00', '0', '%s');'''%(userID,eventName,description,beginTime,remind,location)
             self.lock.acquire()
             self.cur.execute(sql)
             self.lock.release()
@@ -185,7 +198,7 @@ class DayMoonDB(object):
             self.db.rollback()
             return str(err)
 
-    def editEventInfo(self,eventID,userID,eventName='',beginTime='',endTime='',description='',remind=''):
+    def editEventInfo(self,eventID,userID,eventName='',beginTime='',endTime='',description='',remind='',location=''):
         '''
         修改某个个人事件,若原本whetherProcess=False,新传进了endTime,则whetherProcess自动改为True
         :param eventID: int 必有
@@ -212,7 +225,8 @@ class DayMoonDB(object):
         if endTime and endTime!='1970-01-01 00:00:00': str3 = "`whetherProcess` = '1', `endTime` = '%s'," % endTime
         if description: str4 = "`description` = '%s'," % description
         if remind: str5 = "`remind` = '%s'," % remind
-        wholeStr = str1 + str2 + str3 + str4 + str5
+        if location: str6 = "`location` = '%s'," % location
+        wholeStr = str1 + str2 + str3 + str4 + str5 +str6
         wholeStr = wholeStr[:-1]  # 去除最后一个逗号
         sql = "UPDATE `events` SET " + wholeStr + " WHERE `events`.`eventID` = %d;" % eventID
         try:
@@ -248,7 +262,7 @@ class DayMoonDB(object):
         print(info)
         if not info: return None
         infodict = {'eventID': info[0], 'userID': info[1], 'eventName':info[2], 'description': info[3], 'beginTime': info[4].strftime("%Y-%m-%d %H:%M:%S"),
-                    'endTime': info[5].strftime("%Y-%m-%d %H:%M:%S"), 'whetherProcess': Num2Bool[info[6]]}#为了测试暂时把remind删了
+                    'endTime': info[5].strftime("%Y-%m-%d %H:%M:%S"), 'whetherProcess': Num2Bool[info[6]], 'eventLocation': info[7]}#为了测试暂时把remind删了
 
         return json.dumps(infodict,ensure_ascii=False)
 
@@ -490,7 +504,7 @@ class DayMoonDB(object):
     # -----------group的创、删、进、退、查-----------#
 
     # -----------groupEvent的增、改、查、删-----------#
-    def submitGroupEventInfo(self, groupID, eventName, eventType, whetherProcess, location, beginTime, endTime='', description='', remind='{}', dutyUserIDs=None):
+    def submitGroupEventInfo(self, userID, groupID, eventName, eventType, whetherProcess, location, beginTime, endTime='', description='', remind='{}', dutyUserIDs=None):
         '''
         依附于已经存在的groupID，创建小组事件
         :param groupID: int
@@ -516,11 +530,11 @@ class DayMoonDB(object):
                 if not dutyUserIDs:dutyUserIDs=members
 
             if whetherProcess:
-                sql = '''INSERT INTO `groupEvents` (`eventID`, `groupID`, `dutyUserIDs`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`, `location`, `eventType`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '%s', '1', '%s' , '%s', '%d');''' % (
-                groupID, json.dumps(dutyUserIDs,ensure_ascii=False), eventName, description, beginTime, endTime, remind, location, eventType)
+                sql = '''INSERT INTO `groupEvents` (`eventID`, `groupID`, `dutyUserIDs`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`, `location`, `eventType`, `creatorID`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '%s', '1', '%s' , '%s', '%d', '%d');''' % (
+                groupID, json.dumps(dutyUserIDs,ensure_ascii=False), eventName, description, beginTime, endTime, remind, location, eventType,userID)
             else:
-                sql = '''INSERT INTO `groupEvents` (`eventID`, `groupID`, `dutyUserIDs`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`,`location`,`eventType`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '1970-01-01 00:00:00', '0', '%s' ,'%s', '%d');''' % (
-                    groupID, json.dumps(dutyUserIDs, ensure_ascii=False), eventName, description, beginTime,remind, location,eventType)
+                sql = '''INSERT INTO `groupEvents` (`eventID`, `groupID`, `dutyUserIDs`, `eventName`, `description`, `beginTime`, `endTime`, `whetherProcess`, `remind`,`location`,`eventType`, `creatorID`) VALUES (NULL, '%d', '%s', '%s', '%s', '%s', '1970-01-01 00:00:00', '0', '%s' ,'%s', '%d','%d');''' % (
+                groupID, json.dumps(dutyUserIDs, ensure_ascii=False), eventName, description, beginTime,remind, location,eventType,userID)
             self.lock.acquire()
             self.cur.execute(sql)
             self.lock.release()
@@ -628,7 +642,7 @@ class DayMoonDB(object):
             if userID!=leader:return 'NO ACCESS'
 
         infodict = {'eventID': info[0], 'groupID': info[1], 'eventName': info[3], 'description': info[4], 'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
-                    'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]], 'AllMember': str(realusers==[]),'MemberID':realusers,'location': info[9], 'eventType': info[10]}
+                    'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]], 'AllMember': str(realusers==[]),'MemberID':realusers,'location': info[9], 'eventType': info[10],'creatorID': info[11]}
         '''infodict = {'eventID': info[0], 'groupID': info[1], 'dutyUserIDs': realusers, 'eventName': info[3],'description':info[4],
                     'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
                     'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'whetherProcess': info[7], 'remind': json.loads(info[8])}'''
@@ -695,7 +709,7 @@ class DayMoonDB(object):
         allMyEvents=[]
         for eventID in events:
             allMyEvents.append(json.loads(self.getEventInfo(eventID,userID)))
-        return json.dumps(allMyEvents,ensure_ascii=False)
+        return allMyEvents
 
     def getAllMyGroups(self,userID):
         '''
@@ -769,7 +783,7 @@ class DayMoonDB(object):
                            'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
                            'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]],
                            'AllMember': str(realusers == []), 'MemberID': realusers, 'location': info[9],
-                           'eventType': info[10]}
+                           'eventType': info[10], 'creatorID': info[11]}
                 allMyGroupEvents.append(infodict)
         return allMyGroupEvents
 
@@ -799,9 +813,33 @@ class DayMoonDB(object):
                                 'beginTime': info[5].strftime("%Y-%m-%d %H:%M:%S"),
                                 'endTime': info[6].strftime("%Y-%m-%d %H:%M:%S"), 'AllDay': Num2Bool[info[7]],
                                 'AllMember': str(realusers == []), 'MemberID': realusers, 'location': info[9],
-                                'eventType': info[10]}
+                                'eventType': info[10], 'creatorID': info[11]}
                     allMyGroupEvents.append(infodict)
         return allMyGroupEvents
+
+    def getAllMemberEvents(self,groupID):
+        sql = '''SELECT `memberIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+        self.lock.acquire()
+        self.cur.execute(sql)
+        self.lock.release()
+        memberIDs = json.loads(self.cur.fetchone()[0])
+
+        allMemberEvents = []
+        for memberID in memberIDs:
+            allMemberEvents.extend(self.getAllMyEvents(memberID))
+        return allMemberEvents
+
+    def getAllMemberGroupEvents(self,groupID):
+        sql = '''SELECT `memberIDs` FROM `groups` WHERE `groupID`=%d''' % groupID
+        self.lock.acquire()
+        self.cur.execute(sql)
+        self.lock.release()
+        memberIDs = json.loads(self.cur.fetchone()[0])
+
+        allMemberGroupEvents = []
+        for memberID in memberIDs:
+            allMemberGroupEvents.extend(self.getAllMyGroupEventlists(memberID))
+        return allMemberGroupEvents
 
     # -----------个人信息汇总-----------#
 

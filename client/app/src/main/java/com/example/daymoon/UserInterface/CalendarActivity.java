@@ -1,10 +1,13 @@
 package com.example.daymoon.UserInterface;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
@@ -53,6 +56,7 @@ import com.example.daymoon.LocalDatabase.LocalDatabaseHelper;
 import com.example.daymoon.Layout.ViewPagerSlide;
 
 import com.example.daymoon.R;
+import com.example.daymoon.Tool.CameraUtils;
 import com.example.daymoon.Tool.StatusBarUtil;
 import com.example.daymoon.Tool.pxUtils;
 import com.example.daymoon.UserInfoManagement.ClientUserInfoControl;
@@ -63,7 +67,7 @@ import com.heinrichreimersoftware.materialdrawer.DrawerActivity;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerItem;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile;
 import com.heinrichreimersoftware.materialdrawer.theme.DrawerTheme;
-
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -78,9 +82,8 @@ import java.util.Map;
 import android.view.GestureDetector;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-
 import androidx.annotation.NonNull;
-
+import com.getbase.floatingactionbutton.FloatingActionButton;
 public class CalendarActivity extends DrawerActivity implements CalendarView.OnViewChangeListener{
 
     private CalendarView calendarView;
@@ -112,15 +115,25 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     private SQLiteDatabase db;
     private ConstraintLayout clContent;
     private TextView picker;
+    private DrawerProfile drawerProfile;
+    private CameraUtils cameraUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int userId = getIntent().getIntExtra("userid", -1);
         if (userId <0) System.out.println("no userID given");
+        initProflie();
+        initMenu();
+        LocalDatabaseHelper.setCurrentUserID(userId);
         ClientUserInfoControl.setCurrentUser(userId, new Runnable(){
             @Override
             public void run() {
-
+                if (ClientUserInfoControl.getCurrentUser().getProfilePhoto()==null)
+                    Log.d("okok", "run: yapiii");
+                drawerProfile.setRoundedAvatar(CalendarActivity.this,ClientUserInfoControl.getCurrentUser().getProfilePhoto());
+                flushMenu();
+                Log.d("kk", "run: wtf");
             }
         }, new Runnable(){
             @Override
@@ -135,14 +148,14 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 setSchemeDate();
                 flushCalendarListView();
             }
-        });
+        }, this);
         ClientEventControl.getGroupEventListFromServer(new Runnable() {
             @Override
             public void run() {
                 setSchemeDate();
                 flushCalendarListView();
             }
-        });
+        }, this);
         ClientGroupInfoControl.setCurrentUserID(userId);
         ClientGroupEventControl.setCurrentUserID(userId);
         setContentView(R.layout.activity_canlendar);//绑定界面
@@ -158,10 +171,8 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         initPage();
         //按钮
         initButton();
-
-
         //侧滑菜单实现
-        initMenu();
+
     }
 
     private  void initPage(){
@@ -194,7 +205,6 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 // TODO Auto-generated method stub
                 container.removeView(viewList.get(position));
             }
-
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
                 // TODO Auto-generated method stub
@@ -264,8 +274,22 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     /**
      * 个人界面 后期修改
      */
+    private void initProflie(){
+        cameraUtils = new CameraUtils(CalendarActivity.this);
+        drawerProfile = new DrawerProfile()
+                .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.mipmap.user))
+                .setBackground(getResources().getDrawable(R.drawable.cv_bg_material))
+                .setName(ClientUserInfoControl.getCurrentUser().getName())
+                .setDescription(getString((R.string.profile_description)))
+                .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
+                    @Override
+                    public void onClick(DrawerProfile drawerProfile, long l) {
+                        Toast.makeText(CalendarActivity.this,"clicked profile",Toast.LENGTH_SHORT).show();
+                        cameraUtils.getPicFromAlbum();
+                    }
+                });
+    }
     private void initMenu(){
-
         if (getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
@@ -273,17 +297,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 new DrawerTheme(this)
         );
         addProfile(
-                new DrawerProfile()
-                        .setRoundedAvatar((BitmapDrawable)getResources().getDrawable(R.mipmap.user))
-                        .setBackground(getResources().getDrawable(R.drawable.cv_bg_material))
-                        .setName(ClientUserInfoControl.getCurrentUser().getName())
-                        .setDescription(getString((R.string.profile_description)))
-                        .setOnProfileClickListener(new DrawerProfile.OnProfileClickListener() {
-                            @Override
-                            public void onClick(DrawerProfile drawerProfile, long l) {
-                                Toast.makeText(CalendarActivity.this,"clicked profile",Toast.LENGTH_SHORT).show();
-                            }
-                        })
+                drawerProfile
         );
         addItem(new DrawerItem()
                 .setImage(ContextCompat.getDrawable(this,R.drawable.setting_new))
@@ -298,29 +312,22 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 openDrawer();
             }
         });*/
-    }
 
+    }
+    private void flushMenu(){
+        addProfile(
+                drawerProfile
+        );
+    }
     /**
      * 时间轴界面
      * 暂时未加入
      */
     private void initTimeLinePage(){
         timeLine = View.inflate(this,R.layout.timeline_layout,null);
-        ImageView eventaddbutton=timeLine.findViewById(R.id.add_event_image);
-        timelineRecyclerView=timeLine.findViewById(R.id.event_list);
-        timelineRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        final SimpleDateFormat timeformat=new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
-        java.util.Calendar c= java.util.Calendar.getInstance();
-        TextView today=timeLine.findViewById(R.id.today);
-        today.setText(timeformat.format(c.getTime()));
-        eventaddbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(CalendarActivity.this,EventAdder.class);
-                startActivityForResult(intent,0);
-            }
-        });
-        flushTimeLineListView();
+        /**
+         * 未完成 置位
+         */
     }
     /**
      * 周视图形式界面，以事件块的形式表现事件
@@ -336,7 +343,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
 
                 GregorianCalendar c = new GregorianCalendar(calendar.getYear(),calendar.getMonth()-1,calendar.getDay());
                 //Log.d("week",String.valueOf(c.get(java.util.Calendar.WEEK_OF_YEAR)));
-               // Log.d("year",String.valueOf(c.get(java.util.Calendar.YEAR)));
+                // Log.d("year",String.valueOf(c.get(java.util.Calendar.YEAR)));
                 selectYear = calendar.getYear();
                 selectMonth = calendar.getMonth();
                 selectDay = calendar.getDay();
@@ -347,6 +354,8 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 year_text.setText(String.valueOf(selectYear));
                 TextView des_text=findViewById(R.id.des_date);
                 des_text.setText(calendar.getLunar());
+                if (calendarView.getSelectedCalendar().getDay()!= selectDay || calendarView.getSelectedCalendar().getMonth() != selectMonth || calendarView.getSelectedCalendar().getYear() != selectYear)
+                    calendarView.scrollToCalendar(selectYear,selectMonth,selectDay);
                 flushTimeTableListView();
             }
         });
@@ -365,7 +374,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         //日期选择器
 
         //添加事件的按钮
-        ImageButton btn_add = findViewById(R.id.addbutton);
+        FloatingActionButton btn_add = findViewById(R.id.addbutton);
         calendarRecyclerView = calendarPager.findViewById(R.id.list_one); //绑定listview
         calendarRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         calendarRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -374,6 +383,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         selectDay = calendarView.getCurDay();
         selectMonth = calendarView.getCurMonth();
         selectYear = calendarView.getCurYear();
+
         //初始化当前年月
         //月份切换改变事件
         calendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
@@ -399,6 +409,8 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 year_text.setText(String.valueOf(selectYear));
                 TextView des_text=findViewById(R.id.des_date);
                 des_text.setText(calendar.getLunar());
+                if (weekView.getSelectedCalendar().getYear()!= selectYear|| weekView.getSelectedCalendar().getMonth() != selectMonth || weekView.getSelectedCalendar().getDay()  != selectDay)
+                    weekView.scrollToCalendar(selectYear,selectMonth,selectDay);
                 flushCalendarListView();
             }
         });
@@ -416,7 +428,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 startActivityForResult(intent, 0);
             }
         });
-        ImageButton btn_semantice_add=findViewById(R.id.semantic_adder);
+        FloatingActionButton btn_semantice_add=findViewById(R.id.semantic_adder);
         btn_semantice_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -433,18 +445,17 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
     }
 
     /**
-     * 事件列表更新 
+     * 事件列表更新
      * 进入页面时刷新
      * 返回页面时刷新
      * 日期更换时刷新
-     * 
+     *
      */
     private void flushView(){
         flushCalendarListView();
         flushTimeTableListView();
-        flushTimeLineListView();
     }
-
+    /*
     private void flushTimeLineListView(){
         NewTimeLineAdapter timeLineAdapter=new NewTimeLineAdapter(ClientEventControl.getEventList(),this);
         timelineRecyclerView = timeLine.findViewById(R.id.event_list);; //绑定listview
@@ -458,9 +469,9 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                 startActivityForResult(intent,0);
             }
         });
-    }
-    
-    
+    }*/
+
+
     private void flushTimeTableListView(){
         int size = 0;
         size += weekEventList==null? 0:weekEventList.size();
@@ -493,7 +504,7 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
                     intent.putExtra("groupevent", todayGroupEventList.get(adapter.getEventIndex(Position)));
                     startActivityForResult(intent, 0);
                 }
-                }
+            }
         });
     }
     public void onViewChange(boolean isMonthView) {
@@ -510,5 +521,36 @@ public class CalendarActivity extends DrawerActivity implements CalendarView.OnV
         super.onActivityResult(requestCode, resultCode, data);
         flushView();
         setSchemeDate();
+        switch (requestCode){
+            case CameraUtils.ALBUM_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    Uri uri = data.getData();
+                    cameraUtils.cropPhoto(uri);//裁剪图片
+                }
+                break;
+            case CameraUtils.CROP_REQUEST_CODE:
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    Log.d("wtf","okyeah");
+                    Bitmap image = bundle.getParcelable("data");
+                    drawerProfile.setRoundedAvatar(CalendarActivity.this,image);
+                    flushMenu();
+                    String path = cameraUtils.saveImage("userHeader", image);
+                    ClientUserInfoControl.updateProfilePhoto(ClientUserInfoControl.getCurrentUser().getId(), new File(path),
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(mainContext, "成功上传", Toast.LENGTH_LONG).show();
+                                }
+                            },
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(mainContext, "上传失败", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
+                break;
+        }
     }
 }
