@@ -209,6 +209,7 @@ public class EventAdder extends BaseActivity {
         });
 
         //描述content
+        LocationView.setText(bundle.get("location")==null?"":bundle.getString("location"));
         TitleView.setText(bundle.get("title")==null?"":bundle.getString("title"));
         DescriptionView.setText(bundle.get("description")==null?"":bundle.getString("description"));
         //绑定取消按钮

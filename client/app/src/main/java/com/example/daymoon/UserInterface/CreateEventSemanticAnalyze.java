@@ -91,6 +91,7 @@ public class CreateEventSemanticAnalyze extends BaseActivity {
                 bundle.putInt("endMinute",20);
                 bundle.putString("description","吃喝嫖赌样样精通");
                 bundle.putString("title","玩吧");
+                bundle.putString("location","东下院");
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -106,6 +107,7 @@ public class CreateEventSemanticAnalyze extends BaseActivity {
             public void onInit(int code) {
                 if (code != ErrorCode.SUCCESS) {
                     Log.d("tag","error");
+                    Toast.makeText(CreateEventSemanticAnalyze.this, "出现奇怪的错误", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -133,7 +135,7 @@ public class CreateEventSemanticAnalyze extends BaseActivity {
         @Override
         public void onVolumeChanged(int i, byte[] bytes) {
             Log.d("volumn", String.valueOf(i));
-            drawable.setLevel(i*10000/10);
+            drawable.setLevel(5000+(i-1)*2000);
         }
 
         @Override
@@ -171,7 +173,6 @@ public class CreateEventSemanticAnalyze extends BaseActivity {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View vPopupWindow = inflater.inflate(R.layout.popupmenu_audiorecord, null, false);
         popupWindow = new PopupWindow(vPopupWindow, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
-        addBackground();
         ViewFlipper viewFlipper = vPopupWindow.findViewById(R.id.flipper);
         ImageButton record = vPopupWindow.findViewById(R.id.audio_record);
         record.setOnClickListener(new View.OnClickListener() {
@@ -204,35 +205,5 @@ public class CreateEventSemanticAnalyze extends BaseActivity {
         popupWindow.showAtLocation(parentView, Gravity.BOTTOM,0,0);
 
     }
-    private Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what){
-                case AudioUtils.VOICE_VOLUME:
-                    drawable.setLevel(msg.arg1);
-                    break;
-                case AudioUtils.RECORD_STOP:
-                    drawable.setLevel(0);
-                    break;
-                default:
-                    break;
-            }
-            return true;
-        }
-    });
-    private void addBackground() {
-        // 设置背景颜色变暗
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.alpha = 0.7f;//调节透明度
-        getWindow().setAttributes(lp);
-        //dismiss时恢复原样
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                WindowManager.LayoutParams lp = getWindow().getAttributes();
-                lp.alpha = 1f;
-                getWindow().setAttributes(lp);
-            }
-        });
-    }
+
 }
