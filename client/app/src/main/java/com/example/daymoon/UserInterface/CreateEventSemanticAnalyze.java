@@ -17,6 +17,8 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.example.daymoon.EventManagement.ClientEventControl;
+import com.example.daymoon.EventManagement.Event;
 import com.example.daymoon.R;
 import com.example.daymoon.Tool.AudioUtils;
 import com.example.daymoon.Tool.PermissionUtil;
@@ -48,13 +50,17 @@ public class CreateEventSemanticAnalyze extends BaseActivity {
     private RecognizerListener mRecoListener;
     private SpeechRecognizer mIat;
     private StringBuffer buffer = new StringBuffer();
+    private Event event;
     // 语音听写UI
     private RecognizerDialog mIatDialog;
+    private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        event = new Event();
         SpeechUtility.createUtility(CreateEventSemanticAnalyze.this, "appid=5d04f06b");
         initRecognizer();
+        context = this;
         PermissionUtil.verifyAudioPermission(CreateEventSemanticAnalyze.this);
         setContentView(R.layout.activity_create_event_semantic_analyze);
         intent=this.getIntent();
@@ -84,16 +90,31 @@ public class CreateEventSemanticAnalyze extends BaseActivity {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CreateEventSemanticAnalyze.this, EventAdder.class);
-                bundle.putInt("beginHour",8);
-                bundle.putInt("beginMinute",0);
-                bundle.putInt("endHour",12);
-                bundle.putInt("endMinute",20);
-                bundle.putString("description","吃喝嫖赌样样精通");
-                bundle.putString("title","玩吧");
-                bundle.putString("location","东下院");
-                intent.putExtras(bundle);
-                startActivity(intent);
+                ClientEventControl.getSemantic(materialEditText.getText().toString(), event, new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(CreateEventSemanticAnalyze.this, EventAdder.class);
+                        Bundle bundle2 = new Bundle();
+                        bundle2.putInt("selectYear", bundle.getInt("selectYear"));
+                        bundle2.putInt("selectMonth", event.getBeginTime().getTime().getMonth()+1);
+                        bundle2.putInt("selectDay", event.getBeginTime().getTime().getDate());
+                        bundle2.putInt("beginHour",event.getBeginTime().getTime().getHours());
+                        bundle2.putInt("beginMinute",event.getBeginTime().getTime().getMinutes());
+                        bundle2.putInt("endHour",event.getEndTime().getTime().getHours());
+                        bundle2.putInt("endMinute",event.getEndTime().getTime().getMinutes());
+                        bundle2.putString("description",event.getDescription());
+                        bundle2.putString("title",event.getTitle());
+                        bundle2.putString("location",event.getEventLocation());
+                        intent.putExtras(bundle2);
+                        startActivity(intent);
+                    }
+                }, new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context,"Fail to get semantic from server", Toast.LENGTH_LONG).show();
+                    }
+                });
+
             }
         });
     }

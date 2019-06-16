@@ -1,6 +1,7 @@
 package com.example.daymoon.EventManagement;
 
 import android.content.Context;
+import android.support.v7.util.AsyncListUtil;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,6 +16,8 @@ import com.example.daymoon.GroupEventManagement.GroupEventList;
 import com.example.daymoon.HttpUtil.CalendarSerializer;
 import com.example.daymoon.HttpUtil.HttpRequest;
 import com.example.daymoon.HttpUtil.HttpRequestThread;
+
+import static com.example.daymoon.Define.Constants.SEMANTIC_SERVER_IP;
 import static com.example.daymoon.Define.Constants.SERVER_IP;
 
 import okhttp3.Request;
@@ -141,7 +144,26 @@ public class ClientEventControl {//施工
         });
     }
 
+    public static void getSemantic(String sentence, Event event, Runnable success, Runnable failure){
+        Map<String,String> params = new HashMap<>();
 
+        params.put("sen", sentence);
+        HttpRequest.post(SEMANTIC_SERVER_IP + "word2event", params, new HttpRequest.DataCallback() {
+            @Override
+            public void requestSuccess(String result) throws Exception {
+                System.out.println(result);
+                Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
+                        new CalendarSerializer()).create();
+                event.copy(gson.fromJson(result, Event.class));
+                success.run();
+            }
+
+            @Override
+            public void requestFailure(Request request, IOException e) {
+                failure.run();
+            }
+        });
+    }
 
     // 删除一个event
     public static void deleteEvent(int eventID, Context context, Runnable success, Runnable failure){

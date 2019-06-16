@@ -166,14 +166,13 @@ def getRelationship(sentence):
 
         start_day, start_time, end_time, freq=parseTime(time)
 
-        returnDict['date']=start_day.strftime('%Y-%m-%d')
-        if start_time:returnDict['start_time']='%02d:%02d'%start_time
-        if end_time: returnDict['end_time'] = '%02d:%02d' % end_time
-        if freq:returnDict['freq']=str(freq)
-        if things:returnDict['things']='、'.join(things)
-        if people:returnDict['people']='、'.join([people[0][i] for i in range(len(people[0])) if people[1][i]=='nh'])
-        if place: returnDict['place'] = '、'.join([place[0][i] for i in range(len(place[0])) if place[1][i] == 'n'])
-
+        date=start_day.strftime('%Y-%m-%d')
+        if start_time:returnDict['beginTime']= date + ' %02d:%02d:00'%start_time
+        if end_time: returnDict['endTime'] = date + ' %02d:%02d:00' % end_time
+        #if freq:returnDict['freq']=str(freq)
+        if things:returnDict['eventName']='、'.join(things)
+        if people:returnDict['description']='、'.join([people[0][i] for i in range(len(people[0])) if people[1][i]=='nh'])
+        if place: returnDict['eventLocation'] = '、'.join([place[0][i] for i in range(len(place[0])) if place[1][i] == 'n'])
         return returnDict
     except:return returnDict
 
