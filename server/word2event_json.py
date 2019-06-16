@@ -25,4 +25,4 @@ def get_json_event(sentence):
     return json.dumps(eval(result_str),ensure_ascii=False)
 
 if __name__ == '__main__':
-    print(get_json_event('从明天开始每天十二点背单词'))
+    print(get_json_event('从七月开始每天十二点背单词'))
