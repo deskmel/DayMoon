@@ -19,6 +19,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 def index():
     return render_template('home.html')
 
+
 @app.route('/word2event',methods=['GET', 'POST'])
 def word2event():
     res=None
@@ -82,7 +83,7 @@ def getallmyevents():
     if request.method == 'POST':
         userID=int(request.form.get('userID'))
         res=db.getAllMyEvents(userID)
-    return res
+    return json.dumps(res,ensure_ascii=False)
 
 @app.route('/getgroupevent',methods=['GET', 'POST'])
 def getgroupevent():
@@ -129,7 +130,21 @@ def getallmygroups():
         res=db.getAllMyGroups(userID)
     return json.dumps(res, ensure_ascii=False)
 
+@app.route('/getallmemberevents', methods=['GET', 'POST'])
+def getallmemberevents():
+    res = ''
+    if request.method == 'POST':
+        groupID = request.form.get('groupID')
+        res = db.getAllMemberEvents(groupID)
+    return json.dumps(res, ensure_ascii=False)
 
+@app.route('/getallmembergroupevents', methods=['GET', 'POST'])
+def getallmembergroupevents():
+    res = ''
+    if request.method == 'POST':
+        groupID = request.form.get('groupID')
+        res = db.getAllMemberGroupEvents(groupID)
+    return json.dumps(res, ensure_ascii=False)
 
 @app.route('/submitevent',methods=['GET', 'POST'])
 def submitevent():
@@ -143,8 +158,8 @@ def submitevent():
         endTime = request.form.get('endTime')
         description = request.form.get('description')
         remind=rem.str()
-        print(description, eventName)
-        res=db.submitEventInfo(userID,eventName,whetherProcess,beginTime,endTime,description,remind)
+        location = request.form.get('location')
+        res=db.submitEventInfo(userID,eventName,whetherProcess,beginTime,endTime,description,remind,location)
     return str(res)
 
 @app.route('/submitnotification',methods=['GET', 'POST'])
@@ -164,7 +179,8 @@ def submitgroupevent():
     res=None
     if request.method == 'POST':
 
-        groupID=int(request.form.get('groupID'))
+        groupID = int(request.form.get('groupID'))
+        userID = int(request.form.get('userID'))
         eventName = request.form.get('eventName')
         eventType = int(request.form.get('eventType'))
         whetherProcess = bool(request.form.get('whetherProcess'))
@@ -174,7 +190,7 @@ def submitgroupevent():
         description = request.form.get('description')
         remind=rem.str()
         print([groupID,eventName,eventType,whetherProcess,location,beginTime,endTime,description])
-        res=db.submitGroupEventInfo(groupID,eventName,eventType,whetherProcess,location,beginTime,endTime,description)
+        res=db.submitGroupEventInfo(userID,groupID,eventName,eventType,whetherProcess,location,beginTime,endTime,description)
     print(str(res))
     return str(res)
 
@@ -199,7 +215,8 @@ def editevent():
         endTime = request.form.get('endTime')
         description = request.form.get('description')
         remind = rem.str()
-        res=db.editEventInfo(eventID, userID, eventName, beginTime, endTime, description, remind)
+        location = request.form.get('location')
+        res=db.editEventInfo(eventID, userID, eventName, beginTime, endTime, description, remind, location)
     return str(res)
 
 @app.route('/creategroup',methods=['GET', 'POST'])
@@ -215,6 +232,20 @@ def creategroup():
         file_path = path + f.filename + ".png"
         f.save(file_path)
         res = db.createGroup(leaderID, groupName, imgName)
+    return str(res)
+
+@app.route('/updateProfilePhoto',methods=['GET', 'POST'])
+def updateProfilePhoto():
+    res=None
+    if request.method == 'POST':
+        userID = int(request.form.get('userID'))
+        imgName = request.form.get('imgName')
+        f = request.files['file']
+        path = basedir + "/static/uploads/"
+        file_path = path + f.filename + ".png"
+        f.save(file_path)
+        print(userID, imgName)
+        res = db.updateProfilePhoto(userID, imgName)
     return str(res)
 
 @app.route("/image/<imageName>")
@@ -243,6 +274,8 @@ def joingroupbyqrcode():
             return str(res)
         return ''
     return res
+
+
 
 from flask import render_template, jsonify
 if __name__ == '__main__':

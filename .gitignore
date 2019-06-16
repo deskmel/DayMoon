@@ -21,4 +21,9 @@ client/.idea/workspace.xml
 /server/static
 /server/templates
 /server/__pychache__
+<<<<<<< HEAD
 /word2event
+=======
+/word2event/
+/client/local.properties
+>>>>>>> 1017a292ec507b9a54a2108e5e4b466951ca4a0f
