@@ -79,6 +79,7 @@ public class EventAdder extends BaseActivity {
         current.set(Calendar.MONTH,bundle.getInt("selectMonth")-1);
         current.set(Calendar.DATE,bundle.getInt("selectDay"));
         startDate.setText(dateformat.format(current.getTime()));
+
         //开始日期选择工具
         startDate.setOnClickListener(new View.OnClickListener() {
             @Override

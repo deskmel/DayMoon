@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
 import re
+import  pyltp
 from datetime import *
-LTP_DATA_DIR = '/Users/markdana/Downloads/ltp_data_v3.4.0'  # ltp模型目录的路径
+
+LTP_DATA_DIR = 'D:\\ltp_data'  # ltp模型目录的路径
 
 
 numdict={'一':'1','二':'2','两':'2','三':'3','四':'4','五':'5','六':'6','七':'7','八':'8','九':'9','十':'10','天':'7','十一':'11','十二':'12'}
@@ -10,22 +12,26 @@ numdict={'一':'1','二':'2','两':'2','三':'3','四':'4','五':'5','六':'6','
 cws_model_path = os.path.join(LTP_DATA_DIR, 'cws.model')
 pos_model_path = os.path.join(LTP_DATA_DIR, 'pos.model')
 par_model_path = os.path.join(LTP_DATA_DIR, 'parser.model')
-srl_model_path = os.path.join(LTP_DATA_DIR, 'pisrl.model')
+ner_model_path = os.path.join(LTP_DATA_DIR, 'ner.model')
+srl_model_path = os.path.join(LTP_DATA_DIR, 'srl')
 
 from pyltp import Segmentor
 from pyltp import Postagger
 from pyltp import Parser
 from pyltp import SementicRoleLabeller
+from pyltp import NamedEntityRecognizer
 
 segmentor = Segmentor()
 postagger = Postagger()
 parser = Parser()
 labeller = SementicRoleLabeller()
+recognizer = NamedEntityRecognizer()
 
 segmentor.load(cws_model_path)
 postagger.load(pos_model_path)
 parser.load(par_model_path)
 labeller.load(srl_model_path)
+recognizer.load(ner_model_path)
 
 def parseTime(time_tuple):
     '''
@@ -111,6 +117,7 @@ def getRelationship(sentence):
 
         words = segmentor.segment(sentence)
         postags = postagger.postag(words)
+        netags = recognizer.recognize(words, postags)
 
         wds = list(words)
         pgs = list(postags)
@@ -142,11 +149,11 @@ def getRelationship(sentence):
             newstr = ''.join(wds)
             words = segmentor.segment(newstr)
             postags = postagger.postag(words)
-
+            netags = recognizer.recognize(words, postags)
         wds = list(words)
         pgs = list(postags)
         arcs = parser.parse(words, postags)
-        roles = labeller.label(words, postags, arcs)
+        roles = labeller.label(words, postags, netags, arcs)
 
         place=()
         things=[]
@@ -173,9 +180,9 @@ def getRelationship(sentence):
         if things:returnDict['eventName']='、'.join(things)
         if people:returnDict['description']='、'.join([people[0][i] for i in range(len(people[0])) if people[1][i]=='nh'])
         if place: returnDict['eventLocation'] = '、'.join([place[0][i] for i in range(len(place[0])) if place[1][i] == 'n'])
+
         return returnDict
     except:return returnDict
-
 
 if __name__ == '__main__':
     sen="七月的每个星期三上午十点半到十二点和超哥、李克强去食堂开会并吃凉面"

@@ -16,4 +16,5 @@ public class Constants {
     public static final String SERVER_IP = "http://47.102.102.52:8080/";
     //other
     //public static final String SERVER_IP = "http://10.162.235.138:5000/";
+    public static final String SEMANTIC_SERVER_IP = "http://59.78.19.215:5000/";
 }

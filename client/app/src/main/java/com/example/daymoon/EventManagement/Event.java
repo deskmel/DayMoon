@@ -22,6 +22,14 @@ public class Event implements Comparable<Event>, Serializable {
     protected GregorianCalendar beginTime, endTime;
     boolean whetherProcess;
 
+    public Event(){
+        eventName = "";
+        description = "";
+        eventLocation = "";
+        beginTime = new GregorianCalendar();
+        endTime = new GregorianCalendar();
+    }
+
     // Reminder reminder;
     public Event(String name, String des,int beginYear, int beginMonth, int beginDate, int beginHour, int beginMin,
                  int endYear, int endMonth, int endDate, int endHour, int endMin, boolean wProcess) {
@@ -174,6 +182,14 @@ public class Event implements Comparable<Event>, Serializable {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
         Log.d("?",dateFormat.format(beginTime.getTime()));
         return dateFormat.format(beginTime.getTime());
+    }
+
+    public void copy(Event event){
+        eventName = event.eventName;
+        description = event.description;
+        eventLocation = event.eventLocation;
+        beginTime = event.beginTime;
+        endTime = event.endTime;
     }
 
     public GregorianCalendar getEndTime(){

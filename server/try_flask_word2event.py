@@ -1,9 +1,9 @@
 from flask import Flask
 from flask import request
 from flask import Response
-
+import json
 import os, sys, threading
-from word2event import *
+from word2event_shen import *
 
 app = Flask(__name__)
 @app.route('/word2event',methods=['GET', 'POST'])
@@ -13,8 +13,9 @@ def word2event():
         sen = request.form.get('sen')
         # res = '转换结果：'+str(getRelationship(sen))
         res = getRelationship(sen)
+        
     # return render_template('word2event.html',res=res)
-    return str(res)
+    return json.dumps(res,ensure_ascii=False)
 
 if __name__ == '__main__':
     app.debug = True
