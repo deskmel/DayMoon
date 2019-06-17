@@ -18,18 +18,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 def index():
     return render_template('home.html')
 
-
-@app.route('/word2event',methods=['GET', 'POST'])
-def word2event():
-    res=None
-    if request.method == 'POST':
-        sen = request.form.get('sen')
-        # res = '转换结果：'+str(getRelationship(sen))
-        res = getRelationship(sen)
-    # return render_template('word2event.html',res=res)
-    return str(res)
-
-
 @app.route('/signup',methods=['GET', 'POST'])
 def signup():
     res=""

@@ -107,6 +107,7 @@ public class CreateEventSemanticAnalyze extends BaseActivity {
                         bundle2.putString("location",event.getEventLocation());
                         intent.putExtras(bundle2);
                         startActivity(intent);
+                        finish();
                     }
                 }, new Runnable() {
                     @Override
