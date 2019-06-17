@@ -2,6 +2,7 @@ package com.example.daymoon.UserInterface;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ public class GroupEventDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group_event_detail);
         event =(GroupEvent) getIntent().getSerializableExtra("groupevent");
         initView();
+        initButton();
 
     }
     private void initView(){
@@ -59,6 +61,14 @@ public class GroupEventDetailActivity extends AppCompatActivity {
             @Override
             public void run() {
 
+            }
+        });
+    }
+    private void initButton(){
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }

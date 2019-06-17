@@ -16,6 +16,7 @@ public class GroupDetailActivity extends BaseActivity {
     TextView groupname;
     TextView groupMemberNumber;
     TextView groupDescription;
+    TextView back;
     private Group group;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +41,18 @@ public class GroupDetailActivity extends BaseActivity {
         groupname=findViewById(R.id.group_name);
         groupDescription=findViewById(R.id.group_description);
         groupMemberNumber=findViewById(R.id.how_many_group_member);
+        back=findViewById(R.id.back);
         groupname.setText(group.getGroupName());
         groupDescription.setText(group.getGroupDescription());
+
         //groupMemberNumber.setText(group.getGroupMember().size());
+    }
+    private  void initButton(){
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 }
