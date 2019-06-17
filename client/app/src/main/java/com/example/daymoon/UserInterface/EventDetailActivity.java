@@ -16,7 +16,7 @@ import com.example.daymoon.Tool.StatusBarUtil;
 public class EventDetailActivity extends AppCompatActivity{
     Event event;
     private TestUserInterfaceControl UIControl= TestUserInterfaceControl.getUIControl();
-    TextView eventTitle, eventTime, eventLastTime, eventDescription;
+    TextView eventTitle, eventTime, eventLastTime, eventDescription, eventLocation;
 
 
     @Override
@@ -29,6 +29,7 @@ public class EventDetailActivity extends AppCompatActivity{
         eventTime= (TextView) findViewById(R.id.event_time);
         eventLastTime= (TextView) findViewById(R.id.event_lasting_time);
         eventDescription = (TextView) findViewById(R.id.event_descriptions);
+        eventLocation = (TextView) findViewById(R.id.location);
         flushEventDetail();
 
         findViewById(R.id.edit).setOnClickListener(new View.OnClickListener() {
@@ -79,5 +80,6 @@ public class EventDetailActivity extends AppCompatActivity{
         eventDescription.setText(event.getDescription());
         eventTime.setText(event.getBeginTime_str());
         eventLastTime.setText(event.getLastingTime_str());
+        eventLocation.setText(event.getEventLocation());
     }
 }

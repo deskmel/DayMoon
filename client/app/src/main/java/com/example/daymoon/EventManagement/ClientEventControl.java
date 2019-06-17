@@ -65,6 +65,7 @@ public class ClientEventControl {//施工
         HttpRequest.post(SERVER_IP+"getallmyevents",params, new HttpRequest.DataCallback(){
             @Override
             public void requestSuccess(String result) {
+                System.out.println(result);
                 Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GregorianCalendar.class,
                         new CalendarSerializer()).create();
                 Type EventRecordType = new TypeToken<EventList>(){}.getType();

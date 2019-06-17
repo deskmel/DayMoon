@@ -262,7 +262,7 @@ class DayMoonDB(object):
         print(info)
         if not info: return None
         infodict = {'eventID': info[0], 'userID': info[1], 'eventName':info[2], 'description': info[3], 'beginTime': info[4].strftime("%Y-%m-%d %H:%M:%S"),
-                    'endTime': info[5].strftime("%Y-%m-%d %H:%M:%S"), 'whetherProcess': Num2Bool[info[6]], 'eventLocation': info[7]}#为了测试暂时把remind删了
+                    'endTime': info[5].strftime("%Y-%m-%d %H:%M:%S"), 'whetherProcess': Num2Bool[info[6]], 'eventLocation': info[8]}#为了测试暂时把remind删了
 
         return json.dumps(infodict,ensure_ascii=False)
 
