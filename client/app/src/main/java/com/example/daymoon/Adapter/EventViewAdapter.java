@@ -34,8 +34,6 @@ public class EventViewAdapter extends RecyclerView.Adapter<EventViewAdapter.View
     private int[] typelist;
     public EventViewAdapter() {}
     public EventViewAdapter(EventList eventList, Context context, GroupEventList groupEventList){
-        Collections.sort(eventList);
-        Collections.sort(groupEventList);
         this.eventList = eventList;
         this.mContext = context;
         this.groupEventList = groupEventList;

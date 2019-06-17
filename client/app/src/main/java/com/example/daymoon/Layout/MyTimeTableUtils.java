@@ -30,12 +30,12 @@ public class MyTimeTableUtils {
     private ConstraintLayout clContent;
     private EventList weekEventList;
     private GroupEventList weekGroupEventList;
-    private int oneHourPx30;//一个小时高度是60dp，转换成像素
-    private int oneMimutePx1;//一分钟高度是1dp，转化成像素
-    private int oneDayPx;
-    private int offset;
-    private int width;
-    private int padding;
+    private float oneHourPx30;//一个小时高度是60dp，转换成像素
+    private float oneMimutePx1;//一分钟高度是1dp，转化成像素
+    private float oneDayPx;
+    private float offset;
+    private float width;
+    private float padding;
 
 
     public MyTimeTableUtils(Context context, ConstraintLayout clContent, EventList weekEventList,GroupEventList weekGroupEventList){
@@ -74,6 +74,7 @@ public class MyTimeTableUtils {
     private void initData() {
         oneHourPx30 = pxUtils.dip2px(context, 30);
         oneMimutePx1 = pxUtils.dip2px(context,(float) 30./60 );
+        System.out.println(oneMimutePx1);
         //显示控件宽度，不是必须得，假如你的宽度是动态的，然后距离两边多少也可以
         offset = pxUtils.dip2px(context,40);
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -98,7 +99,7 @@ public class MyTimeTableUtils {
         int height = (int) ((calendar2.getTimeInMillis() - calendar1.getTimeInMillis()) /
                 60000 * oneMimutePx1);
         if (calendar2.get(Calendar.DATE)!= calendar1.get(Calendar.DATE) || calendar1.get(Calendar.MONTH) != calendar1.get(Calendar.MONTH) || calendar1.get(Calendar.MONTH) != calendar2.get(Calendar.MONTH)){
-            height = 60 * oneMimutePx1;
+            height = (int) (60 * oneMimutePx1);
         }
         addInLayout(textView,calendar1,calendar2,height);
     }
@@ -117,7 +118,7 @@ public class MyTimeTableUtils {
         int height = (int) ((calendar2.getTimeInMillis() - calendar1.getTimeInMillis()) /
                 60000 * oneMimutePx1);
         if (calendar2.get(Calendar.DATE)!= calendar1.get(Calendar.DATE) || calendar1.get(Calendar.MONTH) != calendar1.get(Calendar.MONTH) || calendar1.get(Calendar.MONTH) != calendar2.get(Calendar.MONTH)){
-            height = 60 * oneMimutePx1;
+            height = (int) (60 * oneMimutePx1);
         }
         addInLayout(textView,calendar1,calendar2,height);
     }
@@ -150,7 +151,7 @@ public class MyTimeTableUtils {
         int height = (int) ((calendar2.getTimeInMillis() - calendar1.getTimeInMillis()) /
                 60000 * oneMimutePx1);
         if (calendar2.get(Calendar.DATE)!= calendar1.get(Calendar.DATE) || calendar1.get(Calendar.MONTH) != calendar1.get(Calendar.MONTH) || calendar1.get(Calendar.MONTH) != calendar2.get(Calendar.MONTH)){
-            height = 60 * oneMimutePx1;
+            height = (int) (60 * oneMimutePx1);
             textView.setText(String.format("%s\n%s",event.getTitle(),"跨天"));
         }
         addInLayout(textView,calendar1,calendar2,height);
@@ -186,7 +187,7 @@ public class MyTimeTableUtils {
         int height = (int) ((calendar2.getTimeInMillis() - calendar1.getTimeInMillis()) /
                 60000 * oneMimutePx1);
          if (calendar2.get(Calendar.DATE)!= calendar1.get(Calendar.DATE) || calendar1.get(Calendar.MONTH) != calendar1.get(Calendar.MONTH) || calendar1.get(Calendar.MONTH) != calendar2.get(Calendar.MONTH)){
-            height = 60 * oneMimutePx1;
+            height = (int) (60 * oneMimutePx1);
              textView.setText(String.format("%s\n%s",event.getTitle(),"跨天"));
         }
         addInLayout(textView,calendar1,calendar2,height);
@@ -200,12 +201,12 @@ public class MyTimeTableUtils {
         textView.setTypeface(ResourcesCompat.getFont(context,R.font.msyh));
         clContent.addView(textView);
         //计算距离顶部的高度，很好理解，比如说13点20分，那就是距离0点有13个小时，再加上20分钟的高度
-        int marginTop = calendar1.get(java.util.Calendar.HOUR_OF_DAY) * oneHourPx30 +
-                calendar1.get(java.util.Calendar.MINUTE) * oneMimutePx1;
-        int marginStart = (calendar1.get(java.util.Calendar.DAY_OF_WEEK)-1) * oneDayPx + offset+padding;
+        int marginTop = (int)(calendar1.get(java.util.Calendar.HOUR_OF_DAY) * oneHourPx30 +
+                calendar1.get(java.util.Calendar.MINUTE) * oneMimutePx1);
+        int marginStart = (int) ((calendar1.get(java.util.Calendar.DAY_OF_WEEK)-1) * oneDayPx + offset+padding);
         //设置显示内容宽度
         constraintSet.clone(clContent);
-        constraintSet.constrainWidth(textView.getId(), width);
+        constraintSet.constrainWidth(textView.getId(), (int)width);
         constraintSet.constrainHeight(textView.getId(), height);
         //设置显示位置，这个是水平居中，假如需要偏左偏右，就设置下margin，参考最后一个connect
         constraintSet.connect(textView.getId(),ConstraintSet.START,

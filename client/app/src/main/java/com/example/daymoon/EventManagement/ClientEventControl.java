@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,12 +73,13 @@ public class ClientEventControl {//施工
                 getInstance().eventList = gson.fromJson(result, EventRecordType);
                 LocalDatabaseHelper localDatabaseHelper = new LocalDatabaseHelper(context);
                 localDatabaseHelper.syncEvents(getInstance().eventList);
+                Collections.sort(getInstance().eventList);
                 callback.run();
             }
             @Override
             public void requestFailure(Request request, IOException e) {
                 getInstance().eventList = new LocalDatabaseHelper(context).queryEventList();
-                System.out.println(getInstance().eventList.size());
+                Collections.sort(getInstance().eventList);
                 callback.run();
             }
         });
@@ -96,11 +98,13 @@ public class ClientEventControl {//施工
                 getInstance().groupEventList = gson.fromJson(result, GroupEventRecordType);
                 LocalDatabaseHelper localDatabaseHelper = new LocalDatabaseHelper(context);
                 localDatabaseHelper.syncGroupEvents(getInstance().groupEventList);
+                Collections.sort(getInstance().groupEventList);
                 callback.run();
             }
             @Override
             public void requestFailure(Request request, IOException e) {
                 getInstance().groupEventList = new LocalDatabaseHelper(context).queryGroupEventList();
+                Collections.sort(getInstance().groupEventList);
                 callback.run();
             }
         });
