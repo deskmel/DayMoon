@@ -4,7 +4,6 @@ from flask import Response
 
 import os, sys, threading
 from sql_utils import *
-from word2event import *
 
 #f = open("err.log","w")
 #sys.stderr = f
