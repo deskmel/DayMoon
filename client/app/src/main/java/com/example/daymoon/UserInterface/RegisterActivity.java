@@ -25,7 +25,7 @@ import okhttp3.Request;
 //import cn.edu.gdmec.android.boxuegu.utils.MD5Utils;
 
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
     //标题
     private TextView tv_main_title;
     //返回按钮
