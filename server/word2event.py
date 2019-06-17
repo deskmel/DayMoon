@@ -39,6 +39,7 @@ def parseTime(time_tuple):
     start_time=(0,0)
     end_time=(0,0)
     time_flag=0
+    #time_flag=0表示还未出现过时间，1为已出现一次上午的，2为第一次是下午
 
     for i in range(len(wds)):
         if '月' in wds[i]:
@@ -67,13 +68,18 @@ def parseTime(time_tuple):
             hour,minute=int(wds[i].split(':')[0]),int(wds[i].split(':')[1])
             if i-1>0 and hour<=12 and ('下午'in wds[i-1] or '晚上'in wds[i-1] or '傍晚'in wds[i-1]):
                 hour += 12
-            start_time = (hour, minute)
-            end_time = (hour, minute)
-            time_flag=1
+                time_flag=2
+                start_time = (hour, minute)
+                end_time = (hour, minute)
+            else:
+                time_flag = 1
+                start_time = (hour, minute)
+                end_time = (hour, minute)
             continue
-        if ':'in wds[i] and time_flag:
+
+        if ':'in wds[i] and time_flag!=0:
             hour,minute=int(wds[i].split(':')[0]),int(wds[i].split(':')[1])
-            if i-1>0 and hour<=12 and ('下午'in wds[i-1] or '晚上'in wds[i-1] or '傍晚'in wds[i-1]):
+            if time_flag==2 or (i-1>0 and hour<=12 and ('下午'in wds[i-1] or '晚上'in wds[i-1] or '傍晚'in wds[i-1])):
                 hour += 12
             end_time = (hour, minute)
             continue

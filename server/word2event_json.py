@@ -29,4 +29,4 @@ def get_json_event(sentence):
 
 if __name__ == '__main__':
 
-    print(get_json_event('后天下午9:00至晚上11:00和超哥去操场吃凉面'))
+    print(get_json_event('这个星期五晚上9:00至11:00和超哥去操场吃凉面'))
