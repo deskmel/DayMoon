@@ -1,4 +1,4 @@
-#!/usr/bin/python
+# !/usr/bin/python
 # coding: utf-8
 
 import json
@@ -24,5 +24,9 @@ def get_json_event(sentence):
 
     return json.dumps(eval(result_str),ensure_ascii=False)
 
+
+
+
 if __name__ == '__main__':
-    print(get_json_event('从七月开始每天十二点背单词'))
+
+    print(get_json_event('后天下午9:00至晚上11:00和超哥去操场吃凉面'))

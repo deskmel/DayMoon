@@ -3,7 +3,7 @@ from flask import request
 from flask import Response
 import json
 import os, sys, threading
-from word2event_shen import *
+from word2event import *
 
 app = Flask(__name__)
 @app.route('/word2event',methods=['GET', 'POST'])
