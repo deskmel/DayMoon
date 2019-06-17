@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,7 +17,8 @@ public class GroupDetailActivity extends BaseActivity {
     TextView groupname;
     TextView groupMemberNumber;
     TextView groupDescription;
-    TextView back;
+    ImageView back;
+    TextView finish;
     private Group group;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class GroupDetailActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+        initButton();
     }
 
 
@@ -42,6 +45,7 @@ public class GroupDetailActivity extends BaseActivity {
         groupDescription=findViewById(R.id.group_description);
         groupMemberNumber=findViewById(R.id.how_many_group_member);
         back=findViewById(R.id.back);
+        finish = findViewById(R.id.finish);
         groupname.setText(group.getGroupName());
         groupDescription.setText(group.getGroupDescription());
 
@@ -49,6 +53,12 @@ public class GroupDetailActivity extends BaseActivity {
     }
     private  void initButton(){
         back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
